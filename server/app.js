@@ -1,7 +1,7 @@
 "use strict"
 //require
 var express = require('express'),
-path = require('path'),
+path = require('path');
 //Conf const
 const _port = 3000;
 
