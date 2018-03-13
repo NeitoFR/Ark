@@ -62,7 +62,7 @@
                 visibility: visible !important;
             }
             
-            button {
+            #sub {
                 border: none;
                 background: #1abc9c;
                 cursor: pointer;
@@ -73,7 +73,7 @@
                 margin-left: 25px;
                 box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
             }
-            button:hover {
+            #sub:hover {
                 -webkit-transform: translateY(-3px);
                 -ms-transform: translateY(-3px);
                 transform: translateY(-3px);
@@ -89,26 +89,27 @@
                 visibility: visible !important;
             }
         </style>
-        <form>
+        <form action="/login" method="POST">
             <h1>Material Design Login Form</h1>
-            <input id="user" placeholder="Username" type="text" required>
-            <input id="pwd" placeholder="Password" type="password" required>
-            <button on-click="_testButton">Submit</button>
+            <input name="user" placeholder="Username" type="text" required>
+            <input name="pwd" placeholder="Password" type="password" required>
+            <input id="sub" type="submit" value="Submit">
         </form>
 
-        <!--<paper-button raised id="test" on-tap="_testButton">test</paper-button>-->
+        <!--<paper-button raised id="test" on-tap="_testButton">test</paper-button>-->->
     </template>
     <script>
         class MyLogin extends Polymer.Element {
             static get is() { return 'my-login'; }
-            ready() {
+            /*ready() {
                 super.ready();
                 setTimeout(function() {
                     console.log('id : ', this.$.user);
                 }.bind(this), 0);
-            }
+            }*/
             _testButton(){
-                console.log('id : ', this.$.user.value);
+                console.log('id : ', this);
+                console.log('id : ', this.sess);
             }
         }
         window.customElements.define(MyLogin.is, MyLogin);
