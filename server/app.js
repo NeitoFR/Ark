@@ -26,12 +26,12 @@ app.get('/', function (req, res){
 
     console.log(req.url);
 })
-.get('/view*', function (req, res){
+.get('/*', function (req, res){
     //var url = req.url.substring(1, req.url.length)+'.html';
     //res.sendFile('../public/src/my-'+url, {root: __dirname});
     res.writeHead(302, {'Location': '/'});
     res.end();
-    console.log(req.url);
+    //console.log(req.url);
 })
 .post('/login', function(req, res){
     //Build Session
