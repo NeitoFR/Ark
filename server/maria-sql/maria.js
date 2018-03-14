@@ -18,10 +18,12 @@ exports.getUsers = function (callback){
 
     c.query('SELECT * FROM USER_TABLE', function(err, res)
     {
-        if (err) 
-            callback(err, null);
-        else
-            callback(null, res);
+        if (err){
+            c.end();
+            callback(err, null);}
+        else{
+            c.end();
+            callback(null, res);}
     });
     /*return new Promise((resolve, reject) => {
         var c = init();

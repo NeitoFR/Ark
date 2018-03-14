@@ -2,12 +2,9 @@
 //require
 var express = require('express'),
 bodyParser = require('body-parser'),
-session = require('express-session'),
 path = require('path');
 //Conf const
 const _port = 3000;
-//Session
-var sess = null;
 //Server
 var app = express();
 
@@ -38,7 +35,6 @@ app.get('/*', function (req, res){
 });
 
 app.post('/login', function(req, res){
-    //Build Session
     //Getting data
     console.log("received data : ", req.body);
     //console.log("user received : ", req.body.username);
