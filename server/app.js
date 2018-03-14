@@ -19,21 +19,23 @@ app.use(bodyParser.urlencoded({extended: true}));
 //Routing
 
 
+//SQL API Routing
+
 app.get('/', function (req, res){
     res.sendFile('../public/index.html', {root: __dirname});
 
     console.log(req.url);
 });
-app.get('/view*', function (req, res){
+
+app.use(require('./maria-sql/maria-routes'));
+
+app.get('/*', function (req, res){
     //var url = req.url.substring(1, req.url.length)+'.html';
     //res.sendFile('../public/src/my-'+url, {root: __dirname});
     res.writeHead(302, {'Location': '/'});
     res.end();
     console.log(req.url);
 });
-
-//SQL API Routing
-app.use(require('./maria-sql/maria-routes'));
 
 app.post('/login', function(req, res){
     //Build Session

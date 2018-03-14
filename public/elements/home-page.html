@@ -8,28 +8,50 @@
     <style include="shared-styles">
     </style>
     <iron-ajax
-    id="getQuoteAjax"
-    auto
-    url="http://localhost:3001/api/random-quote"
-    method="get"
-    handle-as="text"
-    last-response="{{quote}}">
-  </iron-ajax>
-  <div class="card">
-    <h1>Quotes</h1>
-    <blockquote>[[quote]]</blockquote>
-    <paper-button raised on-tap="getQuote" class="primary">Get a New Quote</paper-button>
-  </div>
-</template>
-
-<script>
-  class HomePage extends Polymer.Element {
-    static get is() { return 'home-page'; }
-    getQuote() {
-      this.$.getQuoteAjax.generateRequest();
-    }
-  }
+    id="ajaxEl"
+    content-type="application/json" >></iron-ajax>
+    <div class="card">
+      <h1>Maria DB API</h1>
+      <paper-button raised on-tap="_testButton" class="primary">show user_table</paper-button>
+      <blockquote>[[text]]</blockquote>
+    </div>
+    <!--<iron-ajax
+      id="getQuoteAjax"
+      auto
+      url="http://localhost:3001/api/random-quote"
+      method="get"
+      handle-as="text"
+      last-response="{{quote}}">
+    </iron-ajax>
+    <div class="card">
+      <h1>Quotes</h1>
+      <blockquote>[[quote]]</blockquote>
+      <paper-button raised on-tap="getQuote" class="primary">Get a New Quote</paper-button>
+    </div>-->
+  </template>
   
-  window.customElements.define(HomePage.is, HomePage);
-</script>
+  <script>
+    class HomePage extends Polymer.Element {
+      static get is() { return 'home-page'; }
+      static get properties() { return 
+        text: {
+          type: Array;
+        }
+      }
+      ready() {
+        super.ready();
+        this.$.ajaxEl.addEventListener('response', function(evt){
+          console.log('loginAjax response : ', evt.detail.response);
+          this.text = JSON.stringify(evt.detail.response);
+        }.bind(this));
+      }
+      _testButton() {
+        this.$.ajaxEl.url = '/maria/users'
+        this.$.ajaxEl.method = 'GET'
+        this.$.ajaxEl.generateRequest();
+      }
+    }
+    
+    window.customElements.define(HomePage.is, HomePage);
+  </script>
 </dom-module>

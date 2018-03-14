@@ -6,21 +6,28 @@ var init = function(){
         host: '176.31.103.83',
         user: 'root',
         password: 'mawo',
+        db:'TP_Ark',
         port: 3306
     });
-
+    
     return c;
 }
 
-exports.getUsers = function(){
-    var c = this.init(),
-    res = "";
-    c.query('SHOW DATABASES', function(err, rows) {
-        if (err)
-            throw err;
-        res = rows;
-    });
-    c.end();
+exports.getUsers = function (callback){
+    var c = init();
 
-    return res;
+    c.query('SELECT * FROM USER_TABLE', function(err, res)
+    {
+        if (err) 
+            callback(err, null);
+        else
+            callback(null, res);
+    });
+    /*return new Promise((resolve, reject) => {
+        var c = init();
+        c.query('SELECT * FROM USER_TABLE', (err, result) => {
+            if(err) {return reject(err)}
+            return resolve(result)
+        })
+    })*/
 }
