@@ -35,17 +35,17 @@ app.get('/', function (req, res){
 })
 .post('/login', function(req, res){
     //Build Session
-    sess = req.session;
-    sess.user = req.body.user;
-    sess.pwd = req.body.pwd;
     //Getting data
-    console.log("user received : ", req.body.user);
-    console.log("pwd received : ", req.body.pwd);
+    console.log("received data : ", req.body);
+    //console.log("user received : ", req.body.username);
+    //console.log("pwd received : ", req.body.password);
     //DB Checking
     
     //Answer
-    res.writeHead(302, {'Location': '/'});
-    res.write({user: req.body.user});
+    //res.writeHead(302, {'Location': '/'});
+    //res.write({user: req.body.user})
+    //res.detail.response = "belette";
+    res.send("Login OK");
     res.end();
 })
 
