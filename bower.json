@@ -41,6 +41,7 @@
     "iron-input": "^2.1.1",
     "paper-input": "^2.2.0",
     "iron-localstorage": "^2.1.1",
-    "paper-spinner": "^2.1.0"
+    "paper-spinner": "^2.1.0",
+    "brum-global-variable": "SieBrum/brum-global-variable#^1.0.6"
   }
 }

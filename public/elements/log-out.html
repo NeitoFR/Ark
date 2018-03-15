@@ -1,0 +1,71 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+
+<dom-module id="log-out">
+    <template>
+        <style>
+            :host {
+                margin: 0;
+                padding: 0;
+            }
+            paper-button {
+                color: #fff;
+            }
+            paper-button.link {
+                color: #fff;
+                display: inline-block;
+                font-size: 13px;
+            }
+            paper-button.indigo {
+                background-color: var(--paper-indigo-500);
+                color: white;
+                --paper-button-raised-keyboard-focus: {
+                    background-color: var(--paper-pink-a200) !important;
+                    color: white !important;
+                };
+            }
+            paper-button.indigo:hover {
+                background-color: var(--paper-indigo-400);
+            }
+        </style>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        
+        
+        <template is="dom-if" if="{{!storedUser.loggedin}}">
+            <a href="/register-login">Log in</a>
+        </template>
+        <template is="dom-if" if="{{storedUser.loggedin}}">
+            <paper-button raised class="indigo" on-tap="logout">Log Out [[[storedUser.name]]]</paper-button>
+        </template>
+        
+        <!--<template is="dom-if" if="{{link}}">
+            <paper-button class="link" on-tap="logout">Log Out [[[storedUser.name]]]</paper-button>
+        </template>-->
+    </template>
+    
+    <script>
+        (function() {
+            class LogOut extends Polymer.Element {
+                static get is() {
+                    return 'log-out';
+                }
+                static get properties() {
+                    return {
+                        storedUser: Object,
+                        link: {
+                            type: Boolean,
+                            value: false
+                        }
+                    }
+                }
+                
+                logout() {
+                    this.storedUser = null;
+                }
+            }
+            
+            window.customElements.define(LogOut.is, LogOut);
+        }());
+    </script>
+</dom-module>
