@@ -1,19 +1,27 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="home-page">
   <template>
     <style include="shared-styles">
+      #spinner
+      {
+        margin-left: 50%;
+        margin-right: 50%;
+        display: none;
+      }
     </style>
     <iron-ajax
     id="ajaxEl"
     content-type="application/json" >></iron-ajax>
     <div class="card">
       <h1>Maria DB API</h1>
-      <paper-button raised on-tap="_testButton" class="primary">show user_table</paper-button>
-      <blockquote>[[text]]</blockquote>
+      <paper-button raised on-tap="_getUsers" class="primary">show user_table</paper-button>
+      <!--<paper-button raised on-tap="_testButton" class="primary">test button</paper-button>-->
+      <blockquote><paper-spinner id="spinner" active></paper-spinner>[[text]]</blockquote>
     </div>
     <!--<iron-ajax
       id="getQuoteAjax"
@@ -37,19 +45,29 @@
         text: {
           type: Array;
         }
+        
       }
       ready() {
         super.ready();
         this.$.ajaxEl.addEventListener('response', function(evt){
           console.log('loginAjax response : ', evt.detail.response);
+          this.$.spinner.style.display = 'none'
           this.text = JSON.stringify(evt.detail.response);
         }.bind(this));
       }
-      _testButton() {
+      
+      _getUsers() {
         this.$.ajaxEl.url = '/maria/users'
         this.$.ajaxEl.method = 'GET'
         this.$.ajaxEl.generateRequest();
+        this.$.spinner.style.display = 'block';
       }
+      /*_toggleSpinner() {
+        if($('#spinner').css('display') == 'none') 
+          $('#spinner').css('display', 'block');
+        else 
+          $('#spinner').css('display', 'none');
+      }*/
     }
     
     window.customElements.define(HomePage.is, HomePage);

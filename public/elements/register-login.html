@@ -1,54 +1,29 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
-<link rel="import" href="../bower_components/iron-input/iron-input.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="register-login">
     <template>
         <style include="shared-styles">
-            .wrapper-btns {
-                margin-top: 15px;
-            }
-            paper-button.link {
-                color: #757575;
-            }
+            
         </style>
-        <div class="card">
-            <div id="unauthenticated">
-                <h1>Log In</h1>
-                
-                <p><strong>Log in</strong> or <strong>sign up</strong> to access secret Chuck Norris quotes!</p>
-                
-                <paper-input-container>
-                    <label slot="input">Username</label>
-                    <iron-input slot="input" bind-value="{{formData.username}}">
-                        <input id="username" type="text" value="{{formData.username}}" placeholder="Username">
-                    </iron-input>
-                </paper-input-container>
-                
-                <paper-input-container>
-                    <label>Password</label>
-                    <iron-input slot="input" bind-value="{{formData.password}}">
-                        <input id="password" type="password" value="{{formData.password}}" placeholder="Password">
-                    </iron-input>
-                </paper-input-container>
-                
-                <div class="wrapper-btns">
-                    <paper-button raised class="primary" on-tap="postLogin">Log In</paper-button>
-                    <paper-button class="link" on-tap="postRegister">Sign Up</paper-button>
-                </div>
-            </div>
-            <iron-ajax
-            id="registerLoginAjax"
-            method="post"
-            content-type="application/json"
-            handle-as="text"
-            on-response="handleUserResponse"
-            on-error="handleUserError">
-        </iron-ajax>
+        <div>
+            <h1>Ark Login</h1>
+            <input name="user" placeholder="Username" type="text" value="{{formData.username::input}}" required>
+            <input name="pwd" placeholder="Password" type="password" value="{{formData.password::input}}" required>
+            <paper-button raised on-tap="_submitSignIn" class="primary">Sign In</paper-button>
+            <paper-button raised on-tap="_submitSignUp" class="primary">Sign Up</paper-button>
+            <paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>
+        </div>
+        <iron-ajax
+        id="loginAjax"
+        method="post"
+        content-type="application/json"
+        handle-as="text"
+        on-response="handleUserResponse"
+        on-error="handleUserError"></iron-ajax>   
     </template>
     <script>
         class RegisterLogin extends Polymer.Element {
@@ -68,19 +43,21 @@
                 super.ready();
             }
             _setReqBody() {
-                this.$.registerLoginAjax.body = this.formData;
+                this.$.loginAjax.body = this.formData;
             }
-            
+            _testButton(evt){
+                console.log(this.formData);
+            }
             postLogin() {
-                this.$.registerLoginAjax.url = 'http://localhost:3001/sessions/create';
+                this.$.loginAjax.url = 'http://localhost:3001/sessions/create';
                 this._setReqBody();
-                this.$.registerLoginAjax.generateRequest();
+                this.$.loginAjax.generateRequest();
             }
             
             postRegister() {
-                this.$.registerLoginAjax.url = 'http://localhost:3001/users';
+                this.$.loginAjax.url = 'http://localhost:3001/users';
                 this._setReqBody();
-                this.$.registerLoginAjax.generateRequest();
+                this.$.loginAjax.generateRequest();
             }
             handleUserResponse(event) {
                 var response = JSON.parse(event.detail.response);
