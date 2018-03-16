@@ -1,8 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 
-<dom-module id="log-out">
+<dom-module id="login-logout">
     <template>
         <style>
             :host {
@@ -38,34 +37,32 @@
         <template is="dom-if" if="{{storedUser.loggedin}}">
             <paper-button raised class="indigo" on-tap="logout">Log Out [[[storedUser.name]]]</paper-button>
         </template>
-        
-        <!--<template is="dom-if" if="{{link}}">
-            <paper-button class="link" on-tap="logout">Log Out [[[storedUser.name]]]</paper-button>
-        </template>-->
+        <!--<paper-button raised class="indigo" on-tap="_testButton">Test Button</paper-button>-->
     </template>
     
     <script>
         (function() {
-            class LogOut extends Polymer.Element {
+            class LoginLogout extends Polymer.Element {
                 static get is() {
-                    return 'log-out';
+                    return 'login-logout';
                 }
                 static get properties() {
                     return {
-                        storedUser: Object,
                         link: {
                             type: Boolean,
                             value: false
                         }
                     }
                 }
-                
+                _testButton(evt){
+                    console.log(this.storedUser);
+                }
                 logout() {
                     this.storedUser = null;
                 }
             }
             
-            window.customElements.define(LogOut.is, LogOut);
+            window.customElements.define(LoginLogout.is, LoginLogout);
         }());
     </script>
 </dom-module>

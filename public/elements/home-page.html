@@ -15,13 +15,16 @@
         display: none;
       }
     </style>
+    
+    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <iron-ajax
     id="ajaxEl"
     content-type="application/json" >></iron-ajax>
     <div class="card">
       <h1>Maria DB API</h1>
       <paper-button on-tap="_getUsers" class="primary">show user_table</paper-button>
-      <!--<paper-button raised on-tap="_testButton" class="primary">test button</paper-button>-->
+      
+      <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
       <blockquote><paper-spinner id="spinner" active></paper-spinner>[[text]]</blockquote>
     </div>
   </template>
@@ -43,7 +46,9 @@
           this.text = JSON.stringify(evt.detail.response);
         }.bind(this));
       }
-      
+      _testButton(evt){
+                console.log(this.storedUser);
+            }
       _getUsers() {
         this.$.ajaxEl.url = '/maria/users'
         this.$.ajaxEl.method = 'GET'

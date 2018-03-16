@@ -21,13 +21,17 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="my-icons.html">
 
+<!-- Views -->
 <link rel="lazy-import" href="homepage.html">
-<link rel="lazy-import" href="login.html">
 <link rel="lazy-import" href="not-found.html">
-<link rel="lazy-import" href="my-login.html">
-
+<!-- No lazy import on this for the global variable to be accessible at loading -->
+<link rel="import" href="register-login.html">
+<link rel="import" href="login-logout.html">
 <dom-module id="my-app">
   <template>
     <style>
@@ -84,7 +88,7 @@
   data="{{routeData}}"
   tail="{{subroute}}">
 </app-route>
-
+<brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 <app-drawer-layout fullbleed narrow="{{narrow}}">
   <!-- Drawer content -->
   <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
@@ -101,7 +105,8 @@
       <app-toolbar>
         <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
         <div main-title>Store</div>
-        <a name="register-login" href="[[rootPath]]register-login">Log in</a>
+        <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
+        <login-logout></login-logout>
       </app-toolbar>
     </app-header>
     
@@ -157,15 +162,15 @@
       '_routePageChanged(routeData.page)',
       ];
     }
-    _testButton(){
-      this.page = 'login';
-      /*console.log('this.rootpath : ', this.rootPath);
-      console.log('this.routeData : ', this.routeData);
-      console.log('this.subroute : ', this.subroute);
-      console.log('this.page : ', this.page);*/
-    }
+    ready() {
+        super.ready();
+        if(this.storedUser == null) this.storedUser={};
+      }
     _rootPathChanged(path){
       console.log('this.rootpath : ', path);
+    }
+    _testButton(evt){
+      console.log(this.storedUser);
     }
     _routePageChanged(page) {
       // If no page was found in the route data, page will be an empty string.

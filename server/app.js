@@ -3,7 +3,8 @@
 var express = require('express'),
 bodyParser = require('body-parser'),
 path = require('path');
-//Conf const
+//Populate process.env variable
+require('dotenv').config();
 const _port = 3000;
 //Server
 var app = express();
@@ -46,6 +47,6 @@ app.post('/login', function(req, res){
 });
 
 //Binding server to port
-app.listen(_port, function (){
-    console.log('Server listening on  : '+_port);
+app.listen(process.env.APP_PORT, function (){
+    console.log('Server listening on  : '+process.env.APP_PORT);
 });
