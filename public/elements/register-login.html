@@ -117,11 +117,11 @@
             <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
             
         </form>
-        <div class="card" id="auth" hidden$="[[!storedUser.loggedin]]">
+        <!--<div class="card" id="auth" hidden$="[[!storedUser.loggedin]]">
             <p>Welcome, [[storedUser.username]]</p>
             <log-out></log-out>
-            <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
-        </div>
+            <paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>
+        </div>-->
         <iron-ajax
         id="loginAjax"
         method="post"
@@ -140,7 +140,10 @@
                         type: Object,
                         value: {}
                     },
-                    storedUser: Object,
+                    storedUser: {
+                        type: Object,
+                        value: {}
+                    },
                     error: String
                 }
             }
@@ -183,7 +186,8 @@
                         username: response[0].username,
                         loggedin: true
                     };
-                    console.log('Stored user : ', this.storedUser)
+                    console.log('Stored user : ', this.storedUser);
+                    window.location.replace("/");
                     break;
                     
                     default:

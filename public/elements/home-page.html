@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="data-table.html">
 
 <dom-module id="home-page">
   <template>
@@ -21,47 +22,53 @@
     id="ajaxEl"
     content-type="application/json" >></iron-ajax>
     <div class="card">
-      <h1>Maria DB API</h1>
-      <paper-button on-tap="_getUsers" class="primary">show user_table</paper-button>
-      
-      <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
-      <blockquote><paper-spinner id="spinner" active></paper-spinner>[[text]]</blockquote>
-    </div>
-  </template>
-  
-  <script>
-    class HomePage extends Polymer.Element {
-      static get is() { return 'home-page'; }
-      static get properties() { return 
-        text: {
-          type: Array;
+      <!--<h1>Maria DB API</h1>
+        <paper-button on-tap="_getUsers" class="primary">show user_table</paper-button>
+        
+        <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
+        <blockquote><paper-spinner id="spinner" active></paper-spinner>
+          <data-table table-data={{tableData}}></data-table>
+        </blockquote>-->
+        
+        <h1>Maria DB API</h1>
+        <paper-button on-tap="_getUsers" class="primary">show user_table</paper-button>
+        <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
+        <blockquote><paper-spinner id="spinner" active></paper-spinner>
+          <data-table table-data={{tableData}}></data-table>
+        </blockquote>
+        
+      </div>
+    </template>
+    
+    <script>
+      class HomePage extends Polymer.Element {
+        static get is() { return 'home-page'; }
+        static get properties() { return 
+          text: {
+            type: Array;
+          }
+        }
+        ready() {
+          super.ready();
+          this.$.ajaxEl.addEventListener('response', function(evt){
+            console.log('loginAjax response : ', evt.detail.response);
+            this.$.spinner.style.display = 'none';
+            this.tableData = evt.detail.response;
+            this.text = JSON.stringify(evt.detail.response);
+            //this.text = Object.keys(evt.detail.response[0]);
+          }.bind(this));
+        }
+        _testButton(evt){
+          console.log(this.storedUser);
+        } 
+        _getUsers() {
+          this.$.ajaxEl.url = '/maria/users'
+          this.$.ajaxEl.method = 'GET'
+          this.$.ajaxEl.generateRequest();
+          this.$.spinner.style.display = 'block';
         }
       }
-      ready() {
-        super.ready();
-        this.$.ajaxEl.addEventListener('response', function(evt){
-          console.log('loginAjax response : ', evt.detail.response);
-          this.$.spinner.style.display = 'none';
-          this.text = JSON.stringify(evt.detail.response);
-        }.bind(this));
-      }
-      _testButton(evt){
-                console.log(this.storedUser);
-            }
-      _getUsers() {
-        this.$.ajaxEl.url = '/maria/users'
-        this.$.ajaxEl.method = 'GET'
-        this.$.ajaxEl.generateRequest();
-        this.$.spinner.style.display = 'block';
-      }
-      /*_toggleSpinner() {
-        if($('#spinner').css('display') == 'none') 
-          $('#spinner').css('display', 'block');
-        else 
-          $('#spinner').css('display', 'none');
-      }*/
-    }
-    
-    window.customElements.define(HomePage.is, HomePage);
-  </script>
-</dom-module>
+      
+      window.customElements.define(HomePage.is, HomePage);
+    </script>
+  </dom-module>
