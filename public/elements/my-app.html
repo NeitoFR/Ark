@@ -21,19 +21,22 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="my-view1.html">
-<link rel="lazy-import" href="my-view2.html">
-<link rel="lazy-import" href="my-view3.html">
-<link rel="lazy-import" href="my-view404.html">
-<link rel="lazy-import" href="my-login.html">
-
+<!-- Views -->
+<link rel="lazy-import" href="homepage.html">
+<link rel="lazy-import" href="not-found.html">
+<!-- No lazy import on this for the global variable to be accessible at loading -->
+<link rel="import" href="register-login.html">
+<link rel="import" href="login-logout.html">
 <dom-module id="my-app">
   <template>
     <style>
       :host {
-        --app-primary-color: green;
+        --app-primary-color: #099b34;
         --app-secondary-color: black;
         
         display: block;
@@ -85,16 +88,13 @@
   data="{{routeData}}"
   tail="{{subroute}}">
 </app-route>
-
+<brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 <app-drawer-layout fullbleed narrow="{{narrow}}">
   <!-- Drawer content -->
   <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
     <app-toolbar>Menu</app-toolbar>
     <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-      <a name="view1" href="[[rootPath]]view1">View One</a>
-      <a name="view2" href="[[rootPath]]view2">View Two</a>
-      <a name="view3" href="[[rootPath]]view3">View Three</a>
-      <a name="view404" href="[[rootPath]]view404">View 404</a>
+      <a name="home-page" href="[[rootPath]]home-page">Home</a>
     </iron-selector>
   </app-drawer>
   
@@ -104,8 +104,9 @@
     <app-header slot="header" condenses reveals effects="waterfall">
       <app-toolbar>
         <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-        <div main-title>My App</div>
-        <paper-button raised id="test" on-tap="_testButton">{{userInfo.user}}</paper-button>
+        <div main-title>Store</div>
+        <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
+        <login-logout></login-logout>
       </app-toolbar>
     </app-header>
     
@@ -114,11 +115,9 @@
     attr-for-selected="name"
     fallback-selection="view404"
     role="main">
-    <my-view1 name="view1"></my-view1>
-    <my-view2 name="view2"></my-view2>
-    <my-view3 name="view3"></my-view3>
-    <my-view404 name="view404"></my-view404>
-    <my-login name="login"></my-login>
+    <home-page name="home-page"></home-page>
+    <not-found name="not-found"></not-found>
+    <register-login name="register-login"></register-login>
   </iron-pages>
 </app-header-layout>
 </app-drawer-layout>
@@ -163,20 +162,20 @@
       '_routePageChanged(routeData.page)',
       ];
     }
-    _testButton(){
-      this.page = 'login';
-      /*console.log('this.rootpath : ', this.rootPath);
-      console.log('this.routeData : ', this.routeData);
-      console.log('this.subroute : ', this.subroute);
-      console.log('this.page : ', this.page);*/
-    }
+    ready() {
+        super.ready();
+        if(this.storedUser == null) this.storedUser={};
+      }
     _rootPathChanged(path){
       console.log('this.rootpath : ', path);
+    }
+    _testButton(evt){
+      console.log(this.storedUser);
     }
     _routePageChanged(page) {
       // If no page was found in the route data, page will be an empty string.
       // Default to 'view1' in that case.
-      this.page = page || 'view1';
+      this.page = page || 'home-page';
       
       // Close a non-persistent drawer when the page & route are changed.
       if (!this.$.drawer.persistent) {
@@ -186,7 +185,7 @@
     
     _pageChanged(page) {
       // Load page import on demand. Show 404 page if fails
-      const resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+      const resolvedPageUrl = this.resolveUrl(page + '.html');
       Polymer.importHref(
       resolvedPageUrl,
       null,
@@ -195,7 +194,7 @@
     }
     
     _showPage404() {
-      this.page = 'view404';
+      this.page = 'not-found';
     }
   }
   

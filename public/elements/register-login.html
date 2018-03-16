@@ -1,0 +1,117 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">   
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="register-login">
+    <template>
+        <style include="shared-styles">
+            .alert-error {
+                background: #ffcdd2;
+                border: 1px solid #f44336;
+                border-radius: 3px;
+                color: #333;
+                font-size: 14px;
+                padding: 10px;
+            }
+        </style>
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <form id='unauth' hidden$="[[storedUser.loggedin]]">
+            <h1>Ark Login</h1>
+            <template is="dom-if" if="[[error]]">
+                <p class="alert-error"><strong>Error : </strong>[[error]]</p>
+            </template>
+            <input name="user" placeholder="Username" type="text" value="{{formData.username::input}}" required>
+            <input name="pwd" placeholder="Password" type="password" value="{{formData.password::input}}" required>
+            <paper-button raised on-tap="_submitSignIn" class="primary">Sign In</paper-button>
+            <paper-button raised on-tap="_submitSignUp" class="primary">Sign Up</paper-button>
+            <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
+            
+        </form>
+        <div id="auth" hidden$="[[!storedUser.loggedin]]">
+            <p>Welcome, [[storedUser.name]]</p>
+            <log-out></log-out>
+            <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
+        </div>
+        <iron-ajax
+        id="loginAjax"
+        method="post"
+        content-type="application/json"
+        handle-as="text"
+        on-response="handleUserResponse"
+        on-error="handleUserError"></iron-ajax>   
+    </template>
+    <script>
+        class RegisterLogin extends Polymer.Element {
+            static get is() { return 'register-login'; }
+            
+            static get properties() {
+                return {
+                    formData: {
+                        type: Object,
+                        value: {}
+                    },
+                    storedUser: Object,
+                    error: String
+                }
+            }
+            ready() {
+                super.ready();
+            }
+            _setReqBody() {
+                this.$.loginAjax.body = this.formData;
+            }
+            _testButton(evt){
+                console.log(this.storedUser);
+            }
+            _submitSignUp() {
+                this.$.loginAjax.url = '/signup';
+                this._setReqBody();
+                this.$.loginAjax.generateRequest();
+                this.error = '';
+            }
+            
+            _submitSignIn() {
+                this.$.loginAjax.url = '/signin';
+                this._setReqBody();
+                this.$.loginAjax.generateRequest();
+                this.error = '';
+            }
+            
+            handleUserResponse(event) {
+                //var response = JSON.parse(event.detail.response);
+                //console.log('Response from DB', event.detail.status, ' ', event.detail.response);
+                switch (event.detail.status) {
+                    case 201:
+                    this.error = event.detail.response;
+                    break;
+                    
+                    case 200:
+                    var response = JSON.parse(event.detail.response);
+                    this.error = '';
+                    console.log("data : ", response[0].username);
+                    this.storedUser = {
+                        name: response[0].username,
+                        loggedin: true
+                    };
+                    console.log('Stored user : ', this.storedUser)
+                    break;
+                    
+                    default:
+                    this.error = 'Unexpected error';
+                    break;
+                }
+                
+                //Empty input
+                this.formData = {};
+            }
+            
+            handleUserError(event) {
+                this.error = event.detail.request.xhr.response;
+                
+            }
+        }
+        window.customElements.define(RegisterLogin.is, RegisterLogin);
+    </script>
+</dom-module>
