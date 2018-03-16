@@ -22,13 +22,15 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
-
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="my-icons.html">
+<!-- Shared CSS -->
+<link rel="import" href="shared-styles.html">
 
 <!-- Views -->
 <link rel="lazy-import" href="homepage.html">
 <link rel="lazy-import" href="not-found.html">
+<link rel="lazy-import" href="profile-page.html">
 <!-- No lazy import on this for the global variable to be accessible at loading -->
 <link rel="import" href="register-login.html">
 <link rel="import" href="login-logout.html">
@@ -38,7 +40,6 @@
       :host {
         --app-primary-color: #099b34;
         --app-secondary-color: black;
-        
         display: block;
       }
       
@@ -71,12 +72,9 @@
         color: black;
         font-weight: bold;
       }
-      #test
-      {
-        width: 10px;
-      }
     </style>
     
+    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <app-location
     route="{{route}}"
     url-space-regex="^[[rootPath]]">
@@ -88,13 +86,15 @@
   data="{{routeData}}"
   tail="{{subroute}}">
 </app-route>
-<brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 <app-drawer-layout fullbleed narrow="{{narrow}}">
   <!-- Drawer content -->
   <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
     <app-toolbar>Menu</app-toolbar>
     <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
       <a name="home-page" href="[[rootPath]]home-page">Home</a>
+      <template is="dom-if" if="{{storedUser.loggedin}}">
+          <a name="home-page" href="[[rootPath]]profile-page">Profile</a>
+      </template>
     </iron-selector>
   </app-drawer>
   
@@ -118,6 +118,7 @@
     <home-page name="home-page"></home-page>
     <not-found name="not-found"></not-found>
     <register-login name="register-login"></register-login>
+    <profile-page name="profile-page"></profile-page>
   </iron-pages>
 </app-header-layout>
 </app-drawer-layout>
@@ -126,7 +127,7 @@
 <script>
   // Gesture events like tap and track generated from touch will not be
   // preventable, allowing for better scrolling performance.
-  Polymer.setPassiveTouchGestures(true);
+  //Polymer.setPassiveTouchGestures(true);
   
   class MyApp extends Polymer.Element {
     static get is() { return 'my-app'; }
@@ -163,9 +164,9 @@
       ];
     }
     ready() {
-        super.ready();
-        if(this.storedUser == null) this.storedUser={};
-      }
+      super.ready();
+      if(this.storedUser == null) this.storedUser={};
+    }
     _rootPathChanged(path){
       console.log('this.rootpath : ', path);
     }

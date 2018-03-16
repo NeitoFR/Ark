@@ -34,7 +34,7 @@ exports.createUser = function (data, callback){
     var c = init();
     var query = 'INSERT INTO `USER_TABLE` (`id_user`, `username`, `password`, `group_id`) \
     VALUES (NULL, \''+data.username+'\', \''+data.password+'\', \'0\');';
-    console.log(query);
+//    console.log(query);
     c.query(query, function(err, res)
     {
         if (err){
