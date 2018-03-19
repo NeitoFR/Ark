@@ -1,0 +1,56 @@
+<link rel='import' href='../bower_components/polymer/polymer-element.html'>
+<link rel="import" href="data-table.html">
+
+<dom-module id='alert-list'>
+    <template>
+        <style include='shared-styles'>
+            :host
+            {
+                --app-primary-color: #099b34;
+            }
+            .card
+            {
+                margin: 24px 5px 0px;
+                width: 45%;
+                display: flex;
+            }
+            .right
+            {
+                float: right;
+            }
+            .left
+            {
+                float: left;
+            }
+            @media screen and (max-width: 1100px) {
+                .right
+                {
+                    float: left;
+                }
+            }
+        </style>
+        
+        <div class='card left'>
+            <h1>On Progress Mission</h1>
+            <data-table></data-table>
+            
+        </div>
+        <div class='card right'>
+            <h1>New Alert</h1>
+            
+        </div>
+    </template>
+    <script>
+        class AlertList extends Polymer.Element {
+            static get is() {
+                return 'alert-list'
+            }
+            static get propreties() {
+                return {
+                    
+                }
+            }
+        }
+        window.customElements.define(AlertList.is, AlertList);
+    </script>
+</dom-module>

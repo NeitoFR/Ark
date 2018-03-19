@@ -31,6 +31,7 @@
 <link rel="lazy-import" href="homepage.html">
 <link rel="lazy-import" href="not-found.html">
 <link rel="lazy-import" href="profile-page.html">
+<link rel="lazy-import" href="alert-list.html">
 <!-- No lazy import on this for the global variable to be accessible at loading -->
 <link rel="import" href="register-login.html">
 <link rel="import" href="login-logout.html">
@@ -92,6 +93,7 @@
     <app-toolbar>Menu</app-toolbar>
     <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
       <a name="home-page" href="[[rootPath]]home-page">Home</a>
+      <a name="home-page" href="[[rootPath]]alert-list">Alert List</a>
       <template is="dom-if" if="{{storedUser.loggedin}}">
           <a name="home-page" href="[[rootPath]]profile-page">Profile</a>
       </template>
@@ -104,7 +106,7 @@
     <app-header slot="header" condenses reveals effects="waterfall">
       <app-toolbar>
         <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-        <div main-title>Store</div>
+        <div main-title>The Ark </div>
         <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
         <login-logout></login-logout>
       </app-toolbar>
@@ -119,6 +121,7 @@
     <not-found name="not-found"></not-found>
     <register-login name="register-login"></register-login>
     <profile-page name="profile-page"></profile-page>
+    <alert-list name="alert-list"></alert-list>
   </iron-pages>
 </app-header-layout>
 </app-drawer-layout>
