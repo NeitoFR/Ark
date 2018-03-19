@@ -1,0 +1,153 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<!-- Polymer Routing Components -->
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<!-- Global Variable + Local Storage -->
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<!-- Shared CSS -->         
+<link rel="import" href="shared-styles.html">
+<!-- Views -->
+<link rel="lazy-import" href="homepage.html">
+<link rel="lazy-import" href="not-found.html">
+<link rel="lazy-import" href="profile-page.html">
+<link rel="lazy-import" href="alert-list.html">
+<link rel="lazy-import" href="alert-create.html">
+<!-- No lazy import on those for the global variable to be accessible at loading -->
+<link rel="import" href="register-login.html">
+
+
+<link rel='import' href='../bower_components/polymer/polymer-element.html'>
+
+<dom-module id='ark-app'>
+    <template>
+        <style>
+            :host
+            {
+                --apc: #099b34; /*App Primary Color*/
+                --asc: #4CAF50; /*App Secondary Color*/
+                display: block;
+            }
+            ul {
+                line-height: 200%;
+                font-size: 18px;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color:var(--apc);
+            }
+            
+            .app-link {
+                float: right;
+                border-left: 1px solid #bbb;
+                cursor: pointer;
+            }
+            .app-title
+            {
+                float: left;
+                cursor: pointer;
+            }
+            .app-link a, .app-title a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            
+            /* Change the link color to #111 (black) on hover */
+            .app-link a:hover {
+                background-color: var(--asc);
+            }
+            .app-link a:active {
+                background-color: var(--asc);
+            }
+        </style>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <!-- Routing stuff -->
+        <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location> 
+        <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+        
+        <!-- Navbar -->
+        <ul>
+            <iron-selector selected="[[page]]" role="navigation">
+                <li class="app-title"><a href=[[rootPath]]home-page>Ark Project</a></li>
+                <template is="dom-if" if="{{!storedUser.loggedin}}">
+                    <div class="drawer-link">
+                        <li class="app-link"><a href="[[rootPath]]register-login">Login</a></li>
+                    </div>
+                </template>
+                <template is="dom-if" if="{{storedUser.loggedin}}">
+                    <div on-click="_logout" class="drawer-link">
+                        <li class="app-link"><a href="">Log Out ([[storedUser.username]])</a></li>
+                        <li class="app-link"><a>Create Alert</a></li>
+                    </div>
+                </template>
+            </iron-selector>
+        </ul>
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <home-page name="home-page"></home-page>
+            <not-found name="not-found"></not-found>
+            <register-login name="register-login"></register-login>
+            <profile-page name="profile-page"></profile-page>
+            <alert-list name="alert-list"></alert-list>
+            <alert-create name="alert-create"></alert-create>
+        </iron-pages>
+    </template>
+    <script>
+        class ArkApp extends Polymer.Element {
+            static get is() { return 'ark-app' }
+            static get properties() {
+                return {
+                    page: {
+                        type: String,
+                        reflectToAttribute: true,
+                        observer: '_pageChanged'
+                    },
+                    routeData: Object,
+                    subRoute: Object,
+                    rootPath: {
+                        type: String,
+                        observer: '_rootPathChanged'
+                    },        
+                }
+            }
+            static get observers() {
+                return [
+                '_routePageChanged(routeData.page)',
+                ];
+            }
+            ready() {
+                super.ready();
+                if(this.storedUser == null) this.storedUser={};
+            }
+            _testButton(evt){
+                
+            }
+            _routePageChanged(page) {
+                this.page = page || 'home-page';
+            }
+            _logout()
+            {
+                window.location.replace("/");
+                this.storedUser = null;
+            }
+            _pageChanged(page) {
+                // Load page import on demand. Show 404 page if fails
+                const resolvedPageUrl = this.resolveUrl(page + '.html');
+                Polymer.importHref(
+                resolvedPageUrl,
+                null,
+                this._showPage404.bind(this),
+                true);
+            }
+            _showPage404() {
+                this.page = 'not-found';
+            }
+        }
+        window.customElements.define(ArkApp.is, ArkApp);
+    </script>
+</dom-module>
