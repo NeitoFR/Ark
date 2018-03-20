@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <!-- Shared CSS -->         
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <!-- Views -->
 <link rel="lazy-import" href="homepage.html">
 <link rel="lazy-import" href="not-found.html">
@@ -45,6 +46,10 @@
                 border-left: 1px solid #bbb;
                 cursor: pointer;
             }
+            .app-link iron-icon
+            {
+                padding: 0px 5px;
+            }
             .app-title
             {
                 float: left;
@@ -57,14 +62,35 @@
                 padding: 14px 16px;
                 text-decoration: none;
             }
-            
-            /* Change the link color to #111 (black) on hover */
-            .app-link a:hover {
+            .app-link a:hover{
                 background-color: var(--asc);
             }
             .app-link a:active {
                 background-color: var(--asc);
             }
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+            .dropdown-content {
+                display: none;
+                position: fixed;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+                right: 0;
+            }
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                border-top: 1px solid #CCC;
+            }
+            .dropdown-content a:hover {background-color: rgba(0, 0, 0, 0.20)}
+            .dropdown:hover .dropdown-content {display: block;}
+            .dropdown:hover .dropbtn {background-color: #3e8e41;}
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         <!-- Routing stuff -->
@@ -76,15 +102,17 @@
             <iron-selector selected="[[page]]" role="navigation">
                 <li class="app-title"><a href=[[rootPath]]home-page>Ark Project</a></li>
                 <template is="dom-if" if="{{!storedUser.loggedin}}">
-                    <div class="drawer-link">
-                        <li class="app-link"><a href="[[rootPath]]register-login">Login</a></li>
-                    </div>
+                    <li class="app-link"><a href="[[rootPath]]register-login"><iron-icon icon="icons:power-settings-new"></iron-icon></a></li>
                 </template>
                 <template is="dom-if" if="{{storedUser.loggedin}}">
-                    <div on-click="_logout" class="drawer-link">
-                        <li class="app-link"><a href="">Log Out ([[storedUser.username]])</a></li>
-                        <li class="app-link"><a>Create Alert</a></li>
+                    <div class="dropdown app-link">
+                        <li class=""><a><iron-icon icon="icons:power-settings-new"></iron-icon></a></li>
+                        <div class="dropdown-content"> 
+                            <a href="[[rootPath]]register-login">Profile</a>
+                            <a on-click="_logout">Logout</a>
+                        </div>
                     </div>
+                    <li class="app-link"><a href="[[rootPath]]alert-create">Create Alert</a></li>
                 </template>
             </iron-selector>
         </ul>
