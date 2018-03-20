@@ -1,0 +1,46 @@
+<link rel='import' href='../bower_components/polymer/polymer-element.html'>
+<link rel="import" href="component.html">
+
+<dom-module id='comment-section'>
+    <template>
+        <style include='shared-styles'>
+            .comment-container
+            {
+                position: relative;
+                width: 50%;
+                border: 2px black solid;
+            }
+            .comment-thread
+            {
+                height: 100px;
+                border: 2px yellow solid;
+            }
+            .input-comment
+            {
+                margin: 5px;
+                border: 2px blue solid;
+            }
+        </style>
+        <div class="comment-container" align="center">
+            <div class="comment-thread">
+
+            </div>
+            <div class="input-comment">
+
+            </div>
+        </div>
+    </template>
+    <script>
+        class CommentSection extends Polymer.Element {
+            static get is() {
+                return 'comment-section'
+            }
+            static get propreties() {
+                 return {
+
+                }
+            }
+        }
+        window.customElements.define(CommentSection.is, CommentSection);
+    </script>
+</dom-module>
