@@ -61,3 +61,34 @@ app.post('/signin', function(req, res) {
     }
   });
 });
+
+app.post('/add-comment', function(req, res){
+  console.log('comment : ', req.body[Object.keys(req.body)[0]]);
+  console.log('user : ', Object.keys(req.body)[0]);
+  maria.addComment(req.body, function(err, data){
+    if(err){ 
+      console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
+      res.status(400).send(err).end();
+    }
+    else
+    {console.log('Request : Update commentaire :: OK');
+      //res.status(200).send('Commentaire ajouté').end();
+      res.status(204).send(data).end();
+    }
+  });
+});
+
+app.get('/get-comments', function(req, res) {
+  maria.getCommentThread(function(err, data){
+    if(err){ 
+      console.log('Request : SELECT commentaire :: ERROR');
+      res.status(400).send(err).end();
+    }
+    else{
+      console.log('Request : SELECT commentaire :: OK');
+      var str = Object.values(data[0]);
+      console.log('thread', str[0]);
+      res.send(str[0]).end();
+    }
+  });
+});

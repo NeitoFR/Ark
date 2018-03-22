@@ -9,18 +9,8 @@
             :host
             {
                 --app-primary-color: #099b34;
-                --app-secondary-color: black;
-            }
-            .alert-error {
-                background: #ffcdd2;
-                border: 1px solid #f44336;
-                border-radius: 3px;
-                color: #333;
-                font-size: 14px;
-                padding: 10px;
-            }:host {
+                --app-secondary-color: black; 
                 display: block;
-                
                 padding: 10px;
             }
             h1 {
@@ -105,15 +95,17 @@
         </style>
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        <form id='unauth' hidden$="[[storedUser.loggedin]]">
+        <form hidden$="[[storedUser.loggedin]]">
             <h1>Ark Login</h1>
             <template is="dom-if" if="[[error]]">
                 <p class="alert-error"><strong>Error : </strong>[[error]]</p>
             </template>
             <input name="user" placeholder="Username" type="text" value="{{formData.username::input}}" required>
             <input name="pwd" placeholder="Password" type="password" value="{{formData.password::input}}" required>
-            <paper-button raised on-tap="_submitSignIn" class="primary">Sign In</paper-button>
-            <paper-button raised on-tap="_submitSignUp" class="primary">Sign Up</paper-button>
+            <div align="center">
+                    <paper-button raised on-tap="_submitSignIn" class="primary">Sign In</paper-button>
+                    <paper-button raised on-tap="_submitSignUp" class="primary">Sign Up</paper-button>
+            </div>
             <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
             
         </form>

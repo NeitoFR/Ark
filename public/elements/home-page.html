@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="data-table.html">
+<link rel="import" href="comment-section.html">
 
 <dom-module id="home-page">
   <template>
@@ -21,22 +22,14 @@
     <iron-ajax
     id="ajaxEl"
     content-type="application/json" >></iron-ajax>
-    <div class="card">
-      <!--<h1>Maria DB API</h1>
-        <paper-button on-tap="_getUsers" class="primary">show user_table</paper-button>
-        
-        <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
-        <blockquote><paper-spinner id="spinner" active></paper-spinner>
-          <data-table table-data={{tableData}}></data-table>
-        </blockquote>-->
-        
+    <div class="card">        
         <h1>Maria DB API</h1>
-        <paper-button on-tap="_getUsers" class="primary">show user_table</paper-button>
+        <paper-button raised on-tap="_getUsers" class="primary">show user_table</paper-button>
         <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
         <blockquote><paper-spinner id="spinner" active></paper-spinner>
           <data-table table-data={{tableData}} table-head={{theads}}></data-table>
         </blockquote>
-        
+        <comment-section></comment-section>
       </div>
     </template>
     
