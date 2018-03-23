@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">   
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="register-login">
@@ -36,36 +37,6 @@
                 box-sizing: border-box;
                 padding: 20px;
             }
-            
-            input {
-                margin: 40px 25px;
-                width: 200px;
-                display: block;
-                border: none;
-                padding: 10px 0;
-                border-bottom: solid 1px #1abc9c;
-                -webkit-transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
-                transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
-                background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 96%, #1abc9c 4%);
-                background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #1abc9c 4%);
-                background-position: -200px 0;
-                background-size: 200px 100%;
-                background-repeat: no-repeat;
-                color: #0e6252;
-            }
-            input:focus, input:valid {
-                box-shadow: none;
-                outline: none;
-                background-position: 0 0;
-            }
-            input:focus::-webkit-input-placeholder, input:valid::-webkit-input-placeholder {
-                color: #1abc9c;
-                font-size: 11px;
-                -webkit-transform: translateY(-20px);
-                transform: translateY(-20px);
-                visibility: visible !important;
-            }
-            
             #sub {
                 border: none;
                 background: #1abc9c;
@@ -83,14 +54,9 @@
                 transform: translateY(-3px);
                 box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
             }
-            
-            
-            input:focus::-webkit-input-placeholder, input:valid::-webkit-input-placeholder {
-                color: #1abc9c;
-                font-size: 11px;
-                -webkit-transform: translateY(-20px);
-                transform: translateY(-20px);
-                visibility: visible !important;
+            form paper-input
+            {
+                margin: 15px;
             }
         </style>
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -100,11 +66,13 @@
             <template is="dom-if" if="[[error]]">
                 <p class="alert-error"><strong>Error : </strong>[[error]]</p>
             </template>
-            <input name="user" placeholder="Username" type="text" value="{{formData.username::input}}" required>
-            <input name="pwd" placeholder="Password" type="password" value="{{formData.password::input}}" required>
-            <div align="center">
-                    <paper-button raised on-tap="_submitSignIn" class="primary">Sign In</paper-button>
-                    <paper-button raised on-tap="_submitSignUp" class="primary">Sign Up</paper-button>
+            <paper-input label="Username" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.username::input}}"></paper-input>
+            <paper-input id="input"label="Password" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
+            <!-- <input name="user" placeholder="Username" type="text"  required onkeypress='_checkEmptyness'> -->
+            <!-- <input name="pwd" placeholder="Password" type="password"  required onkeypress='_checkEmptyness'> -->
+            <div align="center"style="margin-top:20px;">
+                <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Sign In</paper-button>
+                <paper-button raised on-tap="_submitSignUp" class="primary"  disabled={{disState}}>Sign Up</paper-button>
             </div>
             <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
             
@@ -141,6 +109,10 @@
             }
             ready() {
                 super.ready();
+                this.disState = false;  
+            }
+            _chekckEmptyness(){
+                console.log('username : ', this.formData.username, '| password : ', this.formData.password);
             }
             _setReqBody() {
                 this.$.loginAjax.body = this.formData;

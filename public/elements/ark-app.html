@@ -186,7 +186,7 @@
             _routePageChanged(page) {
                 this.page = page || 'home-page';
                 if(this.$.drawer.opened)this.$.drawer.close();
-                this.storedUser.activePage = page;
+                if(this.storedUser)this.storedUser.activePage = page;
             }
             _logout()
             {
