@@ -126,7 +126,7 @@
                     <div class="dropdown app-link">
                         <li class=""><a><iron-icon icon="icons:power-settings-new"></iron-icon></a></li>
                         <div class="dropdown-content"> 
-                            <a href="[[rootPath]]register-login">Profile</a>
+                            <a href="[[rootPath]]profile-page">Profile</a>
                             <a on-click="_logout">Logout</a>
                         </div>
                     </div>
@@ -181,11 +181,12 @@
                 if(!this.storedUser) this.storedUser={};
             }
             _testButton(evt){
-                
+                //console.log('ark-app', this.storedUser.activePage);
             }
             _routePageChanged(page) {
                 this.page = page || 'home-page';
                 if(this.$.drawer.opened)this.$.drawer.close();
+                this.storedUser.activePage = page;
             }
             _logout()
             {

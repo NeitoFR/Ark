@@ -34,7 +34,7 @@ exports.createUser = function (data, callback){
     var c = init();
     var query = 'INSERT INTO `USER_TABLE` (`id_user`, `username`, `password`, `group_id`) \
     VALUES (NULL, \''+data.username+'\', \''+data.password+'\', \'0\');';
-    //    console.log(query);
+    //    //console.log(query);
     c.query(query, function(err, res)
     {
         if (err){
@@ -69,12 +69,12 @@ exports.verifyUser = function (data, callback) {
 }
 
 exports.addComment = function (data, callback) {
-    console.log('data', data)
+    //console.log('data', data)
     var c = init(),
     toAppend = '|'+Object.keys(data)+"|"+data[Object.keys(data)[0]],
     query = 'UPDATE mission SET commentaire = CONCAT(commentaire, \''+toAppend+'\') WHERE id_mission=1';
     
-    console.log('comment to append : ', toAppend);
+    //console.log('comment to append : ', toAppend);
     c.query(query, function(err, res){
         if (err){
             c.end();

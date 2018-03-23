@@ -107,7 +107,7 @@
             _testButton()
             {
                 //this._getCommentThread();
-                console.log('ff', this.comment_T);
+                //console.log('ff', this.comment_T);
             }
             _checkEmptyness(val)
             {
@@ -138,7 +138,7 @@
                 var parsedComment = new Object, u = this.storedUser.username, c = this.commentText;
                 c = this._addslashes(c);
                 parsedComment[u] = c;
-                console.log("Parsed comment : ", parsedComment);
+                //console.log("Parsed comment : ", parsedComment);
                 
                 return parsedComment;
             }
@@ -153,7 +153,7 @@
             }
             _buildCommentThread(ct)
             { 
-                console.log(ct);
+                //console.log(ct);
                 
                 var test = ct.split('|');
                 var comment_data = new Array;
@@ -167,13 +167,13 @@
             }
             _handleResponse(evt)
             {
-                console.log('Status : ', evt);
+                //console.log('Status : ', evt);
                 switch (evt.detail.url) {
                     case '/get-comments':
                     this._buildCommentThread(evt.detail.response);
                     break;
                     case '/add-comment':
-                    console.log('Comment added successfully');
+                    //console.log('Comment added successfully');
                     this.commentText = '';
                     location.reload();
                     break;
@@ -183,7 +183,7 @@
             }
             _handleError(evt)
             {
-                console.log('error : ', evt.detail.error);
+                //console.log('error : ', evt.detail.error);
                 this.error = evt.detail.error.message;
             }
         }

@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -10,7 +11,12 @@
                 display: block
             }
             @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
-            
+            #spinner
+            {
+                margin-left: 50%;
+                margin-right: 50%;
+                display: none;
+            }
             body {
                 background-color: #3e94ec;
                 font-family: "Roboto", helvetica, arial, sans-serif;
@@ -175,6 +181,8 @@
                 </template>
             </tbody>
         </table>
+        <paper-spinner id="spinner" active></paper-spinner>
+        <iron-ajax id="tableAjax" on-response='handleResponse'></iron-ajax>
     </template>
     <script>
         
@@ -188,11 +196,59 @@
                     tableData: {
                         type: Object,
                         value: null
+                    },
+                    queryUrl:{
+                        type: String,
+                        observer: '_queryUrlChanged'
+                    },
+                    reload: {
+                        type: Boolean,
+                        value : false,
+                        observer: '_reloadChanged'
                     }
-                };
+                }
+            }
+            static get observers() {
+            }
+            
+            ready() {
+                super.ready();
+                this.$.spinner.style.display = 'none';
+            }
+            _getData(url) {
+                this.$.tableAjax.url = url;
+                this.$.tableAjax.method = 'GET';
+                this.$.tableAjax.generateRequest();
+            }
+            handleResponse(evt)
+            {
+                //console.log('raw data : ', evt.detail.response);
+                this.$.spinner.style.display = 'none';
+                this.tableData = this._buildTable(evt.detail.response);
+            }
+            _queryUrlChanged(val)
+            {
+                this._getData(val);
+                //console.log(val);
+                this.$.spinner.style.display = 'block';
+            }
+            _reloadChanged(val){
+                //console.log(val);
+            }
+            _buildTable(rawData){
+
+                //console.log('rawData : ', rawData);
+                var table = new Array();
+                
+                this.tableHead = Object.keys(rawData[0]);
+                
+                rawData.forEach(function(rawLine){
+                    table.push(Object.values(rawLine));
+                });
+                //console.log('ridofkey table : ', table);
+                return table;
             }
         }
-        
         window.customElements.define(DataTable.is, DataTable);
     </script>
 </dom-module>
