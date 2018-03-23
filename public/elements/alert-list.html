@@ -27,17 +27,23 @@
                 {
                     float: left;
                 }
+                .card
+                {
+                    width: 95%;
+                    box-sizing: border-box;
+                }
             }
         </style>
         
         <div class='card left'>
             <h1>On Progress Mission</h1>
-            <data-table></data-table>
+            <data-table id='validAlertTable'></data-table>
+            
             
         </div>
         <div class='card right'>
             <h1>New Alert</h1>
-            
+            <data-table id='newAlertTable'></data-table>
         </div>
     </template>
     <script>
@@ -49,6 +55,12 @@
                 return {
                     
                 }
+            }
+            ready()
+            {
+                super.ready();
+                this.$.validAlertTable.queryUrl = '/maria/alert-status-0';
+                this.$.newAlertTable.queryUrl = '/maria/alert-status-1'; 
             }
         }
         window.customElements.define(AlertList.is, AlertList);

@@ -73,7 +73,7 @@
                         <p class="alert-error"><strong>Error : </strong>[[error]]</p>
                     </template>
                     <div id="new-comment"><paper-textarea char-counter maxlength="250" value={{commentText}} on-value-changed='_checkEmptyness' label="Add a comment"></paper-textarea></div>
-                    <div align="right" style="margin:5px;"><paper-button raised on-tap="_testButton" class="disabled">test button</paper-button></div>
+                    <!-- <div align="right" style="margin:5px;"><paper-button raised on-tap="_testButton" class="disabled">test button</paper-button></div> -->
                     <div align="right" style="margin:5px;"><paper-button  disabled={{subState}} raised on-tap="_addComment">Comment</paper-button></div>
                 </div>
             </template>
@@ -92,10 +92,6 @@
             }
             static get propreties() {
                 return {
-                    comment_T:{
-                        type: Object,
-                        notify: true
-                    }
                 }
             }
             ready()
@@ -125,7 +121,7 @@
                     this.error = 'Empty text area.'
                 }
                 else{
-                    this.$.commentAjax.url = '/add-comment';
+                    this.$.commentAjax.url = '/maria/add-comment';
                     this.$.commentAjax.method =  'POST';
                     this.$.commentAjax.body = this._buildComment();
                     this.$.commentAjax.contentType='application/json';
@@ -146,7 +142,7 @@
             _getCommentThread()
             {
                 this.error = null;
-                this.$.commentAjax.url = '/get-comments'
+                this.$.commentAjax.url = '/maria/get-comments'
                 this.$.commentAjax.method = 'GET'
                 this.$.commentAjax.handleAs = "text";
                 this.$.commentAjax.generateRequest();
@@ -169,10 +165,10 @@
             {
                 //console.log('Status : ', evt);
                 switch (evt.detail.url) {
-                    case '/get-comments':
+                    case '/maria/get-comments':
                     this._buildCommentThread(evt.detail.response);
                     break;
-                    case '/add-comment':
+                    case '/maria/add-comment':
                     //console.log('Comment added successfully');
                     this.commentText = '';
                     location.reload();

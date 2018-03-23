@@ -17,13 +17,6 @@
                 margin-right: 50%;
                 display: none;
             }
-            body {
-                background-color: #3e94ec;
-                font-family: "Roboto", helvetica, arial, sans-serif;
-                font-size: 16px;
-                font-weight: 400;
-                text-rendering: optimizeLegibility;
-            }
             
             div.table-title {
                 display: block;
@@ -51,7 +44,7 @@
                 border-radius:3px;
                 border-collapse: collapse;
                 height: 320px;
-                margin: auto;
+                margin: 25px;
                 max-width: 600px;
                 padding:5px;
                 width: 100%;
@@ -182,7 +175,7 @@
             </tbody>
         </table>
         <paper-spinner id="spinner" active></paper-spinner>
-        <iron-ajax id="tableAjax" on-response='handleResponse'></iron-ajax>
+        <iron-ajax id="tableAjax" on-response='handleResponse' on-error='handleError'></iron-ajax>
     </template>
     <script>
         
@@ -200,11 +193,6 @@
                     queryUrl:{
                         type: String,
                         observer: '_queryUrlChanged'
-                    },
-                    reload: {
-                        type: Boolean,
-                        value : false,
-                        observer: '_reloadChanged'
                     }
                 }
             }
@@ -215,33 +203,34 @@
                 super.ready();
                 this.$.spinner.style.display = 'none';
             }
+            _queryUrlChanged(url)
+            {
+                this._getData(url);
+                console.log('request on', url);
+                this.$.spinner.style.display = 'block';
+            }
             _getData(url) {
                 this.$.tableAjax.url = url;
                 this.$.tableAjax.method = 'GET';
-                this.$.tableAjax.generateRequest();
+                this.$.tableAjax.generateRequest();//Trigger following handler
             }
             handleResponse(evt)
             {
-                //console.log('raw data : ', evt.detail.response);
+                console.log('raw data : ', evt.detail.response);
                 this.$.spinner.style.display = 'none';
+                //console.log('alert list evt : ', evt.detail.response);
                 this.tableData = this._buildTable(evt.detail.response);
             }
-            _queryUrlChanged(val)
+            handleError(evt)
             {
-                this._getData(val);
-                //console.log(val);
-                this.$.spinner.style.display = 'block';
-            }
-            _reloadChanged(val){
-                //console.log(val);
+                console.log('error : ', evt.detail.error.message);
             }
             _buildTable(rawData){
 
                 //console.log('rawData : ', rawData);
                 var table = new Array();
-                
                 this.tableHead = Object.keys(rawData[0]);
-                
+
                 rawData.forEach(function(rawLine){
                     table.push(Object.values(rawLine));
                 });

@@ -67,7 +67,6 @@ exports.verifyUser = function (data, callback) {
         
     });
 }
-
 exports.addComment = function (data, callback) {
     //console.log('data', data)
     var c = init(),
@@ -86,11 +85,25 @@ exports.addComment = function (data, callback) {
         }
     });
 }
-
 exports.getCommentThread = function (callback){
     var c = init(),
     query ="SELECT commentaire FROM mission WHERE id_mission = 1"
 
+    c.query(query, function(err, res)
+    {
+        if (err){
+            c.end();
+            callback(err, null);
+        }
+        else{
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getAlertByStatus = function (status, callback){
+    var c = init(),
+    query = "SELECT id_mission, nom FROM mission WHERE status = "+status+';';
     c.query(query, function(err, res)
     {
         if (err){

@@ -15,7 +15,7 @@
     <h1>Test Page</h1>
       <paper-button raised on-tap="_getUsers" class="primary">show user_table</paper-button>
       <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
-    <data-table query-url={{tableUrl}} reload={{reload}}></data-table>
+    <data-table query-url={{tableUrl}}></data-table>
     <comment-section></comment-section>
   </div>
 </template>
@@ -27,7 +27,6 @@
     }
     _getUsers(){
       this.tableUrl = '/maria/users';
-      this.reload = true;
     }
     _testButton(){
       //console.log('homepage : ',this.storedUser.activePage);
