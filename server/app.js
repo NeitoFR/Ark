@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', function (req, res){
     res.sendFile('../public/index.html', {root: __dirname});
 
-    console.log(req.url);
+    //console.log(req.url);
 });
 //SQL API Routing
 app.use(require('./maria-sql/maria-routes'));
@@ -28,12 +28,12 @@ app.get('/*', function (req, res){
     //res.sendFile('../public/src/my-'+url, {root: __dirname});
     res.writeHead(302, {'Location': '/'});
     res.end();
-    console.log(req.url);
+    //console.log(req.url);
 });
 
 app.post('/login', function(req, res){
     //Getting data
-    console.log("received data : ", req.body);
+    //console.log("received data : ", req.body);
     //console.log("user received : ", req.body.username);
     //console.log("pwd received : ", req.body.password);
     //DB Checking

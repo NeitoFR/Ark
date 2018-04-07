@@ -1,0 +1,24 @@
+<link rel='import' href='../bower_components/polymer/polymer-element.html'>
+
+<dom-module id='alert-create'>
+    <template>
+        <style include='shared-styles'>
+        </style>
+        <div class="card">
+            <h1>Create Alert</h1>
+        </div>
+    </template>
+    <script>
+        class AlertCreate extends Polymer.Element {
+            static get is() {
+                return 'alert-create'
+            }
+            static get propreties() {
+                 return {
+
+                }
+            }
+        }
+        window.customElements.define(AlertCreate.is, AlertCreate);
+    </script>
+</dom-module>

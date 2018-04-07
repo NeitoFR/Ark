@@ -1,0 +1,188 @@
+<link rel='import' href='../bower_components/polymer/polymer-element.html'>
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id='comment-section'>
+    <template>
+        <style include='shared-styles'>
+            .container
+            {
+                width: 50%;
+                background-color: #CCC;
+                box-sizing: border-box;
+            }
+            .respond{margin-top: 10px;}
+            .respond textarea
+            {
+                width: 100%;
+                height: 150px;
+                box-sizing: border-box;
+            }
+            .thread
+            {
+                padding: 10px;
+                border-radius: 5px;
+                background-color: white;
+                height: 400px;
+                border: 2px solid #ccc;
+                overflow: auto;
+                
+            }
+            .thead p
+            {
+                white-space: initial;
+            }
+            *{outline: none;}
+            .thread ul
+            {
+                list-style-type: none;
+                padding: 5px;
+                margin: 0px;
+            }
+            .c-u
+            {
+                
+                padding: 10px;
+                font-size: large;
+                
+            }
+            .c-t
+            {
+                padding: 5px 0px 5px 20px;
+                border-bottom: 1px solid #DDD;
+            }
+        </style>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <div class="container card">
+            <div class="thread">
+                <ul>
+                    <template is="dom-repeat" items="{{comment_T}}" as="comment" index-as="comment_no">
+                        <li class="c-u">
+                            [[comment.username]]
+                        </li>
+                        <li class="c-t">
+                            [[comment.comment]]
+                        </li>
+                    </template>
+                </ul>
+            </div>
+            <template is="dom-if" if="{{storedUser.loggedin}}">
+                <div class="respond">
+                    <template is="dom-if" if="[[error]]">
+                        <p class="alert-error"><strong>Error : </strong>[[error]]</p>
+                    </template>
+                    <div id="new-comment"><paper-textarea char-counter maxlength="250" value={{commentText}} on-value-changed='_checkEmptyness' label="Add a comment"></paper-textarea></div>
+                    <!-- <div align="right" style="margin:5px;"><paper-button raised on-tap="_testButton" class="disabled">test button</paper-button></div> -->
+                    <div align="right" style="margin:5px;"><paper-button  disabled={{subState}} raised on-tap="_addComment">Comment</paper-button></div>
+                </div>
+            </template>
+            <template is="dom-if" if="{{!storedUser.loggedin}}">
+                <div class="respond">
+                    <div id="new-comment"><paper-textarea label="Please login first to leave a comment" disabled></paper-textarea></div>
+                </div>
+            </template>
+        </div>
+        <iron-ajax id="commentAjax" on-response='_handleResponse' on-error="_handleError"></iron-ajax>
+    </template>
+    <script>
+        class CommentSection extends Polymer.Element {
+            static get is() {
+                return 'comment-section'
+            }
+            static get propreties() {
+                return {
+                }
+            }
+            ready()
+            {
+                super.ready();
+                this.subState = true;
+                this._getCommentThread();
+            }
+            _testButton()
+            {
+                //this._getCommentThread();
+                //console.log('ff', this.comment_T);
+            }
+            _checkEmptyness(val)
+            {
+                if(val.detail.value)
+                this.subState = false;
+                else
+                this.subState = true;
+                
+            }
+            _addComment()
+            {
+                this.error = null;
+                if(!this.commentText)
+                {
+                    this.error = 'Empty text area.'
+                }
+                else{
+                    this.$.commentAjax.url = '/maria/add-comment';
+                    this.$.commentAjax.method =  'POST';
+                    this.$.commentAjax.body = this._buildComment();
+                    this.$.commentAjax.contentType='application/json';
+                    this.$.commentAjax.handleAs="text";
+                    this.$.commentAjax.generateRequest();
+                }
+            }
+            _buildComment()
+            {
+                var parsedComment = new Object, u = this.storedUser.username, c = this.commentText;
+                c = this._addslashes(c);
+                parsedComment[u] = c;
+                //console.log("Parsed comment : ", parsedComment);
+                
+                return parsedComment;
+            }
+            _addslashes(ch) { ch = ch.replace(/\\/g,"\\\\"); ch = ch.replace(/\'/g,"\\'"); ch = ch.replace(/\"/g,"\\\""); return ch }
+            _getCommentThread()
+            {
+                this.error = null;
+                this.$.commentAjax.url = '/maria/get-comments'
+                this.$.commentAjax.method = 'GET'
+                this.$.commentAjax.handleAs = "text";
+                this.$.commentAjax.generateRequest();
+            }
+            _buildCommentThread(ct)
+            { 
+                //console.log(ct);
+                
+                var test = ct.split('|');
+                var comment_data = new Array;
+                for(var i = 1; i < test.length; i+=2 )
+                {
+                    comment_data[(i-1)/2] = {username: test[i], comment: test[i+1]};
+                }
+                
+                this.comment_T = comment_data;
+                
+            }
+            _handleResponse(evt)
+            {
+                //console.log('Status : ', evt);
+                switch (evt.detail.url) {
+                    case '/maria/get-comments':
+                    this._buildCommentThread(evt.detail.response);
+                    break;
+                    case '/maria/add-comment':
+                    //console.log('Comment added successfully');
+                    this.commentText = '';
+                    location.reload();
+                    break;
+                    default:
+                    break;
+                }
+            }
+            _handleError(evt)
+            {
+                //console.log('error : ', evt.detail.error);
+                this.error = evt.detail.error.message;
+            }
+        }
+        window.customElements.define(CommentSection.is, CommentSection);
+    </script>
+</dom-module>

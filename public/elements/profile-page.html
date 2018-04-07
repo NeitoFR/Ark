@@ -9,7 +9,7 @@
             }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        <div class="card">Profile page of {{storedUser.username}}</div>
+        <div class="card">Profile page of {{storedUser.username}}, vous etes sur la page : [[storedUser.activePage]]</div>
     </template>
     <script>
         class ProfiePage extends Polymer.Element {
@@ -17,12 +17,6 @@
             static get is() {
                 return 'profile-page';
             }
-            
-            /*static get properties() {
-                return {
-                    
-                };
-            }*/
             
             ready() {
                 super.ready();

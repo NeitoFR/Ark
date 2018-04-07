@@ -1,0 +1,215 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<!-- Polymer Routing Components -->
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<!-- Global Variable + Local Storage -->
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<!-- Shared CSS -->         
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<!-- Layout Components -->
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<!-- Views -->
+<link rel="lazy-import" href="homepage.html">
+<link rel="lazy-import" href="not-found.html">
+<link rel="lazy-import" href="profile-page.html">
+<link rel="lazy-import" href="alert-list.html">
+<link rel="lazy-import" href="alert-create.html">
+<!-- No lazy import on those for the global variable to be accessible at loading -->
+<link rel="import" href="register-login.html">
+
+
+<link rel='import' href='../bower_components/polymer/polymer-element.html'>
+
+<dom-module id='ark-app'>
+    <template>
+        <style>
+            :host
+            {
+                --apc: #099b34; /*App Primary Color*/
+                --asc: #4CAF50; /*App Secondary Color*/
+                display: block;
+            }
+            ul {
+                line-height: 150%;
+                font-size: 18px;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color:var(--apc);
+            }
+            
+            .app-link {
+                float: right;
+                border-left: 1px solid #bbb;
+                cursor: pointer;
+            }
+            .app-title
+            {
+                float: left;
+                cursor: pointer;
+            }
+            .app-link a, .app-title a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            .app-link a:hover{
+                background-color: var(--asc);
+            }
+            .app-link a:active {
+                background-color: var(--asc);
+            }
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+            .dropdown-content {
+                display: none;
+                position: fixed;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+                right: 0;
+            }
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                border-top: 1px solid #CCC;
+            }
+            .dropdown-content a:hover {background-color: rgba(0, 0, 0, 0.20)}
+            .dropdown:hover .dropdown-content {display: block;}
+            .dropdown:hover .dropbtn {background-color: #3e8e41;}       
+            .drawer-list a {
+                display: block;
+                padding: 0 30px;
+                text-decoration: none;
+                color: var(--app-secondary-color);
+                line-height: 50px;
+                outline: none;
+                
+            }
+            .drawer-list a:hover{background-color: #CCC};
+            #drawer-head
+            {
+                font-size: 24px;
+                text-align: center;
+                border-bottom: 1px solid #CCC;
+                padding-bottom: 15px;
+            }
+        </style>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <!-- Routing stuff -->
+        <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location> 
+        <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+        
+        <!-- Navbar -->
+        <ul>
+            <iron-selector selected="[[page]]" role="navigation">
+                <template is="dom-if" if="{{storedUser.loggedin}}">
+                    <li class="app-title" style="border-right: 1px solid #bbb" on-click="_toggleDrawer"><a><iron-icon icon="icons:menu"></iron-icon></a></li>
+                </template>
+                <li class="app-title"><a href=[[rootPath]]home-page>Ark Project</a></li>
+                <template is="dom-if" if="{{!storedUser.loggedin}}">
+                    <li class="app-link"><a href="[[rootPath]]register-login"><iron-icon icon="icons:power-settings-new"></iron-icon></a></li>
+                </template>
+                <template is="dom-if" if="{{storedUser.loggedin}}">
+                    <div class="dropdown app-link">
+                        <li class=""><a><iron-icon icon="icons:power-settings-new"></iron-icon></a></li>
+                        <div class="dropdown-content"> 
+                            <a href="[[rootPath]]profile-page">Profile</a>
+                            <a on-click="_logout">Logout</a>
+                        </div>
+                    </div>
+                    <li class="app-link"><a href="[[rootPath]]alert-create">Create Alert</a></li>
+                </template>
+            </iron-selector>
+        </ul>
+        <!-- End of NavBar -->
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+            <home-page name="home-page"></home-page>
+            <not-found name="not-found"></not-found>
+            <register-login name="register-login"></register-login>
+            <profile-page name="profile-page"></profile-page>
+            <alert-list name="alert-list"></alert-list>
+            <alert-create name="alert-create"></alert-create>
+        </iron-pages>
+        <app-drawer id='drawer'>
+            <p id="drawer-head">Your Ark</p>
+            <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                <a name="home-page" href="[[rootPath]]home-page" on-click="_toggleDrawer">Home</a>
+                <a name="home-page" href="[[rootPath]]alert-list">Alert List</a>
+                <template is="dom-if" if="{{storedUser.loggedin}}">
+                    <a name="home-page" href="[[rootPath]]profile-page">Profile</a>
+                </template>
+            </iron-selector>
+        </app-drawer>
+    </template>
+    <script>
+        class ArkApp extends Polymer.Element {
+            static get is() { return 'ark-app' }
+            static get properties() {
+                return {
+                    page: {
+                        type: String,
+                        reflectToAttribute: true,
+                        observer: '_pageChanged'
+                    },
+                    routeData: Object,
+                    subRoute: Object,
+                    rootPath: {
+                        type: String
+                    },        
+                }
+            }
+            static get observers() {
+                return [
+                '_routePageChanged(routeData.page)',
+                ];
+            }
+            ready() {
+                super.ready();
+                if(!this.storedUser) this.storedUser={};
+            }
+            _testButton(evt){
+                //console.log('ark-app', this.storedUser.activePage);
+            }
+            _routePageChanged(page) {
+                this.page = page || 'home-page';
+                if(this.$.drawer.opened)this.$.drawer.close();
+                if(this.storedUser)this.storedUser.activePage = page;
+            }
+            _logout()
+            {
+                window.location.replace("/");
+                this.storedUser = {};
+            }
+            _toggleDrawer()
+            {
+                this.$.drawer.toggle();
+            }
+            _pageChanged(page) {
+                // Load page import on demand. Show 404 page if fails
+                const resolvedPageUrl = this.resolveUrl(page + '.html');
+                Polymer.importHref(
+                resolvedPageUrl,
+                null,
+                this._showPage404.bind(this),
+                true);
+            }
+            _showPage404() {
+                this.page = 'not-found';
+            }
+        }
+        window.customElements.define(ArkApp.is, ArkApp);
+    </script>
+</dom-module>
