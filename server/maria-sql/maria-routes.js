@@ -60,7 +60,7 @@ app.post('/signin', function(req, res) {
     }
   });
 });
-app.post('/add-comment', function(req, res){
+app.post('/maria/add-comment', function(req, res){
   //console.log('comment : ', req.body[Object.keys(req.body)[0]]);
   //console.log('user : ', Object.keys(req.body)[0]);
   maria.addComment(req.body, function(err, data){
@@ -75,7 +75,7 @@ app.post('/add-comment', function(req, res){
     }
   });
 });
-app.get('/get-comments', function(req, res) {
+app.get('/maria/get-comments', function(req, res) {
   maria.getCommentThread(function(err, data){
     if(err){ 
       //console.log('Request : SELECT commentaire :: ERROR');

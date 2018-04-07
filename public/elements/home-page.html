@@ -13,8 +13,8 @@
     
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <h1>Test Page</h1>
-      <paper-button raised on-tap="_getUsers" class="primary">show user_table</paper-button>
-      <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
+    <paper-button raised on-tap="_getUsers" class="primary">show user_table</paper-button>
+    <paper-button raised on-tap="_testButton" class="primary">test button</paper-button>
     <data-table query-url={{tableUrl}}></data-table>
     <comment-section></comment-section>
   </div>
@@ -24,6 +24,11 @@
   class HomePage extends Polymer.Element {
     static get is() { return 'home-page'; }
     static get properties() { return 
+    }
+    ready()
+    {
+      super.ready();
+      this._getUsers();
     }
     _getUsers(){
       this.tableUrl = '/maria/users';
