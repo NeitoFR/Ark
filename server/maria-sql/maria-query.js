@@ -3,7 +3,7 @@ var Client = require('mariasql');
 require('dotenv').config();
 
 var init = function(base){
-    console.log(process.env);
+    //console.log(process.env);
     
     var c = new Client({
         host: process.env.DB_HOST,

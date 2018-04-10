@@ -3,9 +3,33 @@
 <dom-module id='alert-create'>
     <template>
         <style include='shared-styles'>
+            paper-input
+            {
+                width: 300px;
+            }
+            paper-textarea
+            {
+                width: 600px;
+            }
+            .card
+            {
+                width: 60%;
+            }
         </style>
         <div class="card">
             <h1>Create Alert</h1>
+            <div>
+                <paper-input label="Nom de l'alerte" always-float-label></paper-input>
+                <paper-input label="Résumé" always-float-label></paper-input>
+                <paper-input label="Continent" always-float-label></paper-input>
+                <paper-input label="Pays" always-float-label></paper-input>
+                <paper-input  label="Ville" always-float-label></paper-input>
+                <paper-textarea char-counter maxlength="800" label="Description" always-float-label></paper-textarea>
+                <div align="center"style="margin-top:20px;">
+                    <paper-button raised on-tap="" class="primary" disabled={{disState}}>Proposer</paper-button>
+                </div>
+                
+            </div>
         </div>
     </template>
     <script>
@@ -14,9 +38,13 @@
                 return 'alert-create'
             }
             static get propreties() {
-                 return {
-
+                return {
+                    
                 }
+            }
+            ready(){
+                super.ready();
+                
             }
         }
         window.customElements.define(AlertCreate.is, AlertCreate);
