@@ -1,0 +1,171 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="register-login">
+    <template>
+        <style include="shared-styles">
+            :host
+            {
+                --app-primary-color: #099b34;
+                --app-secondary-color: black; 
+                display: block;
+                padding: 10px;
+            }
+            h1 {
+                height: 100px;
+                width: 100%;
+                font-size: 18px;
+                background: var(--app-primary-color);
+                color: white;
+                line-height: 150%;
+                border-radius: 3px 3px 0 0;
+                box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+            }
+            
+            form {
+                box-sizing: border-box;
+                width: 260px;
+                margin: 100px auto 0;
+                box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+                padding-bottom: 40px;
+                border-radius: 3px;
+            }
+            form h1 {
+                box-sizing: border-box;
+                padding: 20px;
+            }
+            #sub {
+                border: none;
+                background: #1abc9c;
+                cursor: pointer;
+                border-radius: 3px;
+                padding: 6px;
+                width: 200px;
+                color: white;
+                margin-left: 25px;
+                box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
+            }
+            #sub:hover {
+                -webkit-transform: translateY(-3px);
+                -ms-transform: translateY(-3px);
+                transform: translateY(-3px);
+                box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
+            }
+            form paper-input
+            {
+                margin: 15px;
+            }
+        </style>
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <form hidden$="[[storedUser.loggedin]]">
+            <h1>Ark Login</h1>
+            <template is="dom-if" if="[[error]]">
+                <p class="alert-error"><strong>Error : </strong>[[error]]</p>
+            </template>
+            <paper-input label="pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
+            <paper-input id="input"label="Password" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
+            <!-- <input name="user" placeholder="pseudo" type="text"  required onkeypress='_checkEmptyness'> -->
+            <!-- <input name="pwd" placeholder="Password" type="password"  required onkeypress='_checkEmptyness'> -->
+            <div align="center"style="margin-top:20px;">
+                <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Sign In</paper-button>
+                <paper-button raised on-tap="_submitSignUp" class="primary"  disabled={{disState}}>Sign Up</paper-button>
+            </div>
+            <paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>
+            
+        </form>
+        <!--<div class="card" id="auth" hidden$="[[!storedUser.loggedin]]">
+            <p>Welcome, [[storedUser.pseudo]]</p>
+            <log-out></log-out>
+            <paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>
+        </div>-->
+        <iron-ajax
+        id="loginAjax"
+        method="post"
+        content-type="application/json"
+        handle-as="text"
+        on-response="handleUserResponse"
+        on-error="handleUserError"></iron-ajax>   
+    </template>
+    <script>
+        class RegisterLogin extends Polymer.Element {
+            static get is() { return 'register-login'; }
+            
+            static get properties() {
+                return {
+                    formData: {
+                        type: Object,
+                        value: {}
+                    },
+                    storedUser: {
+                        type: Object,
+                        value: {}
+                    },
+                    error: String
+                }
+            }
+            ready() {
+                super.ready();
+                this.disState = false;  
+            }
+            _chekckEmptyness(){
+                console.log('pseudo : ', this.formData.pseudo, '| password : ', this.formData.password);
+            }
+            _setReqBody() {
+                this.$.loginAjax.body = this.formData;
+            }
+            _testButton(evt){
+                console.log(this.formData);
+            }
+            _submitSignUp() {
+                this.$.loginAjax.url = '/signup';
+                this._setReqBody();
+                this.$.loginAjax.generateRequest();
+                this.error = '';
+            }
+            
+            _submitSignIn() {
+                this.$.loginAjax.url = '/signin';
+                this._setReqBody();
+                this.$.loginAjax.generateRequest();
+                this.error = '';
+            }
+            
+            handleUserResponse(event) {
+                //var response = JSON.parse(event.detail.response);
+                //console.log('Response from DB', event.detail.status, ' ', event.detail.response);
+                switch (event.detail.status) {
+                    case 201:
+                    this.error = event.detail.response;
+                    break;
+                    
+                    case 200:
+                    var response = JSON.parse(event.detail.response);
+                    this.error = '';
+                    //console.log("data : ", response[0].pseudo);
+                    this.storedUser = {
+                        pseudo: response[0].pseudo,
+                        loggedin: true
+                    };
+                    //console.log('Stored user : ', this.storedUser);
+                    window.location.replace("/");
+                    break;
+                    
+                    default:
+                    this.error = 'Unexpected error';
+                    break;
+                }
+                
+                //Empty input
+                this.formData = {};
+            }
+            
+            handleUserError(event) {
+                this.error = event.detail.request.xhr.response;
+                
+            }
+        }
+        window.customElements.define(RegisterLogin.is, RegisterLogin);
+    </script>
+</dom-module>

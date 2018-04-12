@@ -22,10 +22,10 @@ app.post('/signup', function(req, res) {
       var str = '';
       switch (err.code) {
         case 1062:
-        str = 'Username already taken';
+        str = 'pseudo already taken';
         break;
         case 1406:
-        str = 'Username or password too long';
+        str = 'pseudo or password too long';
         break;
         default:
         str = 'Unexpected error code : '+err.code;
@@ -51,7 +51,7 @@ app.post('/signin', function(req, res) {
       //console.log('Request : Verify user :: OK\n data : ', data);
       if(data.info.numRows == 0)
       {
-        res.status(201).send('Username or password incorrect').end();
+        res.status(201).send('pseudo or password incorrect').end();
       }
       if(data.info.numRows == 1)
       {

@@ -32,9 +32,9 @@ exports.getUsers = function (callback){
 }
 //Authentication related query
 exports.createUser = function (data, callback){
-    var c = init();
-    var query = 'INSERT INTO `USER_TABLE` (`id_user`, `username`, `password`, `group_id`) \
-    VALUES (NULL, \''+data.username+'\', \''+data.password+'\', \'0\');';
+    var c = init(process.env.B_USER);
+    var query = 'INSERT INTO `Utilisateurs` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
+    VALUES (NULL, \''+data.pseudo+'\', \''+data.nom+'\', \''+data.prenom+'\', \''+data.password+'\', \'0\', \'0\', \'1\', \''+data.email+'\', \''+data.phone+'\', \''+data.country+'\', \''+data.city+'\', \''+data.address+'\', \'1\');';
     //console.log(query);
     c.query(query, function(err, res)
     {
@@ -51,7 +51,7 @@ exports.createUser = function (data, callback){
 exports.verifyUser = function (data, callback) {
     var c = init(process.env.B_USER),
     
-    query = 'SELECT `pseudo` FROM Utilisateurs WHERE `pseudo` = \''+data.username+'\' AND `password` = \''+data.password+'\';';
+    query = 'SELECT `pseudo` FROM Utilisateurs WHERE `pseudo` = \''+data.pseudo+'\' AND `password` = \''+data.password+'\';';
     
     c.query(query, function(err, res)
     {
@@ -68,7 +68,7 @@ exports.verifyUser = function (data, callback) {
 }
 exports.addComment = function (data, callback) {
     //console.log('data', data)
-    var c = init(),
+    var c = init(process.env.B_MISSION),
     toAppend = '|'+Object.keys(data)+"|"+data[Object.keys(data)[0]],
     query = 'UPDATE mission SET commentaire = CONCAT(commentaire, \''+toAppend+'\') WHERE id_mission=1';
     
@@ -85,7 +85,7 @@ exports.addComment = function (data, callback) {
     });
 }
 exports.getCommentThread = function (callback){
-    var c = init(),
+    var c = init(process.env.B_MISSION),
     query ="SELECT commentaire FROM mission WHERE id_mission = 1"
 
     c.query(query, function(err, res)

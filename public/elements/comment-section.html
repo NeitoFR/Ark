@@ -59,7 +59,7 @@
                 <ul>
                     <template is="dom-repeat" items="{{comment_T}}" as="comment" index-as="comment_no">
                         <li class="c-u">
-                            [[comment.username]]
+                            [[comment.pseudo]]
                         </li>
                         <li class="c-t">
                             [[comment.comment]]
@@ -131,7 +131,7 @@
             }
             _buildComment()
             {
-                var parsedComment = new Object, u = this.storedUser.username, c = this.commentText;
+                var parsedComment = new Object, u = this.storedUser.pseudo, c = this.commentText;
                 c = this._addslashes(c);
                 parsedComment[u] = c;
                 //console.log("Parsed comment : ", parsedComment);
@@ -155,7 +155,7 @@
                 var comment_data = new Array;
                 for(var i = 1; i < test.length; i+=2 )
                 {
-                    comment_data[(i-1)/2] = {username: test[i], comment: test[i+1]};
+                    comment_data[(i-1)/2] = {pseudo: test[i], comment: test[i+1]};
                 }
                 
                 this.comment_T = comment_data;

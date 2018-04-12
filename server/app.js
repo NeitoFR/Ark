@@ -34,7 +34,7 @@ app.get('/*', function (req, res){
 app.post('/login', function(req, res){
     //Getting data
     //console.log("received data : ", req.body);
-    //console.log("user received : ", req.body.username);
+    //console.log("user received : ", req.body.pseudo);
     //console.log("pwd received : ", req.body.password);
     //DB Checking
     //var response = "belette";

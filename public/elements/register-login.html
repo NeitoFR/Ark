@@ -7,79 +7,77 @@
         <style include="shared-styles">
             :host
             {
-                --app-primary-color: #099b34;
-                --app-secondary-color: black; 
                 display: block;
                 padding: 10px;
             }
-            h1 {
-                height: 100px;
-                width: 100%;
-                font-size: 18px;
-                background: var(--app-primary-color);
-                color: white;
-                line-height: 150%;
-                border-radius: 3px 3px 0 0;
-                box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
-            }
-            
-            form {
-                box-sizing: border-box;
-                width: 260px;
-                margin: 100px auto 0;
-                box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
-                padding-bottom: 40px;
-                border-radius: 3px;
-            }
-            form h1 {
-                box-sizing: border-box;
-                padding: 20px;
-            }
-            #sub {
-                border: none;
-                background: #1abc9c;
-                cursor: pointer;
-                border-radius: 3px;
-                padding: 6px;
-                width: 200px;
-                color: white;
-                margin-left: 25px;
-                box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
-            }
-            #sub:hover {
-                -webkit-transform: translateY(-3px);
-                -ms-transform: translateY(-3px);
-                transform: translateY(-3px);
-                box-shadow: 0 6px 6px 0 rgba(0, 0, 0, 0.2);
-            }
-            form paper-input
+            .container
             {
-                margin: 15px;
+                margin: 50px auto;
+                width: 800px;
+                height: 500px;
+                box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+                border-radius: 3px;
+            }
+            .header{width: 100%;}
+            .header div
+            {
+                background-color: var(--apc);
+                height: 70px;
+                text-align: center;
+                font-size: 15px;
+                padding-top: 10px;
+                color: white;
+            }
+            .header div:first-of-type{border-right: 1px solid #bbb;border-top-left-radius: 3px;}
+            .header div:first-of-type:hover{background-color: var(--asc);}
+            .header div:last-of-type{border-top-right-radius: 3px;}
+            .header div:last-of-type:hover{background-color: var(--asc);}
+            .content
+            {
+                padding: 15px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .content div
+            {
+                padding: 15px;
             }
         </style>
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        <form hidden$="[[storedUser.loggedin]]">
-            <h1>Ark Login</h1>
-            <template is="dom-if" if="[[error]]">
-                <p class="alert-error"><strong>Error : </strong>[[error]]</p>
-            </template>
-            <paper-input label="Username" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.username::input}}"></paper-input>
-            <paper-input id="input"label="Password" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
-            <!-- <input name="user" placeholder="Username" type="text"  required onkeypress='_checkEmptyness'> -->
-            <!-- <input name="pwd" placeholder="Password" type="password"  required onkeypress='_checkEmptyness'> -->
-            <div align="center"style="margin-top:20px;">
-                <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Sign In</paper-button>
-                <paper-button raised on-tap="_submitSignUp" class="primary"  disabled={{disState}}>Sign Up</paper-button>
-            </div>
-            <paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>
+        
+        <div class="flex flex--col container">
+            <iron-selector selected="{{selTab}}" attr-for-selected="name" fallback-selection="signin" role="navigation" class="flex flex--row flex__item--top header">
+                <div class="flex__item--top flex__item" name="signin">Sign In</div>
+                <div class="flex__item--top flex__item" name="signup">Sign Up</div>
+            </iron-selector>
             
-        </form>
-        <!--<div class="card" id="auth" hidden$="[[!storedUser.loggedin]]">
-            <p>Welcome, [[storedUser.username]]</p>
-            <log-out></log-out>
-            <paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>
-        </div>-->
+            <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
+                <div name="signin">
+                    <paper-input label="pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
+                    <paper-input id="input"label="Password" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
+                    
+                    <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Sign In</paper-button>
+                </div>
+                <div name="signup" class="flex flex--row">
+                    <div class="flex__item ">
+                        <paper-input label="Pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
+                        <paper-input label="Name" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.prenom::input}}"></paper-input>
+                        <paper-input label="Surname" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.nom::input}}"></paper-input>
+                        <paper-input label="Password" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
+                        <paper-button raised on-tap="_submitSignUp" class="primary"  disabled={{disState}}>Sign Up</paper-button>
+                    </div>
+                    <div class="flex__item">
+                        <paper-input label="email" auto-validate pattern="[a-zA-Z_0-9@.]{6,30}" value="{{formData.email::input}}"></paper-input>
+                        <paper-input label="Phone number" auto-validate pattern="[0-9]{6,15}" value="{{formData.phone::input}}"></paper-input>
+                        <paper-input label="Country" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.country::input}}"></paper-input>
+                        <paper-input label="City" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.city::input}}"></paper-input>
+                        <paper-input label="Address" auto-validate pattern="[a-zA-Z_0-9]{6,50}" value="{{formData.address::input}}"></paper-input>
+                    </div>
+                </div>
+            </iron-pages>
+        </div>
+        
         <iron-ajax
         id="loginAjax"
         method="post"
@@ -110,24 +108,24 @@
                 this.disState = false;  
             }
             _chekckEmptyness(){
-                console.log('username : ', this.formData.username, '| password : ', this.formData.password);
+                console.log('pseudo : ', this.formData.pseudo, '| password : ', this.formData.password);
             }
             _setReqBody() {
-                this.$.loginAjax.body = this.formData;
+                
             }
             _testButton(evt){
                 console.log(this.formData);
             }
             _submitSignUp() {
                 this.$.loginAjax.url = '/signup';
-                this._setReqBody();
+                this.$.loginAjax.body = this.formData;
                 this.$.loginAjax.generateRequest();
                 this.error = '';
             }
             
             _submitSignIn() {
                 this.$.loginAjax.url = '/signin';
-                this._setReqBody();
+                this.$.loginAjax.body = this.formData;
                 this.$.loginAjax.generateRequest();
                 this.error = '';
             }
@@ -143,9 +141,9 @@
                     case 200:
                     var response = JSON.parse(event.detail.response);
                     this.error = '';
-                    //console.log("data : ", response[0].username);
+                    //console.log("data : ", response[0].pseudo);
                     this.storedUser = {
-                        username: response[0].username,
+                        pseudo: response[0].pseudo,
                         loggedin: true
                     };
                     //console.log('Stored user : ', this.storedUser);
