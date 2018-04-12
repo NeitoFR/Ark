@@ -2,22 +2,23 @@
 var Client = require('mariasql');
 require('dotenv').config();
 
-var init = function(){
+var init = function(base){
+    //console.log(process.env);
+    
     var c = new Client({
-        
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
-        db: process.env.DB_NAME,
+        db: base,
         port: process.env.DB_PORT
     });
     return c;
 }
 
 exports.getUsers = function (callback){
-    var c = init();
+    var c = init(process.env.B_USER);
     
-    c.query('SELECT * FROM USER_TABLE', function(err, res)
+    c.query('SELECT * FROM Utilisateurs', function(err, res)
     {
         if (err){
             c.end();
@@ -50,9 +51,9 @@ exports.createUser = function (data, callback){
     
 }
 exports.verifyUser = function (data, callback) {
-    var c = init(),
+    var c = init(process.env.B_USER),
     
-    query = 'SELECT `username` FROM USER_TABLE WHERE `username` = \''+data.username+'\' AND `password` = \''+data.password+'\';';
+    query = 'SELECT `pseudo` FROM Utilisateurs WHERE `pseudo` = \''+data.username+'\' AND `password` = \''+data.password+'\';';
     
     c.query(query, function(err, res)
     {

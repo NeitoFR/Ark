@@ -1,22 +1,79 @@
 <link rel='import' href='../bower_components/polymer/polymer-element.html'>
 
+<link rel="import" href="shared-styles.html">
+
 <dom-module id='alert-create'>
     <template>
         <style include='shared-styles'>
+            paper-input
+            {
+                width: 300px;
+            }
+            paper-textarea
+            {
+                width: 600px;
+            }
+            .card
+            {
+                width: 700px;
+            }
         </style>
         <div class="card">
             <h1>Create Alert</h1>
+            <div>
+                <!-- Here are my inputs -->
+            <paper-input label="Nom de l'alerte" always-float-label value="{{formData.alertName::input}}"></paper-input>
+            <paper-input label="Résumé" always-float-label value="{{formData.summary::input}}"></paper-input>
+            <paper-input label="Continent" always-float-label value="{{formData.continent::input}}"></paper-input>
+            <paper-input label="Pays" always-float-label value="{{formData.country::input}}"></paper-input>
+            <paper-input  label="Ville" always-float-label value="{{formData.city::input}}"></paper-input>
+            <paper-textarea char-counter maxlength="800" label="Description" always-float-label value="{{formData.desc::input}}" required></paper-textarea>
+            <div align="center"style="margin-top:20px;">
+                <paper-button raised on-tap="_buildBody" class="primary" disabled={{disState}}>Proposer</paper-button>
+            </div>
+                
+            </div>
         </div>
+        <iron-ajax id="createAjax" on-response='handleResponse' on-error='handleError'></iron-ajax>
     </template>
     <script>
         class AlertCreate extends Polymer.Element {
             static get is() {
                 return 'alert-create'
             }
-            static get propreties() {
-                 return {
+static get propreties() {
+    return {
+        formData: {
+            type: Object,
+            value: {}
+        }
+    }
+}
+            ready(){
+                super.ready();
+                
+            }
+            handleResponse(evt){
+                
+            }
+            handleError(evt)
+            {
+                console.log('error : ', evt.detail.error.message);
+            }
+            _buildBody(){
+                // var body = {},
+                // data = this.formData;
+                //val = Object.values(data);
+                console.log("form data : ", this.formData);
+                
+                //this._postAlert(body)
+            }
+            _postAlert(){
 
-                }
+                this.$.createAjax.url = "";
+                this.$.createAjax.method = "POST";
+                this.$.createAjax.body = query;
+                this.$.createAjax.generateRequest();
             }
         }
         window.customElements.define(AlertCreate.is, AlertCreate);

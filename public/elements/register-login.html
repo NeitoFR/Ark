@@ -1,7 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">   
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="register-login">
@@ -74,7 +72,7 @@
                 <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Sign In</paper-button>
                 <paper-button raised on-tap="_submitSignUp" class="primary"  disabled={{disState}}>Sign Up</paper-button>
             </div>
-            <!--<paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>-->
+            <paper-button raised on-tap="_testButton" class="primary">Test Button</paper-button>
             
         </form>
         <!--<div class="card" id="auth" hidden$="[[!storedUser.loggedin]]">
@@ -118,7 +116,7 @@
                 this.$.loginAjax.body = this.formData;
             }
             _testButton(evt){
-                //console.log(this.storedUser);
+                console.log(this.formData);
             }
             _submitSignUp() {
                 this.$.loginAjax.url = '/signup';
