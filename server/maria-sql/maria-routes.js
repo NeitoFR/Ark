@@ -113,3 +113,20 @@ app.get('/maria/alert-status-1', function(req, res) {
     }
   });
 });
+app.post('/maria/create-alert', function(req, res){
+  //console.log(req.body);
+  
+  //console.log('comment : ', req.body[Object.keys(req.body)[0]]);
+  //console.log('user : ', Object.keys(req.body)[0]);
+  maria.createAlert(req.body, function(err, data){
+    if(err){ 
+      //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
+      res.status(400).send(err).end();
+    }
+    else
+    {//console.log('Request : Update commentaire :: OK');
+      //res.status(200).send('Commentaire ajouté').end();
+      res.status(204).send(data).end();
+    }
+  });
+});

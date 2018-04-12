@@ -47,8 +47,6 @@ exports.createUser = function (data, callback){
             callback(null, res);
         }
     });
-    
-    
 }
 exports.verifyUser = function (data, callback) {
     var c = init(process.env.B_USER),
@@ -103,8 +101,26 @@ exports.getCommentThread = function (callback){
     });
 }
 exports.getAlertByStatus = function (status, callback){
-    var c = init(),
-    query = "SELECT id_mission, nom FROM mission WHERE status = "+status+';';
+    var c = init(process.env.B_MISSION),
+    query = "SELECT id_Mission, nom,resume FROM missions WHERE id_Status = "+status+';';
+    c.query(query, function(err, res)
+    {
+        if (err){
+            c.end();
+            callback(err, null);
+        }
+        else{
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.createAlert = function (data, callback){
+    var c = init(process.env.B_MISSION);
+    
+    var query = 'INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `valideur`, `invalideur`, `indecis`, `missionnaires`, `donation`, `retour`, `visible`)  \
+    VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', NULL, \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
+    //console.log(query);
     c.query(query, function(err, res)
     {
         if (err){
