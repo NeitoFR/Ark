@@ -70,7 +70,7 @@ exports.addComment = function (data, callback) {
     //console.log('data', data)
     var c = init(process.env.B_MISSION),
     toAppend = '|'+Object.keys(data)+"|"+data[Object.keys(data)[0]],
-    query = 'UPDATE mission SET commentaire = CONCAT(commentaire, \''+toAppend+'\') WHERE id_mission=1';
+    query = 'UPDATE missions SET commentaires = CONCAT(commentaires, \''+toAppend+'\') WHERE id_Mission=1';
     
     //console.log('comment to append : ', toAppend);
     c.query(query, function(err, res){
@@ -86,7 +86,7 @@ exports.addComment = function (data, callback) {
 }
 exports.getCommentThread = function (callback){
     var c = init(process.env.B_MISSION),
-    query ="SELECT commentaire FROM mission WHERE id_mission = 1"
+    query ="SELECT commentaires FROM missions WHERE id_Mission = 1"
 
     c.query(query, function(err, res)
     {

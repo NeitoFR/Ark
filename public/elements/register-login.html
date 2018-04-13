@@ -54,7 +54,7 @@
             
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
                 <div name="signin">
-                    <paper-input label="pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
+                    <paper-input label="Pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
                     <paper-input id="input"label="Password" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
                     
                     <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Sign In</paper-button>

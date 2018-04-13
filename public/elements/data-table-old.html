@@ -6,10 +6,12 @@
 
 <dom-module id="data-table">
     <template>
-        <style include="shared-styles">
+        <style include="shared-style">
             :host 
             {
                 display: block;
+                --apc: #099b34; /*App Primary Color*/
+                --asc: #4CAF50; /*App Secondary Color*/
                 
             }
             #spinner
@@ -114,8 +116,7 @@
                     queryUrl:{
                         type: String,
                         observer: '_queryUrlChanged'
-                    },
-                    idMission: Array
+                    }
                 }
             }
             static get observers() {
@@ -138,7 +139,7 @@
             }
             handleResponse(evt)
             {
-                //console.log('raw data : ', evt.detail.response);
+                console.log('raw data : ', evt.detail.response);
                 this.$.spinner.style.display = 'none';
                 //console.log('alert list evt : ', evt.detail.response);
                 this.tableData = this._buildTable(evt.detail.response);
@@ -149,21 +150,14 @@
             }
             _buildTable(rawData){
                 
-                // console.log('rawData : ', rawData);
+                //console.log('rawData : ', rawData);
                 var table = new Array();
-                var ids = new Array();
                 this.tableHead = Object.keys(rawData[0]);
                 
                 rawData.forEach(function(rawLine){
                     table.push(Object.values(rawLine));
                 });
-                table.forEach(element => {
-                    ids.push(element[0]);
-                });
-                // console.log('ridofkey table : ', table);
-                console.log('id mission table : ', ids);
-                
-                this.idMission = ids;
+                console.log('ridofkey table : ', table);
                 return table;
             }
         }
