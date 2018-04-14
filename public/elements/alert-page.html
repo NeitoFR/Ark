@@ -1,0 +1,96 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel='import' href='./comment-section.html'>
+<link rel="import" href="shared-styles.html">
+<dom-module id="alert-page">
+    <template>
+        <style include='shared-styles'>
+            :host {
+                display: block
+            }
+            .content
+            {
+                padding: 15px;
+                width: 700px;
+                margin: auto;
+                box-sizing: border-box;
+                height: 500px;
+            }
+            .content div:first-of-type
+            {
+                width: 100%;
+            }
+            .article
+            {
+                padding: 15px 0px;
+            }
+        </style>
+        <div class="flex flex--col content">
+            <div class="flex flex--row flex__item--top">
+                <div class="flex__item--top flex__item">{{projectData.nom}}</div>
+                <div class="flex__item--top">{{projectData.date_creation}}</div>
+            </div>
+            <div class="flex flex--row flex__item article">
+                <div class="flex__item">Contient : {{projectData.continent}}</div>
+                <div class="flex__item">Pays : {{projectData.pays}}</div>
+                <div class="flex__item" style="text-align: right">Ville : {{projectData.ville}}</div>
+            </div>
+            <div class="flex__item--top article">
+                {{projectData.resume}}
+            </div>
+            <div class="flex__item article">
+                {{projectData.contenu}}
+            </div>
+            <div class="flex__item article">
+                <comment-section comment-thread={{commentThread}}></comment-section>
+            </div>
+        </div>
+        
+        <iron-ajax
+        id="ajaxEl"
+        url=""
+        content-type="application/json"
+        on-response="handleResponse"></iron-ajax>
+        
+    </template>
+    <script>
+        class alertPage extends Polymer.Element {
+            
+            static get is() {
+                return 'alert-page';
+            }
+            static get properties() {
+                return {
+                    projectId:{
+                        observer:'_procectIdChanged'
+                    },
+                    projectData : Object,
+                    commentThread: String
+                };
+            }
+            ready() {
+                super.ready();
+            }
+            _procectIdChanged(projectId){
+                //console.log("Etape 4 ", projectId);
+                this._getProjectData(projectId);
+            }
+            _getProjectData(projectId){
+                var url = '/missions/'+projectId;
+                this.$.ajaxEl.url = url;
+                this.$.ajaxEl.method = "GET";
+                this.$.ajaxEl.generateRequest();
+            }
+            handleResponse(evt)
+            {
+                console.log(evt.detail.response);
+                this.set('projectData', evt.detail.response[0]);
+                console.log('Project Data ', this.projectData);
+                setTimeout(() => {
+                    this.set('commentThread', this.projectData.commentaires);
+                    this.notifyPath('commentThread')
+                });
+            }
+        }
+        window.customElements.define(alertPage.is, alertPage);
+    </script>
+</dom-module>

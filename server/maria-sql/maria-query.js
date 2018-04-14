@@ -70,7 +70,7 @@ exports.addComment = function (data, callback) {
     //console.log('data', data)
     var c = init(process.env.B_MISSION),
     toAppend = '|'+Object.keys(data)+"|"+data[Object.keys(data)[0]],
-    query = 'UPDATE missions SET commentaires = CONCAT(commentaires, \''+toAppend+'\') WHERE id_Mission=1';
+    query = 'UPDATE Missions SET commentaires = CONCAT(commentaires, \''+toAppend+'\') WHERE id_Mission=1';
     
     //console.log('comment to append : ', toAppend);
     c.query(query, function(err, res){
@@ -86,8 +86,8 @@ exports.addComment = function (data, callback) {
 }
 exports.getCommentThread = function (callback){
     var c = init(process.env.B_MISSION),
-    query ="SELECT commentaires FROM missions WHERE id_Mission = 1"
-
+    query ="SELECT commentaires FROM Missions WHERE id_Mission = 1"
+    
     c.query(query, function(err, res)
     {
         if (err){
@@ -100,9 +100,30 @@ exports.getCommentThread = function (callback){
         }
     });
 }
-exports.getAlertByStatus = function (status, callback){
-    var c = init(process.env.B_MISSION),
-    query = "SELECT id_Mission, nom,resume FROM missions WHERE id_Status = "+status+';';
+exports.getAlerts = function (wanted, callback){
+    var query;
+    
+    switch (wanted) {
+        case "all":
+            query = "SELECT id_Mission, nom, resume FROM Missions"; 
+        break;
+
+        case "new":
+        
+        break;
+
+        case "":
+        
+        break;
+
+        case "":
+        
+        break;
+
+        default:
+        break;
+    }
+    var c = init(process.env.B_MISSION);
     c.query(query, function(err, res)
     {
         if (err){
@@ -118,8 +139,25 @@ exports.getAlertByStatus = function (status, callback){
 exports.createAlert = function (data, callback){
     var c = init(process.env.B_MISSION);
     
-    var query = 'INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `valideur`, `invalideur`, `indecis`, `missionnaires`, `donation`, `retour`, `visible`)  \
+    var query = 'INSERT INTO `Missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `valideur`, `invalideur`, `indecis`, `missionnaires`, `donation`, `retour`, `visible`)  \
     VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', NULL, \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
+    //console.log(query);
+    c.query(query, function(err, res)
+    {
+        if (err){
+            c.end();
+            callback(err, null);
+        }
+        else{
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getAlertById = function (id, callback){
+    var c = init(process.env.B_MISSION);
+    
+    var query = 'SELECT * FROM Missions WHERE id_Mission=\''+id+'\';';
     //console.log(query);
     c.query(query, function(err, res)
     {

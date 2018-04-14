@@ -1,6 +1,6 @@
 <link rel='import' href='../bower_components/polymer/polymer-element.html'>
-<link rel="import" href="data-table.html">
-
+<link rel="import" href="./alert-table.html">
+<link rel="import" href="shared-styles.html">
 <dom-module id='alert-list'>
     <template>
         <style include='shared-styles'>
@@ -45,14 +45,13 @@
                     <h1>On Progress Mission</h1>
                 </div>
                 <div class="flex__item--top">
-                    
-                    <data-table id='validAlertTable'></data-table>
+                    <alert-table wanted="all" id="table"></alert-table>
                 </div>
             </div> 
             
             
         </div>
-        <div class='card right'>
+        <!--<div class='card right'>
             <data-table id='newAlertTable'></data-table>
             <div class="flex flex--col">
                 <div class="flex__item--top">
@@ -63,7 +62,7 @@
                     <data-table id='newAlertTable'></data-table>
                 </div>
             </div>
-        </div>
+        </div>-->
     </template>
     <script>
         class AlertList extends Polymer.Element {
@@ -78,8 +77,14 @@
             ready()
             {
                 super.ready();
-                this.$.validAlertTable.queryUrl = '/maria/alert-status-0';
-                this.$.newAlertTable.queryUrl = '/maria/alert-status-1'; 
+                const table = this.$.table;
+                // this.$.validAlertTable.queryUrl = '/maria/alert-status-0';
+                // this.$.newAlertTable.queryUrl = '/maria/alert-status-1'; 
+                table.addEventListener('alert', function(evt){
+                    //console.log("Etape 2", evt);
+                    
+                    this.dispatchEvent(new CustomEvent('mission', {detail : {project_id: evt.detail.project_id}}));
+                }.bind(this));
             }
         }
         window.customElements.define(AlertList.is, AlertList);

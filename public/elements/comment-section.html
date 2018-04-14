@@ -8,7 +8,7 @@
         <style include='shared-styles'>
             .container
             {
-                width: 50%;
+                width: 100%;
                 background-color: #CCC;
                 box-sizing: border-box;
             }
@@ -90,15 +90,24 @@
             static get is() {
                 return 'comment-section'
             }
-            static get propreties() {
+            static get properties() {
                 return {
+                    commentThread:{
+                        observer:'_commentTheadArrived'
+                    }
                 }
             }
             ready()
             {
                 super.ready();
                 this.subState = true;
-                this._getCommentThread();
+                // this._getCommentThread();
+            }
+            _commentTheadArrived(val)
+            {
+                console.log('comment thread', val);
+                
+                this._buildCommentThread(val);
             }
             _testButton()
             {
@@ -139,14 +148,14 @@
                 return parsedComment;
             }
             _addslashes(ch) { ch = ch.replace(/\\/g,"\\\\"); ch = ch.replace(/\'/g,"\\'"); ch = ch.replace(/\"/g,"\\\""); return ch }
-            _getCommentThread()
+            /*_getCommentThread()
             {
                 this.error = null;
                 this.$.commentAjax.url = '/maria/get-comments'
                 this.$.commentAjax.method = 'GET'
                 this.$.commentAjax.handleAs = "text";
                 this.$.commentAjax.generateRequest();
-            }
+            }*/
             _buildCommentThread(ct)
             { 
                 //console.log(ct);

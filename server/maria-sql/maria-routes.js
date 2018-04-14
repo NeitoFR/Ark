@@ -70,10 +70,10 @@ app.post('/maria/add-comment', function(req, res){
     }
     else
     {//console.log('Request : Update commentaire :: OK');
-      //res.status(200).send('Commentaire ajouté').end();
-      res.status(204).send(data).end();
-    }
-  });
+    //res.status(200).send('Commentaire ajouté').end();
+    res.status(204).send(data).end();
+  }
+});
 });
 app.get('/maria/get-comments', function(req, res) {
   maria.getCommentThread(function(err, data){
@@ -89,8 +89,10 @@ app.get('/maria/get-comments', function(req, res) {
     }
   });
 });
-app.get('/maria/alert-status-0', function(req, res) {
-  maria.getAlertByStatus(0, function(err, data){
+app.post('/missions/get', function(req, res) {
+  console.log("body", req.body.wanted);
+  
+  maria.getAlerts(req.body.wanted, function(err, data){
     if(err){ 
       //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
       res.status(400).send(err).end();
@@ -101,7 +103,7 @@ app.get('/maria/alert-status-0', function(req, res) {
     }
   });
 });
-app.get('/maria/alert-status-1', function(req, res) {
+app.get('/missions/alert-status-1', function(req, res) {
   maria.getAlertByStatus(1, function(err, data){
     if(err){
       //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
@@ -125,8 +127,21 @@ app.post('/maria/create-alert', function(req, res){
     }
     else
     {//console.log('Request : Update commentaire :: OK');
-      //res.status(200).send('Commentaire ajouté').end();
-      res.status(204).send(data).end();
+    //res.status(200).send('Commentaire ajouté').end();
+    res.status(204).send(data).end();
+  }
+});
+});
+app.get('/missions/:project_id', function(req, res) {
+  console.log('url ', req.params);
+  maria.getAlertById(req.params.project_id, function(err, data){
+    if(err){
+      //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
+      res.status(400).send(err).end();
+    }
+    else{
+      //console.log('Request : SELECT * FROM USER_TABLE :: OK');
+      res.status(200).send(data).end();
     }
   });
 });

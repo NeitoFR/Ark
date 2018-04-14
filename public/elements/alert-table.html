@@ -1,0 +1,124 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel='import' href='../bower_components/iron-ajax/iron-ajax.html'>
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel='import' href='./shared-styles.html'>
+
+<dom-module id="alert-table">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+            #spinner
+            {
+                margin-left: 50%;
+                margin-right: 50%;
+                display: none;
+            }
+            table 
+            { 
+                border: 1px solid transparent;
+                border-collapse: collapse; 
+                border-spacing: 0;
+                color: #333;
+                margin: 25px;
+            }
+            
+            tr{border-bottom: 1px solid #AAA;}
+            tr:last-of-type{border: none;}
+            td, th {height: 30px;} 
+            
+            th
+            {
+                padding: 5px 15px;
+                background: rgb(43, 43, 43);
+                color: #ddd; /* Light grey background */
+                font-weight: bold; 
+                text-align: center;  
+            }
+            td
+            {
+                padding: 3px 30px 3px 30px;
+                
+            }
+            .link:hover{
+                background-color: rgba(0, 0, 0, 0.356);
+                cursor: pointer;
+            }
+        </style>
+        <paper-spinner id="spinner" active></paper-spinner>
+        <table>
+            <thead>
+                <th>Mission</th>
+                <th>Nom</th>
+                <th>Résumé</th>
+                <!--<template is="dom-repeat" items="{{tableHead}}" as="thead">
+                    <th>{{thead}}</th>
+                </template>-->
+            </thead>
+            <tbody>
+                <template is="dom-repeat" items="{{tableData}}" as="data">
+                    <tr>
+                        <td class="link" on-click="_test" data-projectid$="[[data.id_Mission]]">{{data.id_Mission}}</td>
+                        <td>{{data.nom}}</td>
+                        <td>{{data.resume}}</td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        <iron-ajax id="ajaxEl"content-type="application/json" on-response="handleResponse"></iron-ajax>
+        
+    </template>
+    <script>
+        class alertTable extends Polymer.Element {
+            static get is() {
+                return 'alert-table';
+            }
+            static get properties() {
+                return {
+                    wanted:{
+                        type:String
+                    }
+                };
+            }
+            ready() {
+                super.ready();
+                this._getData();
+                this.$.spinner.style.display = 'block';
+            }
+            _test(evt)
+            {
+                //console.log("Etape 1 ", evt);
+                
+                this.dispatchEvent(new CustomEvent('alert', {detail : {project_id: evt.target.dataset.projectid}}));
+                //console.log(evt);
+                //console.log(evt.target.dataset.mid);
+            }
+            _getData(){
+                this.$.ajaxEl.url = "/missions/get";
+                this.$.ajaxEl.method = "POST"
+                this.$.ajaxEl.body = {wanted : this.wanted};
+                this.$.ajaxEl.generateRequest();
+            }
+            handleResponse(evt){
+                //console.log(evt.detail.response);
+                this._buildTable(evt.detail.response);
+            }
+            _buildTable(data)
+            {
+                // var table = new Array(); 
+                /*data.forEach(function(rawLine){
+                    table.push(Object.values(rawLine));
+                });*/
+                // console.log(table);
+                this.$.spinner.style.display = 'none';
+                this.tableHead = Object.keys(data[0]);
+                this.tableData = data;
+                setTimeout(() => {
+                    //this._test();
+                });
+            }
+        }
+        window.customElements.define(alertTable.is, alertTable);
+    </script>
+</dom-module>
