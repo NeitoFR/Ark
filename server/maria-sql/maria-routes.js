@@ -90,7 +90,7 @@ app.get('/maria/get-comments', function(req, res) {
   });
 });
 app.post('/missions/get', function(req, res) {
-  console.log("body", req.body.wanted);
+  //console.log("body", req.body.wanted);
   
   maria.getAlerts(req.body.wanted, function(err, data){
     if(err){ 
@@ -133,7 +133,7 @@ app.post('/maria/create-alert', function(req, res){
 });
 });
 app.get('/missions/:project_id', function(req, res) {
-  console.log('url ', req.params);
+  //console.log('url ', req.params);
   maria.getAlertById(req.params.project_id, function(err, data){
     if(err){
       //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
