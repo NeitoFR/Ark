@@ -145,7 +145,7 @@
             <register-login name="register-login"></register-login>
             <profile-page name="profile-page"></profile-page>
             <alert-list name="alert-list" id="alertlist"></alert-list>
-            <alert-create name="alert-create"></alert-create>
+            <alert-create name="alert-create" trigger={{actr}}></alert-create>
             <alert-page name="alert-page" project-id="{{projectId}}"></alert-page>
         </iron-pages>
         <app-drawer id='drawer'>
@@ -173,6 +173,10 @@
                     subRoute: Object,
                     rootPath: {
                         type: String
+                    },
+                    actr: {
+                        type: Boolean,
+                        value: false
                     }
                 }
             }
@@ -186,7 +190,7 @@
                 if(!this.storedUser) this.storedUser={};
                 const alertlist = this.$.alertlist;
                 alertlist.addEventListener('mission', function(evt){
-                    console.log("Etape 3", evt.detail.project_id);
+                    //console.log("Etape 3", evt.detail.project_id);
                     this.projectId = evt.detail.project_id;
                     //window.history.pushState({}, null, '/alert-page');
                     this._routePageChanged('alert-page');
@@ -196,9 +200,19 @@
                 //console.log('ark-app', this.storedUser.activePage);
             }
             _routePageChanged(page) {
+                console.log('page changed', page);
+                
                 this.page = page || 'home-page';
                 if(this.$.drawer.opened)this.$.drawer.close();
                 if(this.storedUser)this.storedUser.activePage = page;
+                switch (page) {
+                    case 'alert-create':
+                        this.actr = !this.actr;
+                        break;
+                
+                    default:
+                        break;
+                }
             }
             _logout()
             {

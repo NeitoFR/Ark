@@ -5,82 +5,169 @@
 <dom-module id='alert-create'>
     <template>
         <style include='shared-styles'>
-            paper-input
+            paper-input{width: 300px;}
+            paper-textarea{width: 600px;}
+            .card{width: 700px;}
+            .listcontainer
             {
-                width: 300px;
+                height: 100px;
+                overflow: auto;
+                border-radius: 3px;
+                margin: 0 0 10px 0;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);                
             }
-            paper-textarea
-            {
-                width: 600px;
-            }
-            .card
-            {
-                width: 700px;
-            }
+            .animallist{list-style-type: none;}
+            .content{padding: 25px;}
+            .animal:hover{background-color: rgb(240, 240, 240);cursor: pointer;}
+            .animal.aselected{background-color: rgb(215, 215, 215);}
         </style>
-        <div class="card">
+        <div class="card content">
             <h1>Create Alert</h1>
-            <div class="flex--row">
-                
+            <div class="flex flex--row">
+                <div class="flex__item flex flex--col">
+                    <paper-input class="flex__item" label="Nom de l'alerte" always-float-label value="{{formData.alertName::input}}"></paper-input>
+                    <paper-input class="flex__item" label="Résumé" always-float-label value="{{formData.summary::input}}"></paper-input>
+                    <paper-input class="flex__item" label="Continent" always-float-label value="{{formData.continent::input}}"></paper-input>
+                    <paper-input class="flex__item" label="Pays" always-float-label value="{{formData.country::input}}"></paper-input>
+                    <paper-input class="flex__item" label="Ville" always-float-label value="{{formData.city::input}}"></paper-input>
+                </div>
+                <div class="flex__item flex flex--col">
+                    <paper-input class="flex__item--top" label="Animal selectionné" placeholder="Choisissez dans la liste ou ajouter le "always-float-label value="{{formData.animal}}" disabled></paper-input>
+                    <paper-input class="flex__item--top" label="Chercher anmial existant" always-float-label value="{{searchimal}}"><iron-icon icon="icons:search" slot="prefix"></iron-icon></paper-input>
+                    <div class="flex__item listcontainer">
+                        <ul class="animallist">
+                            <template is="dom-repeat" items="{{animalList}}" as="animal">
+                                <li class="animal" on-click="_selectItem">{{animal}}</li>
+                            </template>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex__item--middle">Ou alors<paper-button raised on-tap="" class="primary" disabled>Ajouter une espece</paper-button></div>
+                </div>
             </div>
-            <!-- Here are my inputs -->
-            <paper-input label="Nom de l'alerte" always-float-label value="{{formData.alertName::input}}"></paper-input>
-            <paper-input label="Résumé" always-float-label value="{{formData.summary::input}}"></paper-input>
-            <paper-input label="Continent" always-float-label value="{{formData.continent::input}}"></paper-input>
-            <paper-input label="Pays" always-float-label value="{{formData.country::input}}"></paper-input>
-            <paper-input  label="Ville" always-float-label value="{{formData.city::input}}"></paper-input>
-            <paper-textarea char-counter maxlength="800" label="Description" always-float-label value="{{formData.desc::input}}" required></paper-textarea>
-            <div align="center"style="margin-top:20px;">
-                <paper-button raised on-tap="_buildBody" class="primary" disabled={{disState}}>Proposer</paper-button>
+            <div class="flex flex--row">
+                <paper-textarea char-counter maxlength="800" label="Description" always-float-label value="{{formData.desc::input}}"></paper-textarea>
             </div>
-            
+            <div class="flex flex--row ">
+                <paper-button class="flex__item"raised on-tap="_buildBody" class="primary" disabled={{disState}}>Proposer</paper-button>
+            </div>
         </div>
-    </div>
-    <iron-ajax id="createAjax" on-response='handleResponse' on-error='handleError' content-type="application/json"></iron-ajax>
-</template>
-<script>
-    class AlertCreate extends Polymer.Element {
-        static get is() {
-            return 'alert-create'
-        }
-        static get properties() {
-            return {
-                formData: {
-                    type: Object,
-                    value: {
-                        alertName: "",
-                        summary: "",
-                        continent: "",
-                        country: "",
-                        city: "",
-                        desc: "",
+        <iron-ajax id="createAjax" on-response='handleResponse' on-error='handleError' content-type="application/json"></iron-ajax>
+    </template>
+    <script>
+        class AlertCreate extends Polymer.Element {
+            static get is() {
+                return 'alert-create'
+            }
+            static get properties() {
+                return {
+                    formData: {
+                        type: Object,
+                        value: {
+                            alertName: "",
+                            summary: "",
+                            continent: "",
+                            country: "",
+                            city: "",
+                            desc: "",
+                            animal: ""
+                        }
+                    },
+                    animalList: Array,
+                    trigger:{
+                        type: Boolean,
+                        observer: '_triggerTriggered'
+                    },
+                    searchimal:{
+                        type: String,
+                        observer: '_searchimalChanged'
                     }
                 }
             }
+            ready(){
+                super.ready();
+            }
+            _searchimalChanged(filter)
+            {
+                filter = filter.toUpperCase();
+                console.log("Searchimal changed :", filter);
+                
+                var list = this.shadowRoot.querySelectorAll('.animal');
+                console.log(list);
+                
+                list.forEach(li => {
+                    console.log(li.innerHTML);
+                    
+                    if(!(li.innerHTML.toUpperCase().includes(filter)))
+                    {
+                        console.log("\""+li.innerHTML+"\" ne contient pas : ", filter);
+                        li.style.display = "none";
+                    }
+                    else
+                    {
+                        li.style.display = "block";
+                    }
+                });
+            }
+            _selectItem(val)
+            {
+                var li = val.target;
+                
+                if(!this.actualSelected){
+                    this.set('formData.animal', li.innerHTML);
+                    li.classList.add('aselected');
+                    this.actualSelected = li;
+                }
+                else
+                {
+                    this.set('formData.animal', li.innerHTML);
+                    this.actualSelected.classList.remove('aselected');
+                    li.classList.add('aselected');
+                    this.actualSelected = li;
+                }
+                //console.log(li.innerHTML);
+            }
+            handleResponse(evt){
+                switch (evt.detail.url) {
+                    case "/maria/get-animals":
+                    //console.log('Animal list', evt.detail.response);
+                    var tab = evt.detail.response;
+                    var list = [];
+                    tab.forEach(animal => {
+                        list.push(animal.espece);
+                    });
+                    //console.log("list", list);
+                    this.animalList = list;
+                    break;
+                    
+                    default:
+                    console.log('Weird, url not referenced, might being hacked');
+                    break;
+                }
+            }
+            handleError(evt)
+            {
+                console.log('error : ', evt.detail.error.message);
+            }
+            _buildBody(){
+                console.log("form data : ", this.formData);
+                this._postAlert();
+            }
+            _getAnimalList(){
+                this.$.createAjax.url = "/maria/get-animals";
+                this.$.createAjax.method = "GET";
+                this.$.createAjax.generateRequest();
+            }
+            _triggerTriggered(){
+                this._getAnimalList();
+            }
+            _postAlert(){
+                this.$.createAjax.url = "/maria/create-alert";
+                this.$.createAjax.method = "POST";
+                this.$.createAjax.body = this.formData;
+                this.$.createAjax.generateRequest();
+            }
         }
-        ready(){
-            super.ready();
-            
-        }
-        handleResponse(evt){
-            
-        }
-        handleError(evt)
-        {
-            console.log('error : ', evt.detail.error.message);
-        }
-        _buildBody(){
-            console.log("form data : ", this.formData);
-            this._postAlert();
-        }
-        _postAlert(){
-            
-            this.$.createAjax.url = "/maria/create-alert";
-            this.$.createAjax.method = "POST";
-            this.$.createAjax.body = this.formData;
-            this.$.createAjax.generateRequest();
-        }
-    }
-    window.customElements.define(AlertCreate.is, AlertCreate);
-</script>
+        window.customElements.define(AlertCreate.is, AlertCreate);
+    </script>
 </dom-module>

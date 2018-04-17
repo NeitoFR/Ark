@@ -31,21 +31,6 @@ app.get('/*', function (req, res){
     //console.log(req.url);
 });
 
-app.post('/login', function(req, res){
-    //Getting data
-    //console.log("received data : ", req.body);
-    //console.log("user received : ", req.body.pseudo);
-    //console.log("pwd received : ", req.body.password);
-    //DB Checking
-    //var response = "belette";
-    var response = {"Login Status": "Ok"};
-    //Answer
-    //res.writeHead(302, {'Location': '/'});
-    //res.write({user: req.body.user})
-    //res.detail.response = "belette";
-    res.status(200).send(response);
-});
-
 //Binding server to port
 app.listen(process.env.APP_PORT, function (){
     console.log('Server listening on  : '+process.env.APP_PORT);

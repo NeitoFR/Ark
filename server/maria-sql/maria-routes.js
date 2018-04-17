@@ -145,3 +145,16 @@ app.get('/missions/:project_id', function(req, res) {
     }
   });
 });
+app.get('/maria/get-animals', function(req, res) {
+  //console.log('url ', req.params);
+  maria.getAnimals(function(err, data){
+    if(err){
+      //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
+      res.status(400).send(err).end();
+    }
+    else{
+      //console.log('Request : SELECT * FROM USER_TABLE :: OK');
+      res.status(200).send(data).end();
+    }
+  });
+});

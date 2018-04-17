@@ -171,3 +171,20 @@ exports.getAlertById = function (id, callback){
         }
     });
 }
+exports.getAnimals = function (callback){
+    var c = init(process.env.B_TAXO);
+    
+    var query = 'SELECT espece FROM Espece;';
+    //console.log(query);
+    c.query(query, function(err, res)
+    {
+        if (err){
+            c.end();
+            callback(err, null);
+        }
+        else{
+            c.end();
+            callback(null, res);
+        }
+    });
+}
