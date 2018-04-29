@@ -1,4 +1,5 @@
 <link rel='import' href='../bower_components/polymer/polymer-element.html'>
+<link rel='import' href='./modal-animal.html'>
 
 <link rel="import" href="shared-styles.html">
 
@@ -21,6 +22,7 @@
             .animal:hover{background-color: rgb(240, 240, 240);cursor: pointer;}
             .animal.aselected{background-color: rgb(215, 215, 215);}
         </style>
+        <modal-animal trigger-modal={{triggerModal}}></modal-animal>
         <div class="card content">
             <h1>Create Alert</h1>
             <div class="flex flex--row">
@@ -42,14 +44,14 @@
                         </ul>
                     </div>
                     
-                    <div class="flex__item--middle">Ou alors<paper-button raised on-tap="" class="primary" disabled>Ajouter une espece</paper-button></div>
+                    <div class="flex__item--middle">Ou alors<paper-button raised on-tap="_toggleModal" class="primary">Ajouter une espece</paper-button></div>
                 </div>
             </div>
             <div class="flex flex--row">
                 <paper-textarea char-counter maxlength="800" label="Description" always-float-label value="{{formData.desc::input}}"></paper-textarea>
             </div>
             <div class="flex flex--row ">
-                <paper-button class="flex__item"raised on-tap="_buildBody" class="primary" disabled={{disState}}>Proposer</paper-button>
+                <paper-button class="flex__item" raised on-tap="_buildBody" class="primary" disabled={{disState}}>Proposer</paper-button>
             </div>
         </div>
         <iron-ajax id="createAjax" on-response='handleResponse' on-error='handleError' content-type="application/json"></iron-ajax>
@@ -81,26 +83,34 @@
                     searchimal:{
                         type: String,
                         observer: '_searchimalChanged'
+                    },
+                    triggerModal:{
+                        type: Boolean
                     }
                 }
             }
             ready(){
                 super.ready();
             }
+            _toggleModal(){
+                
+                this.triggerModal = !this.triggerModal;
+                
+            }
             _searchimalChanged(filter)
             {
                 filter = filter.toUpperCase();
-                console.log("Searchimal changed :", filter);
+                // console.log("Searchimal changed :", filter);
                 
                 var list = this.shadowRoot.querySelectorAll('.animal');
-                console.log(list);
+                // console.log(list);
                 
                 list.forEach(li => {
-                    console.log(li.innerHTML);
+                    // console.log(li.innerHTML);
                     
                     if(!(li.innerHTML.toUpperCase().includes(filter)))
                     {
-                        console.log("\""+li.innerHTML+"\" ne contient pas : ", filter);
+                        // console.log("\""+li.innerHTML+"\" ne contient pas : ", filter);
                         li.style.display = "none";
                     }
                     else

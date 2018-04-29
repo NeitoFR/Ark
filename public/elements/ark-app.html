@@ -26,25 +26,20 @@
 <!-- No lazy import on those for the global variable to be accessible at loading -->
 <link rel="import" href="register-login.html">
 
-
-<link rel='import' href='../bower_components/polymer/polymer-element.html'>
-
 <dom-module id='ark-app'>
     <template>
         <style include="shared-styles" >
             :host
             {
-                
                 display: block;
             }
             ul {
-                line-height: 150%;
                 font-size: 18px;
                 list-style-type: none;
                 margin: 0;
+                background-color:var(--apc);
                 padding: 0;
                 overflow: hidden;
-                background-color:var(--apc);
             }
             
             .app-link {
@@ -207,11 +202,11 @@
                 if(this.storedUser)this.storedUser.activePage = page;
                 switch (page) {
                     case 'alert-create':
-                        this.actr = !this.actr;
-                        break;
-                
+                    this.actr = !this.actr;
+                    break;
+                    
                     default:
-                        break;
+                    break;
                 }
             }
             _logout()
