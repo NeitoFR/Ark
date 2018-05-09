@@ -105,7 +105,7 @@
             }
             _commentTheadArrived(val)
             {
-                console.log('comment thread', val);
+                //console.log('comment thread', val);
                 
                 this._buildCommentThread(val);
             }
@@ -142,7 +142,9 @@
             {
                 var parsedComment = new Object, u = this.storedUser.pseudo, c = this.commentText;
                 c = this._addslashes(c);
+                var path2 = window.location.href.split('/');
                 parsedComment[u] = c;
+                parsedComment["id"] = path2[path2.length-1];
                 //console.log("Parsed comment : ", parsedComment);
                 
                 return parsedComment;

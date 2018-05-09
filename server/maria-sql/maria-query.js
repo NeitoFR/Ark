@@ -67,10 +67,10 @@ exports.verifyUser = function (data, callback) {
     });
 }
 exports.addComment = function (data, callback) {
-    //console.log('data', data)
+    console.log('data', data)
     var c = init(process.env.B_MISSION),
-    toAppend = '|'+Object.keys(data)+"|"+data[Object.keys(data)[0]],
-    query = 'UPDATE Missions SET commentaires = CONCAT(commentaires, \''+toAppend+'\') WHERE id_Mission=1';
+    toAppend = '|'+Object.keys(data)[0]+"|"+data[Object.keys(data)[0]],
+    query = 'UPDATE Missions SET commentaires = CONCAT(commentaires, \''+toAppend+'\') WHERE id_Mission=\''+data.id+'\';';
     
     //console.log('comment to append : ', toAppend);
     c.query(query, function(err, res){
@@ -84,9 +84,9 @@ exports.addComment = function (data, callback) {
         }
     });
 }
-exports.getCommentThread = function (callback){
+exports.getCommentThread = function (id, callback){
     var c = init(process.env.B_MISSION),
-    query ="SELECT commentaires FROM Missions WHERE id_Mission = 1"
+    query ="SELECT commentaires FROM Missions WHERE id_Mission=\'"+id+"\';";
     
     c.query(query, function(err, res)
     {

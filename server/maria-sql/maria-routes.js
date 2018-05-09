@@ -75,8 +75,8 @@ app.post('/maria/add-comment', function(req, res){
   }
 });
 });
-app.get('/maria/get-comments', function(req, res) {
-  maria.getCommentThread(function(err, data){
+app.get('/maria/get-comments/:id', function(req, res) {
+  maria.getCommentThread(req.params.id, function(err, data){
     if(err){ 
       //console.log('Request : SELECT commentaire :: ERROR');
       res.status(400).send(err).end();
