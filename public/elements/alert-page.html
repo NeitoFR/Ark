@@ -41,13 +41,12 @@
                 {{projectData.contenu}}
             </div>
             <div class="flex__item article">
-                <comment-section comment-thread={{commentThread}}></comment-section>
+                <comment-section id="commentSection"comment-thread={{commentThread}}></comment-section>
             </div>
         </div>
         
         <iron-ajax
         id="ajaxEl"
-        url=""
         content-type="application/json"
         on-response="handleResponse"></iron-ajax>
         
@@ -61,7 +60,7 @@
             static get properties() {
                 return {
                     projectId:{
-                        observer:'_procectIdChanged'
+                        observer:'_projectIdChanged'
                     },
                     projectData : Object,
                     commentThread: String
@@ -69,10 +68,20 @@
             }
             ready() {
                 super.ready();
+                this.$.commentSection.addEventListener('newcomment', function(){
+                    this._getNewComment(this.projectId);
+                }.bind(this));
+
             }
-            _procectIdChanged(projectId){
+            _projectIdChanged(projectId){
                 //console.log("Etape 4 ", projectId);
                 this._getProjectData(projectId);
+            }
+            _getNewComment(projectId){
+                var url = '/missions/'+projectId;
+                this.$.ajaxEl.url = url;
+                this.$.ajaxEl.method = "GET";
+                this.$.ajaxEl.generateRequest();
             }
             _getProjectData(projectId){
                 var url = '/missions/'+projectId;

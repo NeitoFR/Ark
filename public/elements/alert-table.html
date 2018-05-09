@@ -59,7 +59,8 @@
             <tbody>
                 <template is="dom-repeat" items="{{tableData}}" as="data">
                     <tr>
-                        <td class="link" on-click="_test" data-projectid$="[[data.id_Mission]]">{{data.id_Mission}}</td>
+                        <!-- <td class="link" on-click="_test" data-projectid$="[[data.id_Mission]]">{{data.id_Mission}}</td> -->
+                        <td><a href="[[rootPath]]alert-page/{{data.id_Mission}}" data-page={{data.id_Mission}}>{{data.id_Mission}}</a></td>
                         <td>{{data.nom}}</td>
                         <td>{{data.resume}}</td>
                     </tr>

@@ -180,7 +180,10 @@
                     case '/maria/add-comment':
                     //console.log('Comment added successfully');
                     this.commentText = '';
-                    location.reload();
+                    //location.reload();
+                    this.dispatchEvent(new CustomEvent('newcomment'));
+                    
+                    
                     break;
                     default:
                     break;
