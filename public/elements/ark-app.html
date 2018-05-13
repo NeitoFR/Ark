@@ -23,8 +23,8 @@
 <link rel="lazy-import" href="alert-list.html">
 <link rel="lazy-import" href="alert-create.html">
 <link rel="import" href="alert-page.html">
-    <!-- No lazy import on those for the global variable to be accessible at loading -->
-    <link rel="import" href="register-login.html">
+<!-- No lazy import on those for the global variable to be accessible at loading -->
+<link rel="import" href="register-login.html">
 
 <dom-module id='ark-app'>
     <template>
@@ -129,7 +129,7 @@
                             <a on-click="_logout">Logout</a>
                         </div>
                     </div>
-                    <li class="app-link"><a href="" on-tap="_changePage" data-page="alert-create">Create Alert</a></li>
+                    <li class="app-link"><a href="[[rootPath]]alert-create"data-page="alert-create">Create Alert</a></li>
                 </template>
             </iron-selector>
         </ul>
@@ -138,7 +138,7 @@
             <home-page name="home-page"></home-page>
             <not-found name="not-found"></not-found>
             <register-login name="register-login"></register-login>
-            <profile-page name="profile-page"></profile-page>
+            <profile-page name="profile-page" trigger={{pptr}}></profile-page>
             <alert-list name="alert-list" id="alertlist"></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
             <alert-page name="alert-page" project-id="{{projectId}}"></alert-page>
@@ -169,10 +169,8 @@
                     rootPath: {
                         type: String
                     },
-                    actr: {
-                        type: Boolean,
-                        value: false
-                    }
+                    actr: Boolean,
+                    pptr: Boolean
                 }
             }
             static get observers() {
@@ -192,18 +190,22 @@
                 }.bind(this));*/
             }
             _changePage(evt){
-                console.log(evt.path["0"].dataset.page);
+                //console.log(evt.path["0"].dataset.page);
                 this.page = evt.path["0"].dataset.page;
+                this.notifyPath('page');
             }
             _testButton(evt){
                 //console.log('ark-app', this.storedUser.activePage);
             }
             _routePageChanged(page) {
                 console.log('page changed', page);
+                if(!this.storedUser.pagehistory)this.storedUser.pagehistory = [];
+                this.storedUser.pagehistory.push(this.route.path);
+                this.notifyPath('storedUser.pagehistory');
                 
                 this.page = page || 'home-page';
                 if(this.$.drawer.opened)this.$.drawer.close();
-                if(this.storedUser)this.storedUser.activePage = page;
+                if(this.storedUser.loggedin)this.storedUser.activePage = this.route.path;
                 switch (page) {
                     case 'alert-create':
                     this.actr = !this.actr;
@@ -212,6 +214,11 @@
                     var path = this.route.path.split('/');
                     console.log('matched alert-page, wanted id : ',path[path.length-1]);
                     this.projectId = path[path.length-1];
+                    break;
+                    case 'profile-page':
+                    // this.$.profilepage._getUserData();
+                    // this.$$('profile-page')._getUserData();
+                    this.pptr = !this.pptr;
                     break;
                     default:
                     break;

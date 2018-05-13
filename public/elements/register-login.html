@@ -142,10 +142,17 @@
                     var response = JSON.parse(event.detail.response);
                     this.error = '';
                     //console.log("data : ", response[0].pseudo);
-                    this.storedUser = {
-                        pseudo: response[0].pseudo,
-                        loggedin: true
-                    };
+                    this.storedUser['loggedin'] = true;
+                    this.notifyPath('storedUser.loggedin');
+                    Object.keys(response[0]).forEach(function(key){
+                        this.storedUser[key] = response[0][key];
+                        this.notifyPath(key);
+                    }.bind(this));
+                    //this.storedUser.pagehistory = [];
+                    // this.storedUser = {
+                    //     pseudo: response[0].pseudo,
+                    //     loggedin: true
+                    // };
                     //console.log('Stored user : ', this.storedUser);
                     window.location.replace("/");
                     break;

@@ -15,6 +15,16 @@ app.get('/maria/users', function(req, res) {
     }
   });
 });
+app.get('/maria/users/:id', function(req, res) {
+  maria.getUserInfo(req.params.id, function(err, data){
+    if(err){ 
+      res.status(400).send(err).end();
+    }
+    else{
+      res.status(200).send(data).end();
+    }
+  });
+});
 //Authentication related route
 app.post('/signup', function(req, res) {
   maria.createUser(req.body, function(err, data){

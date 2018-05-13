@@ -10,6 +10,8 @@
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         <div class="card">Profile page of {{storedUser.pseudo}}, vous etes sur la page : [[storedUser.activePage]]</div>
+        <div class="card">[[stringedUser]]</div>
+        <iron-ajax id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
     </template>
     <script>
         class ProfiePage extends Polymer.Element {
@@ -17,10 +19,32 @@
             static get is() {
                 return 'profile-page';
             }
-            
+            static get properties() {
+                return {
+                    trigger:{
+                        type: Boolean,
+                        observer: '_triggerTriggered'
+                    },
+                    stringedUser: String
+                }
+            }
             ready() {
                 super.ready();
                 
+            }
+            handleResponse(evt){
+                console.log(evt.detail.response);
+                this.stringedUser = JSON.stringify(evt.detail.response);
+            }
+            _triggerTriggered(){
+                console.log('profile-page selected');
+                this._getUserData();
+            }
+            _getUserData(){
+                var url = "/maria/users/"+this.storedUser.id_Utilisateurs;
+                this.$.ajaxEl.method = 'GET';
+                this.$.ajaxEl.url = url;
+                this.$.ajaxEl.generateRequest();
             }
         }
         window.customElements.define(ProfiePage.is, ProfiePage);

@@ -30,6 +30,21 @@ exports.getUsers = function (callback){
         }
     });
 }
+exports.getUserInfo = function (id, callback){
+    var c = init(process.env.B_USER);
+    var query = "SELECT * FROM Utilisateurs WHERE id_Utilisateurs=\'"+id+"\';";
+    c.query(query, function(err, res)
+    {
+        if (err){
+            c.end();
+            callback(err, null);
+        }
+        else{
+            c.end();
+            callback(null, res);
+        }
+    });
+}
 //Authentication related query
 exports.createUser = function (data, callback){
     var c = init(process.env.B_USER);
@@ -51,7 +66,7 @@ exports.createUser = function (data, callback){
 exports.verifyUser = function (data, callback) {
     var c = init(process.env.B_USER),
     
-    query = 'SELECT `pseudo` FROM Utilisateurs WHERE `pseudo` = \''+data.pseudo+'\' AND `password` = \''+data.password+'\';';
+    query = 'SELECT * FROM Utilisateurs WHERE `pseudo` = \''+data.pseudo+'\' AND `password` = \''+data.password+'\';';
     
     c.query(query, function(err, res)
     {
