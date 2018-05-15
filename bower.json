@@ -43,6 +43,7 @@
     "iron-localstorage": "^2.1.1",
     "paper-spinner": "^2.1.0",
     "brum-global-variable": "SieBrum/brum-global-variable#^1.0.6",
-    "iron-icons": "PolymerElements/iron-icons#^2.1.1"
+    "iron-icons": "PolymerElements/iron-icons#^2.1.1",
+    "paper-progress": "PolymerElements/paper-progress#^2.1.1"
   }
 }
