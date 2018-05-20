@@ -1,3 +1,5 @@
+✔ Lien pintask : https://pintask.me/board/35bQYhYGKpv2Lvax6 @done (2018-5-20 14:44:44)
+
 Définition des modules restant à faire : 
     Texte Statique : 
         ☐ README (F)
@@ -21,11 +23,14 @@ Définition des modules restant à faire :
         ☐ A redéfinir
     alert-page: 
         ✔ Allez chercher le nom de l'espece @done (2018-5-20 11:23:30)
-        ☐ Rajouter l'onglet 'Activity Log'
-            ☐ Meme visuel que l'element commentaire ?
-        ☐ Rajouter l'onglet 'Tâches' (dom-if, visible pour group 6, 7)
-
-    Module Actions Possibles:
+        ✔ Transformer en iron-pages + iron-selector @done (2018-5-20 14:26:29) :
+            ☐ Rajouter l'onglet 'Activity Log'
+            Meme visuel que l'element commentaire ?
+            ☐ Rajouter l'onglet 'Tâches' (dom-if, visible pour group 6, 7)
+        ☐ Ajouter un bouton Participer qui sera grisé si la personne partcipe déjà
+    alerte-list:
+        ☐ Recharger la liste des alerte lorsque selectedRoute change
+    Module Actions Possibles: 
         Dom-if à faire : 
             ☐ L'element s'affiche if storedUser.id_user != id_initiateur && if id_groupe == 5 || 6 || 7
                 
@@ -33,12 +38,19 @@ Définition des modules restant à faire :
 
 Remarque:
     Sur la table Mission: 
-        Rajouter un champ 'initiateur'
-        ☐ Rajouter un champ 'activty_log' |timestamp;id_user;pseudo;id_state;'demandinfo'|
-        ☐ Renommer le champ 'valideur' en 'v_cur_step' (x|x|x/y|y|y|y/z|z|z) x = valideur, y = invalideur, z = demande info
-        ☐ Supprimer les champ 'invaleurs' et 'indecis'
+        ✔ Rajouter un champ 'initiateur' @done (2018-5-20 16:50:07)
+        ✔ Rajouter un champ 'activty_log' |timestamp;id_user;id_messagee;pseudo;id_state;'demandeinfo'| @done (2018-5-20 16:50:05)
+        Définir les différent message de log:
+            
+        ✔ Renommer le champ 'valideur' en 'v_cur_step' (x|x|x;y|y|y|y;z|z|z) x = valideur, y = invalideur, z = demande info @done (2018-5-20 15:37:01) @done (2018-5-20 16:50:19)
+        ✔ Supprimer les champ 'invaleurs' et 'indecis' @done (2018-5-20 15:34:53)
+        ✔ Rajouter un champ 'm_potentiel' |id;pseudo|id;pseudo @done (2018-5-20 15:36:43)
+        ✔ Renommer le champ 'missionaires' en 'm_valider' |id;pseudo|id;pseudo @done (2018-5-20 15:36:44)
     
     Créer la table Taches:
         Les champs:
             ☐ id_taches (clé primaire)
             ☐ id_projet (clé étrangere sur la table missions)
+
+Questions : 
+    Si l'initiateur supprime son compte ? 

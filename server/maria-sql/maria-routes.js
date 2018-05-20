@@ -132,15 +132,31 @@ app.post('/maria/create-alert', function(req, res){
   //console.log('user : ', Object.keys(req.body)[0]);
   maria.createAlert(req.body, function(err, data){
     if(err){ 
+      console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
+      res.status(400).send(err).end();
+    }
+    else
+    {
+      //console.log('Request : Update commentaire :: OK');
+      //res.status(200).send('Commentaire ajouté').end();
+      res.status(204).send(data).end();
+    }
+  });
+});
+app.post('/maria/submit-participation', function(req, res){
+  console.log(req.body);
+  
+  maria.sumbitParticipation(req.body, function(err, data){
+    if(err){ 
       //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
       res.status(400).send(err).end();
     }
     else
-    {//console.log('Request : Update commentaire :: OK');
-    //res.status(200).send('Commentaire ajouté').end();
-    res.status(204).send(data).end();
-  }
-});
+    {
+      //console.log('Request : Update commentaire :: OK');
+      res.status(204).send(data).end();
+    }
+  });
 });
 // app.get('/missions/:project_id', function(req, res) {
 //   //console.log('url ', req.params);
@@ -182,29 +198,29 @@ app.get('/missions/:project_id', function(req, res) {
           res.status(200).send(result).end();
           
         }});
-    }
+      }
+    });
   });
-});
-app.get('/comment/:id', function(req, res) {
-  maria.getCommentFromMissionId(req.params.id, function(err, data){
-    if(err){ 
-      res.status(400).send(err).end();
-    }
-    else{
-      res.status(200).send(data).end();
-    }
+  app.get('/comment/:id', function(req, res) {
+    maria.getCommentFromMissionId(req.params.id, function(err, data){
+      if(err){ 
+        res.status(400).send(err).end();
+      }
+      else{
+        res.status(200).send(data).end();
+      }
+    });
   });
-});
-app.get('/maria/get-animals', function(req, res) {
-  //console.log('url ', req.params);
-  maria.getAnimals(function(err, data){
-    if(err){
-      //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
-      res.status(400).send(err).end();
-    }
-    else{
-      //console.log('Request : SELECT * FROM USER_TABLE :: OK');
-      res.status(200).send(data).end();
-    }
+  app.get('/maria/get-animals', function(req, res) {
+    //console.log('url ', req.params);
+    maria.getAnimals(function(err, data){
+      if(err){
+        //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
+        res.status(400).send(err).end();
+      }
+      else{
+        //console.log('Request : SELECT * FROM USER_TABLE :: OK');
+        res.status(200).send(data).end();
+      }
+    });
   });
-});

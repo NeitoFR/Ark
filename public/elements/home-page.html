@@ -15,7 +15,7 @@
     
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <div class="flex flex--col content" style="margin:auto">
-      <paper-button raised on-tap="_testButton" class="primary">Test</paper-button>      
+      <paper-button raised on-tap="_testButton2" class="primary">Test</paper-button>      
       <div class="flex__item--middle"><h1>Bienvenue sur le site de l'Arche</h1></div>
       <div class="flex__item--middle"><h1>Veuillez vous connecter et naviguer via le menu qui apparaitra en haut à gauche</h1></div>
       <div class="flex__item--middle"><h1>Site en construction</h1></div>
@@ -39,6 +39,10 @@
     }
     _testButton(){
       console.log('stored user : ',this.storedUser);
+    }
+    _testButton2(){
+      var date = new Date();
+      console.log(date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()+' '+date.getUTCHours() + ':' + date.getUTCMinutes()+'');     
     }
   }
   window.customElements.define(HomePage.is, HomePage);

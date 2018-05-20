@@ -45,6 +45,25 @@ exports.getUserInfo = function (id, callback){
         }
     });
 }
+exports.sumbitParticipation = function (data, callback){
+    var c = init(process.env.B_MISSION);
+    // var query = 'INSERT INTO `Missions` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
+    // VALUES (NULL, \''+data.pseudo+'\', \''+data.nom+'\', \''+data.prenom+'\', \''+data.password+'\', \'0\', \'0\', \'1\', \''+data.email+'\', \''+data.phone+'\', \''+data.country+'\', \''+data.city+'\', \''+data.address+'\', \'1\');';
+    query = 'UPDATE Missions SET m_potentiel = CONCAT(m_potentiel, \''+data.string+'\') WHERE id_Mission=\''+data.id_proj+'\';';
+    
+    var query = '';
+    c.query(query, function(err, res)
+    {
+        if (err){
+            c.end();
+            callback(err, null);
+        }
+        else{
+            c.end();
+            callback(null, res);
+        }
+    });
+}
 //Authentication related query
 exports.createUser = function (data, callback){
     var c = init(process.env.B_USER);
@@ -152,9 +171,10 @@ exports.getAlerts = function (wanted, callback){
 }
 exports.createAlert = function (data, callback){
     var c = init(process.env.B_MISSION);
+    console.log(data.log);
     
-    var query = 'INSERT INTO `Missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `valideur`, `invalideur`, `indecis`, `missionnaires`, `donation`, `retour`, `visible`)  \
-    VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \''+data.desc+'\', \'\', \'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
+    var query = 'INSERT INTO `Missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `visible`)  \
+    VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \''+data.id_Espece+'\', \'1\', \''+data.desc+'\', \'\', \'\', \'\', \'\', \'\', \'0\', \'0\',\''+data.log+'\', \'0\');';
     // VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', \'\', \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
     //console.log(query);
     c.query(query, function(err, res)
@@ -228,7 +248,7 @@ exports.getCommentFromMissionId = function (id, callback){
 exports.getAnimals = function (callback){
     var c = init(process.env.B_TAXO);
     
-    var query = 'SELECT espece FROM Espece;';
+    var query = 'SELECT espece, id_Espece FROM Espece;';
     //console.log(query);
     c.query(query, function(err, res)
     {

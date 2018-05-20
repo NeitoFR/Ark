@@ -46,7 +46,7 @@
             </iron-selector>
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
                 <resume-tab name='resume-tab' project-data={{projectData}}></resume-tab>
-                <activitylog-tab name='activitylog-tab' project-data={{projectData}}></activitylog-tab>
+                <activitylog-tab name='activitylog-tab' project-data={{projectData}} log-data={{logData}}></activitylog-tab>
                 <task-tab name='task-tab' project-data={{projectData}}></task-tab>
             </iron-pages>
             
@@ -88,6 +88,7 @@
                 console.log(evt.detail.response);
                 this.set('projectData', evt.detail.response[0][0]);
                 this.set('projectData.espece', evt.detail.response[1][0].espece);
+                this.set('logData', evt.detail.response[0][0].activity_log);
                 console.log('Project Data ', this.projectData);
             }
         }

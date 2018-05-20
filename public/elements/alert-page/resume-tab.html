@@ -56,14 +56,19 @@
             
             .steps,
             .step-details,
-            .actions {
+            .actions,
+            .participate {
                 border-bottom: solid 1px rgb(185, 185, 185);
                 
             }
             
+            .participate {
+                text-align: center;
+                padding: 15px;
+            }
+            
             .steps {
                 padding: 10px 24px 40px;
-                
             }
             
             .step-details {
@@ -79,6 +84,8 @@
                 padding: 7px 0px;
             }
         </style>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        
         <div class="flex flex--row">
             <div class="flex flex--col flex__item--top alert">
                 <div class="flex flex--row flex__item article">
@@ -129,6 +136,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="flex__item step-details">
                     <p>Détails Etape actuel </p>
                     Validation
@@ -137,6 +145,9 @@
                     <paper-progress value="1" max="5" min="0" id="proginval"></paper-progress>
                     Demande d'info
                     <paper-progress value="1" max="3" min="0" id="proginfo"></paper-progress>
+                </div>
+                <div class="flex__item participate">
+                    <paper-button raised on-tap="_submitParticip" class="primary">Participer</paper-button>
                 </div>
             </div>
         </div>
@@ -166,19 +177,30 @@
                     this._getNewComment(this.projectData.id_Mission);
                 }.bind(this));
             }
-            _getNewComment(projectId){
+            _getNewComment(projectId) {
                 var url = '/comment/' + projectId;
                 this.$.ajaxEl.url = url;
                 this.$.ajaxEl.method = "GET";
                 this.$.ajaxEl.generateRequest();
             }
-            handleResponse(evt){
+            handleResponse(evt) {
                 console.log('comment ', evt.detail.response);
                 this.set('commentThread', evt.detail.response[0].commentaires)
                 
             }
-            _projectDataChanged(projectData){
-                this.set('commentThread', projectData.commentaires)
+            _projectDataChanged(projectData) {
+                this.set('projectData', projectData);
+                this.set('commentThread', projectData.commentaires);
+            }
+            _submitParticip(){
+                var url = '/maria/submit-participation';
+                this.$.ajaxEl.url = url;
+                this.$.ajaxEl.body = {
+                    id_proj : this.projectData.id_Mission,
+                    string : '|'+this.storedUser.id_Utilisateurs+';'+this.storedUser.pseudo
+                };
+                this.$.ajaxEl.method = "POST";
+                this.$.ajaxEl.generateRequest();
             }
         }
         window.customElements.define(ResumeTab.is, ResumeTab);

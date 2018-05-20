@@ -15,8 +15,14 @@
             }
             static get properties() {
                  return {
-
+                     logData:{
+                        observer: '_logDataChanged'
+                     }
                 }
+            }
+            _logDataChanged(val){
+                console.log('log list ', val);
+                
             }
         }
         window.customElements.define(ActivitylogTab.is, ActivitylogTab);
