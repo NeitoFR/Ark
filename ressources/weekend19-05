@@ -1,0 +1,46 @@
+Samedi :
+    Review du site à l'heure actuel (cd0c33eb91e1a0497d52410258a03bf8ef0a9fd9) animal modal UI done
+
+Définition des modules restant à faire : 
+    Texte Statique : 
+        README (F)
+        A propos (F)
+    Feature globales : 
+        Adapter le style en fonction du group_id du user :
+            Style différent - (F)
+            Fonctionnalité différentes(F)
+        Sécurisation :
+            Crypter les envoi client serveur (F/B)
+        Faire en sorte que l'URL soit /home-page à l'arriver sur le site;(F)
+    profile-page :
+        Agencer les elements (F)
+    alerte-create :
+        Terminer l'ajout d'animaux(B)
+    register-login:
+        Ne pas renvoyer le mot de passe(B)
+    Cahier de bord :
+        Ou le placer : Lien vers PDF dans l'onglet Résumé
+    Systeme de commande:
+        A redéfinir
+    alert-page:
+        Rajouter l'onglet 'Activity Log':
+            Meme visuel que l'element commentaire ?
+        Rajouter l'onglet 'Tâches' (dom-if, visible pour group 6, 7)
+
+        Module Actions Possibles:
+            Dom-if à faire : 
+                L'element s'affiche if storedUser.id_user != id_initiateur && if id_groupe == 5 || 6 || 7
+                
+
+
+Remarque:
+    Sur la table Mission: 
+        Rajouter un champ 'initiateur'
+        Rajouter un champ 'activty_log' |timestamp;id_user;pseudo;id_state;'demandinfo'|
+        Renommer le champ 'valideur' en 'v_cur_step' (x|x|x/y|y|y|y/z|z|z) x = valideur, y = invalideur, z = demande info
+        Supprimer les champ 'invaleurs' et 'indecis'
+    
+    Créer la table Taches:
+        Les champs:
+            id_taches (clé primaire)
+            id_projet (clé étrangere sur la table missions)

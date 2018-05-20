@@ -155,7 +155,8 @@ exports.createAlert = function (data, callback){
     var c = init(process.env.B_MISSION);
     
     var query = 'INSERT INTO `Missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `valideur`, `invalideur`, `indecis`, `missionnaires`, `donation`, `retour`, `visible`)  \
-    VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', NULL, \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
+    VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \''+data.desc+'\', \'\', \'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
+    // VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', \'\', \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
     //console.log(query);
     c.query(query, function(err, res)
     {

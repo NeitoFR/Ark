@@ -8,80 +8,80 @@
             :host {
                 display: block
             }
-
+            
             .alert {
                 width: 80%;
                 background-color: white;
                 padding: 24px;
                 border-right: solid 1px rgb(185, 185, 185);
-
+                
             }
-
+            
             .menu {
                 width: 20%;
                 background-color: white;
             }
-
+            
             .alert,
             .menu {
                 box-sizing: border-box;
             }
-
+            
             paper-progress {
                 --paper-progress-height: 25px;
             }
-
+            
             #progecoute {
                 --paper-progress-active-color: rgb(209, 212, 17);
             }
-
+            
             #progexpert {
                 --paper-progress-active-color: blue;
             }
-
+            
             #progcomite {
                 --paper-progress-active-color: red;
             }
-
+            
             #progval {
                 --paper-progress-active-color: var(--apc);
             }
-
+            
             #proginval {
                 --paper-progress-active-color: red;
             }
-
+            
             #proginfo {
                 --paper-progress-active-color: rgb(209, 212, 17);
             }
-
+            
             .sd-div {
                 text-align: center;
                 padding: 3px 0px;
             }
-
+            
             .steps,
             .step-details,
             .actions {
                 border-bottom: solid 1px rgb(185, 185, 185);
-
+                
             }
-
+            
             .steps {
                 padding: 10px 24px 40px;
-
+                
             }
-
+            
             .step-details {
                 padding: 20px 24px 20px;
-
+                
             }
-
+            
             .actions {
                 padding: 40px 24px 10px;
             }
         </style>
-
+        
         <div class="flex flex--row">
             <div class="flex flex--col flex__item--top alert">
                 <div class="flex flex--row flex__item--top article">
@@ -113,7 +113,7 @@
                     Equipe comité 0/1
                     <paper-progress value="0" max="1" min="0" id="progcomite"></paper-progress>
                 </div>
-
+                
                 <div class="flex__item actions">
                     <div class="flex flex--col">
                         <div class="flex__item--middle sd-div">Actions possibles</div>
@@ -131,23 +131,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex__item step-details">
-                    <p>Détails Etape actuel </p>
-                    Validation
-                    <paper-progress value="4" max="5" min="0" id="progval"></paper-progress>
-                    Invalidation
-                    <paper-progress value="1" max="5" min="0" id="proginval"></paper-progress>
-                    Demande d'info
-                    <paper-progress value="1" max="3" min="0" id="proginfo"></paper-progress>
-                </div>
+                <!-- <template is="dom-if" if="{{_checkStatus(idprojet)}}"> -->
+                    <!-- <template is="dom-if" if="{{_checkStatus(idprojet)}}"> -->
+                        <div class="flex__item step-details">
+                            <p>Détails Etape actuel </p>
+                            Validation
+                            <paper-progress value="4" max="5" min="0" id="progval"></paper-progress>
+                            Invalidation
+                            <paper-progress value="1" max="5" min="0" id="proginval"></paper-progress>
+                            Demande d'info
+                            <paper-progress value="1" max="3" min="0" id="proginfo"></paper-progress>
+                        </div>
+                    <!-- </template> -->
+                <!-- </template> -->
             </div>
         </div>
         <iron-ajax id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
-
+        
     </template>
     <script>
         class alertPage extends Polymer.Element {
-
+            
             static get is() {
                 return 'alert-page';
             }
@@ -165,7 +169,7 @@
                 this.$.commentSection.addEventListener('newcomment', function () {
                     this._getNewComment(this.projectId);
                 }.bind(this));
-
+                
             }
             _projectIdChanged(projectId) {
                 //console.log("Etape 4 ", projectId);

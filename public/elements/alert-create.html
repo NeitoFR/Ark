@@ -149,9 +149,12 @@
                     //console.log("list", list);
                     this.animalList = list;
                     break;
-                    
+                    case "/maria/create-alert":
+                    console.log('Mission bien ajouté');
+                    this.set('formData', {});
+                    break;
                     default:
-                    console.log('Weird, url not referenced, might being hacked');
+                    console.log('Weird, url not referenced, might being hacked', evt.detail.url);
                     break;
                 }
             }
