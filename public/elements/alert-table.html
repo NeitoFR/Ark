@@ -46,27 +46,32 @@
                 cursor: pointer;
             }
         </style>
-        <paper-spinner id="spinner" active></paper-spinner>
-        <table>
-            <thead>
-                <th>Mission</th>
-                <th>Nom</th>
-                <th>Résumé</th>
-                <!--<template is="dom-repeat" items="{{tableHead}}" as="thead">
-                    <th>{{thead}}</th>
-                </template>-->
-            </thead>
-            <tbody>
-                <template is="dom-repeat" items="{{tableData}}" as="data">
-                    <tr>
-                        <!-- <td class="link" on-click="_test" data-projectid$="[[data.id_Mission]]">{{data.id_Mission}}</td> -->
-                        <td><a href="[[rootPath]]alert-page/{{data.id_Mission}}" data-page={{data.id_Mission}}>{{data.id_Mission}}</a></td>
-                        <td>{{data.nom}}</td>
-                        <td>{{data.resume}}</td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+        
+        <template is="dom-if" if={{spin}}>
+            <paper-spinner id="spinner" active></paper-spinner>
+        </template>
+        <template is="dom-if" if={{!spin}}>
+            <table>
+                <thead>
+                    <th>Mission</th>
+                    <th>Nom</th>
+                    <th>Résumé</th>
+                    <!--<template is="dom-repeat" items="{{tableHead}}" as="thead">
+                        <th>{{thead}}</th>
+                    </template>-->
+                </thead>
+                <tbody>
+                    <template is="dom-repeat" items="{{tableData}}" as="data">
+                        <tr>
+                            <!-- <td class="link" on-click="_test" data-projectid$="[[data.id_Mission]]">{{data.id_Mission}}</td> -->
+                            <td><a href="[[rootPath]]alert-page/{{data.id_Mission}}" data-page={{data.id_Mission}}>{{data.id_Mission}}</a></td>
+                            <td>{{data.nom}}</td>
+                            <td>{{data.resume}}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
         <iron-ajax id="ajaxEl"content-type="application/json" on-response="handleResponse"></iron-ajax>
         
     </template>
@@ -79,12 +84,15 @@
                 return {
                     wanted:{
                         type:String
+                    },
+                    trigger:{
+                        observer: '_getData'
                     }
                 };
             }
             ready() {
                 super.ready();
-                this._getData();
+                // this._getData();
                 this.$.spinner.style.display = 'block';
             }
             _test(evt)
@@ -96,6 +104,8 @@
                 //console.log(evt.target.dataset.mid);
             }
             _getData(){
+                console.log('Etape 3');
+                this.set('spin', true);
                 this.$.ajaxEl.url = "/missions/get";
                 this.$.ajaxEl.method = "POST"
                 this.$.ajaxEl.body = {wanted : this.wanted};
@@ -107,18 +117,18 @@
             }
             _buildTable(data)
             {
-                //TODO: Vider la liste des alerte,  
-                // var table = new Array(); 
-                /*data.forEach(function(rawLine){
-                    table.push(Object.values(rawLine));
-                });*/
-                // console.log(table);
-                this.$.spinner.style.display = 'none';
-                this.tableHead = Object.keys(data[0]);
-                this.tableData = data;
-                setTimeout(() => {
-                    //this._test();
-                });
+                if(data[0]){
+                    this.tableHead = Object.keys(data[0]);
+                    this.tableData = data;
+                    this.set('spin', false);
+                    setTimeout(() => {
+                        //this._test();
+                    });
+                }
+                else{
+                    this.set('spin', false);
+                    
+                }
             }
         }
         window.customElements.define(alertTable.is, alertTable);

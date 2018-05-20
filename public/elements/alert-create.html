@@ -188,8 +188,8 @@
                 var timestamp = +date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()+' '+date.getUTCHours() + ':' + date.getUTCMinutes();
                 this.$.createAjax.url = "/maria/create-alert";
                 this.$.createAjax.method = "POST";
-                this.formData.log = '|'+timestamp+';'+this.storedUser.id_Utilisateurs+';1;'+this.storedUser.pseudo+';1;';
-                // this.formData.log = this.storedUser.pseudo+' a créé l\'alerte à : '+date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()+' '+date.getUTCHours() + ':' + date.getUTCMinutes()+' ' ;
+                this.formData.initiateur = this.storedUser.id_Utilisateurs;
+                this.formData.log = '|'+timestamp+';'+this.storedUser.id_Utilisateurs+';0;'+this.storedUser.pseudo+';1;';
                 this.$.createAjax.body = this.formData;
                 this.$.createAjax.generateRequest();
             }

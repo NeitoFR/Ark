@@ -132,7 +132,7 @@ app.post('/maria/create-alert', function(req, res){
   //console.log('user : ', Object.keys(req.body)[0]);
   maria.createAlert(req.body, function(err, data){
     if(err){ 
-      console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
+      // console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
       res.status(400).send(err).end();
     }
     else
@@ -144,7 +144,7 @@ app.post('/maria/create-alert', function(req, res){
   });
 });
 app.post('/maria/submit-participation', function(req, res){
-  console.log(req.body);
+  // console.log(req.body);
   
   maria.sumbitParticipation(req.body, function(err, data){
     if(err){ 

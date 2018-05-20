@@ -45,7 +45,7 @@
                     <h1>Missions List</h1>
                 </div>
                 <div class="flex__item--top">
-                    <alert-table wanted="all" id="table"></alert-table>
+                    <alert-table wanted="all" id="table" trigger={{trigger}}></alert-table>
                 </div>
             </div> 
             
@@ -71,7 +71,9 @@
             }
             static get propreties() {
                 return {
-                    
+                    trigger:{
+                        observer: '_triggerTheTrigger'
+                    }
                 }
             }
             ready()
