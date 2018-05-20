@@ -142,8 +142,22 @@ app.post('/maria/create-alert', function(req, res){
   }
 });
 });
+// app.get('/missions/:project_id', function(req, res) {
+//   //console.log('url ', req.params);
+//   maria.getAlertById(req.params.project_id, function(err, data){
+//     if(err){
+//       //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
+//       res.status(400).send(err).end();
+//     }
+//     else{
+//       //console.log('Request : SELECT * FROM USER_TABLE :: OK');
+//       res.status(200).send(data).end();
+//     }
+//   });
+// });
 app.get('/missions/:project_id', function(req, res) {
   //console.log('url ', req.params);
+  var result = [];
   maria.getAlertById(req.params.project_id, function(err, data){
     if(err){
       //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
@@ -151,7 +165,23 @@ app.get('/missions/:project_id', function(req, res) {
     }
     else{
       //console.log('Request : SELECT * FROM USER_TABLE :: OK');
-      res.status(200).send(data).end();
+      // res.status(200).send(data).end();
+      result.push(data);
+      // console.log(data[0].id_Espece);
+      
+      maria.getEspece(data[0].id_Espece, function(err, data){
+        if(err){
+          //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
+          res.status(400).send(err).end();
+        }
+        else{
+          //console.log('Request : SELECT * FROM USER_TABLE :: OK');
+          // console.log('animal ', data);
+          
+          result.push(data);
+          res.status(200).send(result).end();
+          
+        }});
     }
   });
 });

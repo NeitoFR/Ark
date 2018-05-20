@@ -80,18 +80,22 @@
             .actions {
                 padding: 40px 24px 10px;
             }
+            .article{
+                padding: 7px 0px;
+            }
         </style>
         
         <div class="flex flex--row">
             <div class="flex flex--col flex__item--top alert">
-                <div class="flex flex--row flex__item--top article">
-                    <div class="flex__item--top flex__item">{{projectData.nom}}</div>
-                    <div class="flex__item--top">{{projectData.date_creation}}</div>
+                <div class="flex flex--row flex__item article">
+                        <div class="flex__item--top flex__item">{{projectData.nom}}</div>
+                        <div class="flex__item--top flex__item">Espece concernée : {{projectData.espece}}</div>
+                        <div class="flex__item--top">{{projectData.date_creation}}</div>
                 </div>
                 <div class="flex flex--row flex__item article">
-                    <div class="flex__item">Contient : {{projectData.continent}}</div>
-                    <div class="flex__item">Pays : {{projectData.pays}}</div>
-                    <div class="flex__item" style="text-align: right">Ville : {{projectData.ville}}</div>
+                        <div class="flex__item">Contient : {{projectData.continent}}</div>
+                        <div class="flex__item">Pays : {{projectData.pays}}</div>
+                        <div class="flex__item--bottom" style="text-align: right">Ville : {{projectData.ville}}</div>
                 </div>
                 <div class="flex__item--top article">
                     <p>Résumé : {{projectData.resume}}</p>
@@ -142,61 +146,62 @@
                             Demande d'info
                             <paper-progress value="1" max="3" min="0" id="proginfo"></paper-progress>
                         </div>
-                    <!-- </template> -->
-                <!-- </template> -->
-            </div>
-        </div>
-        <iron-ajax id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
-        
-    </template>
-    <script>
-        class alertPage extends Polymer.Element {
-            
-            static get is() {
-                return 'alert-page';
-            }
-            static get properties() {
-                return {
-                    projectId: {
-                        observer: '_projectIdChanged'
-                    },
-                    projectData: Object,
-                    commentThread: String
-                };
-            }
-            ready() {
-                super.ready();
-                this.$.commentSection.addEventListener('newcomment', function () {
-                    this._getNewComment(this.projectId);
-                }.bind(this));
+                        <!-- </template> -->
+                        <!-- </template> -->
+                    </div>
+                </div>
+                <iron-ajax id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
                 
-            }
-            _projectIdChanged(projectId) {
-                //console.log("Etape 4 ", projectId);
-                this._getProjectData(projectId);
-            }
-            _getNewComment(projectId) {
-                var url = '/missions/' + projectId;
-                this.$.ajaxEl.url = url;
-                this.$.ajaxEl.method = "GET";
-                this.$.ajaxEl.generateRequest();
-            }
-            _getProjectData(projectId) {
-                var url = '/missions/' + projectId;
-                this.$.ajaxEl.url = url;
-                this.$.ajaxEl.method = "GET";
-                this.$.ajaxEl.generateRequest();
-            }
-            handleResponse(evt) {
-                console.log(evt.detail.response);
-                this.set('projectData', evt.detail.response[0]);
-                console.log('Project Data ', this.projectData);
-                setTimeout(() => {
-                    this.set('commentThread', this.projectData.commentaires);
-                    this.notifyPath('commentThread')
-                });
-            }
-        }
-        window.customElements.define(alertPage.is, alertPage);
-    </script>
-</dom-module>
+            </template>
+            <script>
+                class alertPage extends Polymer.Element {
+                    
+                    static get is() {
+                        return 'alert-page';
+                    }
+                    static get properties() {
+                        return {
+                            projectId: {
+                                observer: '_projectIdChanged'
+                            },
+                            projectData: Object,
+                            commentThread: String
+                        };
+                    }
+                    ready() {
+                        super.ready();
+                        this.$.commentSection.addEventListener('newcomment', function () {
+                            this._getNewComment(this.projectId);
+                        }.bind(this));
+                        
+                    }
+                    _projectIdChanged(projectId) {
+                        //console.log("Etape 4 ", projectId);
+                        this._getProjectData(projectId);
+                    }
+                    _getNewComment(projectId) {
+                        var url = '/missions/' + projectId;
+                        this.$.ajaxEl.url = url;
+                        this.$.ajaxEl.method = "GET";
+                        this.$.ajaxEl.generateRequest();
+                    }
+                    _getProjectData(projectId) {
+                        var url = '/missions/' + projectId;
+                        this.$.ajaxEl.url = url;
+                        this.$.ajaxEl.method = "GET";
+                        this.$.ajaxEl.generateRequest();
+                    }
+                    handleResponse(evt) {
+                        console.log(evt.detail.response);
+                        this.set('projectData', evt.detail.response[0][0]);
+                        this.set('projectData.espece', evt.detail.response[1][0].espece);
+                        console.log('Project Data ', this.projectData);
+                        setTimeout(() => {
+                            this.set('commentThread', this.projectData.commentaires);
+                            this.notifyPath('commentThread')
+                        });
+                    }
+                }
+                window.customElements.define(alertPage.is, alertPage);
+            </script>
+        </dom-module>
