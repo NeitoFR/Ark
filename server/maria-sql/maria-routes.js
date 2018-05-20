@@ -185,6 +185,16 @@ app.get('/missions/:project_id', function(req, res) {
     }
   });
 });
+app.get('/comment/:id', function(req, res) {
+  maria.getCommentFromMissionId(req.params.id, function(err, data){
+    if(err){ 
+      res.status(400).send(err).end();
+    }
+    else{
+      res.status(200).send(data).end();
+    }
+  });
+});
 app.get('/maria/get-animals', function(req, res) {
   //console.log('url ', req.params);
   maria.getAnimals(function(err, data){

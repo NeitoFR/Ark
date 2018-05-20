@@ -205,6 +205,26 @@ exports.getEspece = function (id, callback){
         }
     });
 }
+exports.getCommentFromMissionId = function (id, callback){
+    var c = init(process.env.B_MISSION);
+    
+    var query = 'SELECT commentaires FROM Missions WHERE id_Mission =\''+id+'\';';
+    //console.log(query);
+    c.query(query, function(err, res)
+    {
+        if (err){
+            c.end();
+            callback(err, null);
+        }
+        else{
+            console.log("animal", res);
+            
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+
 exports.getAnimals = function (callback){
     var c = init(process.env.B_TAXO);
     

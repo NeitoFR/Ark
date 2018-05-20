@@ -1,0 +1,24 @@
+<link rel='import' href='../../bower_components/polymer/polymer-element.html'>
+<link rel='import' href='../shared-styles.html'>
+
+
+<dom-module id='activitylog-tab'>
+    <template>
+        <style include='shared-styles'>
+        </style>
+        Fil d'activité tab
+    </template>
+    <script>
+        class ActivitylogTab extends Polymer.Element {
+            static get is() {
+                return 'activitylog-tab'
+            }
+            static get properties() {
+                 return {
+
+                }
+            }
+        }
+        window.customElements.define(ActivitylogTab.is, ActivitylogTab);
+    </script>
+</dom-module>

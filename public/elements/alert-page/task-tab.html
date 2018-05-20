@@ -1,0 +1,23 @@
+<link rel='import' href='../../bower_components/polymer/polymer-element.html'>
+<link rel='import' href='../shared-styles.html'>
+
+<dom-module id='task-tab'>
+    <template>
+        <style include='shared-styles'>
+        </style>
+        Task Tab
+    </template>
+    <script>
+        class TaskTab extends Polymer.Element {
+            static get is() {
+                return 'task-tab'
+            }
+            static get properties() {
+                 return {
+
+                }
+            }
+        }
+        window.customElements.define(TaskTab.is, TaskTab);
+    </script>
+</dom-module>
