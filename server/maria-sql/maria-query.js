@@ -32,7 +32,7 @@ exports.getUsers = function (callback){
 }
 exports.getUserInfo = function (id, callback){
     var c = init(process.env.B_USER);
-    var query = "SELECT * FROM Utilisateurs WHERE id_Utilisateurs=\'"+id+"\';";
+    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM Utilisateurs WHERE id_Utilisateurs=\'"+id+"\';";
     c.query(query, function(err, res)
     {
         if (err){

@@ -32,56 +32,63 @@
 
 <dom-module id='ark-app'>
     <template>
-        <style include="shared-styles" >
-            :host
-            {
+        <style include="shared-styles">
+            :host {
                 display: block;
             }
+
             ul {
                 font-size: 18px;
                 list-style-type: none;
                 margin: 0;
-                background-color:var(--apc);
+                background-color: var(--apc);
                 padding: 0;
                 overflow: hidden;
             }
-            
+
             .app-link {
                 float: right;
                 border-left: 1px solid #bbb;
                 cursor: pointer;
             }
-            .app-title
-            {
+
+            .app-title {
                 float: left;
                 cursor: pointer;
             }
-            .app-link a, .app-title a {
+
+            .app-link a,
+            .app-title a {
                 display: block;
                 color: white;
                 text-align: center;
                 padding: 14px 16px;
                 text-decoration: none;
             }
-            .app-link a:hover{
+
+            .app-link a:hover {
                 background-color: var(--asc);
             }
+
             .app-link a:active {
                 background-color: var(--asc);
             }
+
             .dropdown {
                 position: relative;
                 display: inline-block;
             }
+
             .dropdown-content {
                 display: none;
                 position: fixed;
                 background-color: #f9f9f9;
                 min-width: 160px;
-                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
                 z-index: 1;
                 right: 0;
             }
+
             .dropdown-content a {
                 color: black;
                 padding: 12px 16px;
@@ -89,9 +96,19 @@
                 display: block;
                 border-top: 1px solid #CCC;
             }
-            .dropdown-content a:hover {background-color: rgba(0, 0, 0, 0.20)}
-            .dropdown:hover .dropdown-content {display: block;}
-            .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+            .dropdown-content a:hover {
+                background-color: rgba(0, 0, 0, 0.20)
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            .dropdown:hover .dropbtn {
+                background-color: #3e8e41;
+            }
+
             .drawer-list a {
                 display: block;
                 padding: 0 30px;
@@ -99,11 +116,15 @@
                 color: var(--app-secondary-color);
                 line-height: 50px;
                 outline: none;
-                
+
             }
-            .drawer-list a:hover{background-color: #CCC};
-            #drawer-head
-            {
+
+            .drawer-list a:hover {
+                background-color: #CCC
+            }
+
+            ;
+            #drawer-head {
                 font-size: 24px;
                 text-align: center;
                 border-bottom: 1px solid #CCC;
@@ -114,27 +135,45 @@
         <!-- Routing stuff -->
         <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-        
+
         <!-- Navbar -->
         <ul>
             <iron-selector selected="[[page]]" role="navigation">
                 <template is="dom-if" if="{{storedUser.loggedin}}">
-                    <li class="app-title" style="border-right: 1px solid #bbb" on-click="_toggleDrawer"><a><iron-icon icon="icons:menu"></iron-icon></a></li>
+                    <li class="app-title" style="border-right: 1px solid #bbb" on-click="_toggleDrawer">
+                        <a>
+                            <iron-icon icon="icons:menu"></iron-icon>
+                        </a>
+                    </li>
                 </template>
-                <li class="app-title"><a href="[[rootPath]]home-page">Ark Project</a></li>
-                <li class="app-title" on-tap="_testButton"><a>See storedUser</a></li>
+                <li class="app-title">
+                    <a href="[[rootPath]]home-page">Ark Project</a>
+                </li>
+                <li class="app-title" on-tap="_testButton">
+                    <a>See storedUser</a>
+                </li>
                 <template is="dom-if" if="{{!storedUser.loggedin}}">
-                    <li class="app-link"><a href="[[rootPath]]register-login"><iron-icon icon="icons:power-settings-new"></iron-icon></a></li>
+                    <li class="app-link">
+                        <a href="[[rootPath]]register-login">
+                            <iron-icon icon="icons:power-settings-new"></iron-icon>
+                        </a>
+                    </li>
                 </template>
                 <template is="dom-if" if="{{storedUser.loggedin}}">
                     <div class="dropdown app-link">
-                        <li class=""><a><iron-icon icon="icons:power-settings-new"></iron-icon></a></li>
+                        <li class="">
+                            <a>
+                                <iron-icon icon="icons:power-settings-new"></iron-icon>
+                            </a>
+                        </li>
                         <div class="dropdown-content">
                             <a href="[[rootPath]]profile-page">Profile</a>
                             <a on-click="_logout">Logout</a>
                         </div>
                     </div>
-                    <li class="app-link"><a href="[[rootPath]]alert-create"data-page="alert-create">Create Alert</a></li>
+                    <li class="app-link">
+                        <a href="[[rootPath]]alert-create" data-page="alert-create">Create Alert</a>
+                    </li>
                 </template>
             </iron-selector>
         </ul>
@@ -156,14 +195,17 @@
                 <a href="[[rootPath]]alert-list">Alert List</a>
                 <a href="[[rootPath]]profile-page">Profile</a>
                 <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.id_Groupe)}}">
-                <a href="[[rootPath]]admin-panel">Admin Panel</a>
+                    <a href="[[rootPath]]admin-panel">Admin Panel</a>
                 </template>
             </iron-selector>
         </app-drawer>
+        <iron-ajax id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
     </template>
     <script>
         class ArkApp extends Polymer.Element {
-            static get is() { return 'ark-app' }
+            static get is() {
+                return 'ark-app'
+            }
             static get properties() {
                 return {
                     page: {
@@ -183,12 +225,12 @@
             }
             static get observers() {
                 return [
-                '_routePageChanged(routeData.page)',
+                    '_routePageChanged(routeData.page)',
                 ];
             }
             ready() {
                 super.ready();
-                if(!this.storedUser) this.storedUser={};
+                if (!this.storedUser) this.storedUser = {};
                 const alertlist = this.$.alertlist;
                 /*alertlist.addEventListener('mission', function(evt){
                     //console.log("Etape 3", evt.detail.project_id);
@@ -197,66 +239,88 @@
                     this._routePageChanged('alert-page');
                 }.bind(this));*/
             }
-            _changePage(evt){
+            _changePage(evt) {
                 //console.log(evt.path["0"].dataset.page);
                 this.page = evt.path["0"].dataset.page;
                 this.notifyPath('page');
             }
-            _testButton(evt){
+            _testButton(evt) {
                 console.log('Stored User :', this.storedUser);
             }
-            _isAdminPanelVisible(id_group){
+            _isAdminPanelVisible(id_group) {
                 return false;
                 // return id_group == 7 ? true : false;
             }
             _routePageChanged(page) {
                 console.log('page changed', page);
-                if(!this.storedUser.pagehistory)this.storedUser.pagehistory = [];
+                this._updateUserData();
+                if (!this.storedUser.pagehistory) this.storedUser.pagehistory = [];
                 this.storedUser.pagehistory.push(this.route.path);
                 this.notifyPath('storedUser.pagehistory');
-                
+
                 this.page = page || 'home-page';
-                if(this.$.drawer.opened)this.$.drawer.close();
-                if(this.storedUser.loggedin)this.storedUser.activePage = this.route.path;
+                if (this.$.drawer.opened) this.$.drawer.close();
+                if (this.storedUser.loggedin) this.storedUser.activePage = this.route.path;
                 switch (page) {
                     case 'alert-create':
-                    this.actr = !this.actr;
-                    break;
+                        this.actr = !this.actr;
+                        break;
                     case (page.match(/alert-page/) || {}).input:
-                    var path = this.route.path.split('/');
-                    // console.log('matched alert-page, wanted id : ',path[path.length-1]);
-                    this.projectId = path[path.length-1];
-                    this.aptr = !this.aptr;
-                    // console.log('reaching an '+page);
-                    
-                    break;
+                        var path = this.route.path.split('/');
+                        // console.log('matched alert-page, wanted id : ',path[path.length-1]);
+                        this.projectId = path[path.length - 1];
+                        this.aptr = !this.aptr;
+                        // console.log('reaching an '+page);
+
+                        break;
                     case 'alert-list':
-                    // console.log(this.$.alertlist);
-                    // console.log('Etape 1');
-                    
-                    this.trigger = !this.trigger;
-                    break;
+                        // console.log(this.$.alertlist);
+                        // console.log('Etape 1');
+
+                        this.trigger = !this.trigger;
+                        break;
                     case 'profile-page':
-                    // this.$.profilepage._getUserData();
-                    // this.$$('profile-page')._getUserData();
-                    this.pptr = !this.pptr;
-                    break;
+                        // this.$.profilepage._getUserData();
+                        // this.$$('profile-page')._getUserData();
+                        this.pptr = !this.pptr;
+                        break;
                     case 'admin-panel':
-                    console.log('Accessing Admin Panel...');
-                    
-                    this.admtr = !this.admtr;
-                    break;
+                        console.log('Accessing Admin Panel...');
+
+                        this.admtr = !this.admtr;
+                        break;
                     default:
-                    break;
+                        break;
                 }
             }
-            _logout()
-            {
+            _updateUserData() {
+                if (this.storedUser.id_Utilisateurs) {
+                    this.$.ajaxEl.url = '/maria/users/' + this.storedUser.id_Utilisateurs;
+                    this.$.ajaxEl.method = 'GET'
+                    this.$.ajaxEl.generateRequest();
+                }
+            }
+            handleResponse(evt) {
+                if (evt.detail.url.includes('/maria/users/')) {
+                    console.log(evt.detail.response[0]);
+                    
+                    var newUser = evt.detail.response[0];
+                    var keys = Object.keys(evt.detail.response[0]);
+                    var cpt = [];
+                    keys.forEach(key => {
+                        if(this.storedUser[key] != newUser[key]){
+                            this.storedUser[key] = newUser[key];
+                            cpt.push(key);
+                        }
+                    });
+                    cpt.length == 0 ? console.log('Pas de nouvelle valeur') : console.log(' nouvelles valeurs', cpt);
+                }
+            }
+            _logout() {
                 window.location.replace("/");
                 this.storedUser = {};
             }
-            _toggleDrawer()
-            {
+            _toggleDrawer() {
                 this.$.drawer.toggle();
             }
             _pageChanged(page) {
@@ -264,10 +328,10 @@
                 //console.log('Page changed for ', page);
                 const resolvedPageUrl = this.resolveUrl(page + '.html');
                 Polymer.importHref(
-                resolvedPageUrl,
-                null,
-                this._showPage404.bind(this),
-                true);
+                    resolvedPageUrl,
+                    null,
+                    this._showPage404.bind(this),
+                    true);
             }
             _showPage404() {
                 this.page = 'not-found';
