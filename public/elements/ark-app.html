@@ -144,7 +144,7 @@
             <profile-page name="profile-page" trigger={{pptr}}></profile-page>
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
-            <alert-page name="alert-page" project-id="{{projectId}}"></alert-page>
+            <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}}></alert-page>
         </iron-pages>
         <app-drawer id='drawer'>
             <p id="drawer-head">Your Ark</p>
@@ -173,7 +173,8 @@
                         type: String
                     },
                     actr: Boolean,
-                    pptr: Boolean
+                    pptr: Boolean,
+                    aptr: Boolean
                 }
             }
             static get observers() {
@@ -217,6 +218,9 @@
                     var path = this.route.path.split('/');
                     // console.log('matched alert-page, wanted id : ',path[path.length-1]);
                     this.projectId = path[path.length-1];
+                    this.aptr = !this.aptr;
+                    console.log('reaching an '+page);
+                    
                     break;
                     case 'alert-list':
                     // console.log(this.$.alertlist);

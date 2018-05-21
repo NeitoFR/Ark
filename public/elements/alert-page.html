@@ -68,7 +68,10 @@
                         observer: '_projectIdChanged'
                     },
                     projectData: Object,
-                    commentThread: String
+                    commentThread: String,
+                    trigger: {
+                        observer: '_aptrChanged'
+                    }
                 };
             }
             ready() {
@@ -77,13 +80,18 @@
                     this._getProjectData(this.projectId);
                 }.bind(this));
             }
+            _aptrChanged(){
+                this._getProjectData(this.projectId);
+            }
             _taskVisible(id_group){
                 return (id_group == '6' || id_group == '7') ? true : false;
             }
             _projectIdChanged(val){
-                this._getProjectData(val);
+                // this._getProjectData(val);
             }
             _getProjectData(projectId) {
+                console.log('Getting Projet Data...');
+                
                 var url = '/missions/' + projectId;
                 this.$.ajaxEl.url = url;
                 this.$.ajaxEl.method = "GET";

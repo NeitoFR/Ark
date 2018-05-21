@@ -133,18 +133,27 @@
             <div class="flex flex--col flex__item--top menu">
                 <div class="flex__item  steps">
                     <p>Résumé Etape</p>
-                    <paper-checkbox class="red" checked={{isChecked1}} disabled>
-                        <span class="title">Etape 1</span>
-                        <span class="subtitle">Valider par l'équipe d'écoute</span>
-                    </paper-checkbox>
-                    <paper-checkbox class="red" checked={{isChecked2}} disabled>
-                        <span class="title">Etape 2</span>
-                        <span class="subtitle">Valider par l'équipe d'expert</span>
-                    </paper-checkbox>
-                    <paper-checkbox class="red" checked={{isChecked3}} disabled>
-                        <span class="title">Etape 3</span>
-                        <span class="subtitle">Valider par le Comité d'évaluation</span>
-                    </paper-checkbox>
+                    
+                    <iron-pages selected="{{selSteps}}" attr-for-selected="name" fallback-selection="mainSteps" role="main">
+                        <div name='mainSteps'>
+                            <paper-checkbox class="red" checked={{isChecked1}} disabled>
+                                <span class="title">Etape 1</span>
+                                <span class="subtitle">Valider par l'équipe d'écoute</span>
+                            </paper-checkbox>
+                            <paper-checkbox class="red" checked={{isChecked2}} disabled>
+                                <span class="title">Etape 2</span>
+                                <span class="subtitle">Valider par l'équipe d'expert</span>
+                            </paper-checkbox>
+                            <paper-checkbox class="red" checked={{isChecked3}} disabled>
+                                <span class="title">Etape 3</span>
+                                <span class="subtitle">Valider par le Comité d'évaluation</span>
+                            </paper-checkbox>
+                        </div>
+                        <div name='Steps0'>
+                            En attente d'info de la part de l'auteur...
+                        </div>
+                    </iron-pages>
+                    
                     <!-- <paper-progress value="0" max="1" min="0" id="progecoute"></paper-progress>
                         Equipe d'expert 2/5
                         <paper-progress value="2" max="1" min="0" id="progexpert"></paper-progress>
@@ -270,12 +279,22 @@
                 _projectDataChanged(projectData) {
                     this.set('projectData', projectData);
                     this.set('commentThread', projectData.commentaires);
-                    this._checkIsChecked(projectData.id_Status);
+                    this._setViewForIdStatus(projectData.id_Status);
                     this._checkParticipant(this.projectData.m_potentiel, this.projectData.m_valider);
+                    if(projectData.id_Status == 0)
+                        this.set('SelSteps', 'mainSteps')
                 }
-                _checkIsChecked(id){
+                _setViewForIdStatus(id){
                     console.log('id status', id);
-                    
+                    if(id == 0){
+                        console.log('Etape 0!! ');
+                        
+                        this.set('selSteps', 'Steps0');
+                    }
+                    else{
+                        this.set('selSteps', 'mainSteps');
+                        
+                    }
                     if(id >= 2)this.set('isChecked1', true);//En cours expert = valider ecoute
                     if(id >= 3)this.set('isChecked2', true);//En courd comité = valider expret
                     if(id == 4)this.set('isChecked3', true);// Est un projet validé
