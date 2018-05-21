@@ -121,6 +121,7 @@
                     <li class="app-title" style="border-right: 1px solid #bbb" on-click="_toggleDrawer"><a><iron-icon icon="icons:menu"></iron-icon></a></li>
                 </template>
                 <li class="app-title"><a href="[[rootPath]]home-page">Ark Project</a></li>
+                <li class="app-title" on-tap="_testButton"><a>See storedUser</a></li>
                 <template is="dom-if" if="{{!storedUser.loggedin}}">
                     <li class="app-link"><a href="[[rootPath]]register-login"><iron-icon icon="icons:power-settings-new"></iron-icon></a></li>
                 </template>
@@ -199,7 +200,7 @@
                 this.notifyPath('page');
             }
             _testButton(evt){
-                //console.log('ark-app', this.storedUser.activePage);
+                console.log('Stored User :', this.storedUser);
             }
             _routePageChanged(page) {
                 console.log('page changed', page);
@@ -219,7 +220,7 @@
                     // console.log('matched alert-page, wanted id : ',path[path.length-1]);
                     this.projectId = path[path.length-1];
                     this.aptr = !this.aptr;
-                    console.log('reaching an '+page);
+                    // console.log('reaching an '+page);
                     
                     break;
                     case 'alert-list':

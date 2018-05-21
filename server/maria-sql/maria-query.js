@@ -167,7 +167,7 @@ exports.createAlert = function (data, callback){
     // console.log(data.log);
     
     var query = 'INSERT INTO `Missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `visible`)  \
-    VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \''+data.id_Espece+'\', \'1\', \''+data.desc+'\', \'\', \''+data.initiateur+'\', \'\', \'\', \'\', \'0\', \'0\',\''+data.log+'\', \'0\');';
+    VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \''+data.id_Espece+'\', \'1\', \''+data.desc+'\', \'\', \''+data.initiateur+'\', \'||\', \'\', \'\', \'0\', \'0\',\''+data.log+'\', \'0\');';
     // VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', \'\', \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
     //console.log(query);
     c.query(query, function(err, res)
