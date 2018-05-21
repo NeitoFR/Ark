@@ -24,7 +24,7 @@
             .header div:hover{
                 cursor: pointer;
             }
-            .iron-selected{
+            iron-selector   .iron-selected{
                 border-top: 1px solid black;
                 border-left: 1px solid black;
                 border-right: 1px solid black;
@@ -37,12 +37,15 @@
                 width: 100%;
             }
         </style>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         
         <div class="flex flex--col container">
             <iron-selector selected="{{selTab}}" attr-for-selected="name" fallback-selection="resume-tab" role="navigation" class="flex flex--row flex__item--top header">
                 <div class="flex__item--top flex__item" name="resume-tab">Détails</div>
                 <div class="flex__item--top flex__item" name="activitylog-tab">Fil d'activité</div>
-                <div class="flex__item--top flex__item" name="task-tab">Tâches</div>
+                <template is="dom-if" if={{_taskVisible(storedUser.id_Groupe)}}>
+                    <div class="flex__item--top flex__item" name="task-tab">Tâches</div>
+                </template>
             </iron-selector>
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
                 <resume-tab name='resume-tab' project-data={{projectData}} id='rstab'></resume-tab>
@@ -71,8 +74,11 @@
             ready() {
                 super.ready();
                 this.$.rstab.addEventListener('askprojectdata', function () {
-                            this._getProjectData(this.projectId);
-                        }.bind(this));
+                    this._getProjectData(this.projectId);
+                }.bind(this));
+            }
+            _taskVisible(id_group){
+                return (id_group == '6' || id_group == '7') ? true : false;
             }
             _projectIdChanged(val){
                 this._getProjectData(val);
@@ -84,7 +90,7 @@
                 this.$.ajaxEl.generateRequest();
             }
             handleResponse(evt) {
-                console.log(evt.detail.response);
+                // console.log(evt.detail.response);
                 this.set('projectData', evt.detail.response[0][0]);
                 this.set('projectData.espece', evt.detail.response[1][0].espece);
                 this.set('logData', evt.detail.response[0][0].activity_log);

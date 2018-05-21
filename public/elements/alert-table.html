@@ -93,7 +93,7 @@
             ready() {
                 super.ready();
                 // this._getData();
-                this.$.spinner.style.display = 'block';
+                // this.$.spinner.style.display = 'block';
             }
             _test(evt)
             {
@@ -104,7 +104,6 @@
                 //console.log(evt.target.dataset.mid);
             }
             _getData(){
-                console.log('Etape 3');
                 this.set('spin', true);
                 this.$.ajaxEl.url = "/missions/get";
                 this.$.ajaxEl.method = "POST"

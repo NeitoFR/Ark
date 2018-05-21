@@ -41,7 +41,7 @@ Remarque:
         ✔ Rajouter un champ 'initiateur' @done (2018-5-20 16:50:07)
         ✔ Rajouter un champ 'activty_log' |timestamp;id_user;id_messagee;pseudo;id_state;'demandeinfo'| @done (2018-5-20 16:50:05)
         Définir les différent message de log:
-            ☐ "Alerte créé."
+            ✔ "Alerte créé." @done (2018-5-20 23:42:35)
         Définir les différent message de status:
             ✔ "En attente d'info de l'auteur ", @done (2018-5-20 19:40:21)
             ✔ "En cours de validation par l'équipe d'écoute", @done (2018-5-20 19:40:22)
