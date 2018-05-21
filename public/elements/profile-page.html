@@ -7,45 +7,80 @@
             :host {
                 display: block
             }
+
+            .card {
+                width: 40%;
+            }
+
+            .detail {
+                padding: 5px;
+            }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        <div class="card">Profile page of {{storedUser.pseudo}}, vous etes sur la page : [[storedUser.activePage]]</div>
-        <div class="card">[[stringedUser]]</div>
-        <iron-ajax id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
+
+        <div class="flex flex--row card">
+
+            <div class="flex__item flex flex--col">
+                <div class="flex__item detail">Profil de : {{storedUser.pseudo}}</div>
+                <div class="flex__item detail">Prénom : {{storedUser.prenom}}</div>
+                <div class="flex__item detail">Nom : {{storedUser.nom}}</div>
+            </div>
+            <div class="flex__item--top flex flex--col">
+                <div class="flex__item detail">Groupe : {{_printUserGroup(storedUser.id_Groupe)}}</div>
+                <div class="flex__item detail">Adresse : {{_printAdresse()}}</div>
+            </div>
+
+            <!-- <div class="flex__item flex flex--row">
+                <div class="flex__item detail">Profil de : {{storedUser.pseudo}}</div>
+                <div class="flex__item--top detail">Groupe : {{_printUserGroup(storedUser.id_Groupe)}}</div>
+            </div>  
+            <div class="flex__item detail">Prénom : {{storedUser.prenom}}</div>
+            <div class="flex__item detail">Nom : {{storedUser.nom}}</div> -->
+        </div>
+        <!-- <div class="card">Profile page of {{storedUser.pseudo}}, vous etes sur la page : [[storedUser.activePage]]</div>
+        <div class="card">[[stringedUser]]</div> -->
     </template>
     <script>
         class ProfiePage extends Polymer.Element {
-            
+
             static get is() {
                 return 'profile-page';
             }
             static get properties() {
                 return {
-                    trigger:{
+                    trigger: {
                         type: Boolean,
                         observer: '_triggerTriggered'
                     },
+                    groupeCmp: {
+                        type: Array,
+                        value: [
+                            'Utilisateur',
+                            'Narrateur',
+                            'Equipe d\'écoute',
+                            'Equipe d\'expert',
+                            'Comité d\'évaluation'
+                        ]
+                    },
+                    // storedUser: Object,
                     stringedUser: String
                 }
             }
             ready() {
                 super.ready();
-                
+
             }
-            handleResponse(evt){
-                console.log(evt.detail.response);
-                this.stringedUser = JSON.stringify(evt.detail.response);
+            _printAdresse() {
+                return (this.storedUser.adresse + ' - ' + this.storedUser.ville + ' - ' + this.storedUser.pays)
             }
-            _triggerTriggered(){
-                console.log('profile-page selected');
-                this._getUserData();
+            _printUserGroup(id) {
+                if (id == 1) return this.groupeCmp[0];
+                if (id == 4) return this.groupeCmp[1];
+                if (id == 5) return this.groupeCmp[2];
+                if (id == 6) return this.groupeCmp[3];
+                if (id == 7) return this.groupeCmp[4];
             }
-            _getUserData(){
-                var url = "/maria/users/"+this.storedUser.id_Utilisateurs;
-                this.$.ajaxEl.method = 'GET';
-                this.$.ajaxEl.url = url;
-                this.$.ajaxEl.generateRequest();
-            }
+            _triggerTriggered() {}
         }
         window.customElements.define(ProfiePage.is, ProfiePage);
     </script>

@@ -182,7 +182,7 @@
             <home-page name="home-page"></home-page>
             <not-found name="not-found"></not-found>
             <register-login name="register-login"></register-login>
-            <profile-page name="profile-page" trigger={{pptr}}></profile-page>
+            <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}}></profile-page>
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
             <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}}></alert-page>
@@ -313,7 +313,7 @@
                             cpt.push(key);
                         }
                     });
-                    cpt.length == 0 ? console.log('Pas de nouvelle valeur') : console.log(' nouvelles valeurs', cpt);
+                    if(cpt.length != 0) console.log(' nouvelles valeurs', cpt);
                 }
             }
             _logout() {
