@@ -25,6 +25,7 @@
 <link rel="lazy-import" href="profile-page.html">
 <link rel="lazy-import" href="alert-list.html">
 <link rel="lazy-import" href="alert-create.html">
+<link rel='import' href='admin-panel.html'>
 <link rel="import" href="alert-page.html">
 <!-- No lazy import on those for the global variable to be accessible at loading -->
 <link rel="import" href="register-login.html">
@@ -146,14 +147,16 @@
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
             <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}}></alert-page>
+            <admin-panel name='admin-panel' trigger={{admtr}}></admin-panel>
         </iron-pages>
         <app-drawer id='drawer'>
             <p id="drawer-head">Your Ark</p>
             <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
                 <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Home</a>
                 <a href="[[rootPath]]alert-list">Alert List</a>
-                <template is="dom-if" if="{{storedUser.loggedin}}">
-                    <a href="[[rootPath]]profile-page">Profile</a>
+                <a href="[[rootPath]]profile-page">Profile</a>
+                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.id_Groupe)}}">
+                <a href="[[rootPath]]admin-panel">Admin Panel</a>
                 </template>
             </iron-selector>
         </app-drawer>
@@ -202,6 +205,10 @@
             _testButton(evt){
                 console.log('Stored User :', this.storedUser);
             }
+            _isAdminPanelVisible(id_group){
+                return false;
+                // return id_group == 7 ? true : false;
+            }
             _routePageChanged(page) {
                 console.log('page changed', page);
                 if(!this.storedUser.pagehistory)this.storedUser.pagehistory = [];
@@ -233,6 +240,11 @@
                     // this.$.profilepage._getUserData();
                     // this.$$('profile-page')._getUserData();
                     this.pptr = !this.pptr;
+                    break;
+                    case 'admin-panel':
+                    console.log('Accessing Admin Panel...');
+                    
+                    this.admtr = !this.admtr;
                     break;
                     default:
                     break;

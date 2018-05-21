@@ -1,0 +1,45 @@
+<link rel='import' href='../bower_components/polymer/polymer-element.html'>
+<link rel='import' href='./shared-styles.html'>
+
+<dom-module id='admin-panel'>
+    <template>
+        <style include='shared-styles'>
+        </style>
+        <div>
+            Admin Panel
+        </div>
+        <iron-ajax id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
+    </template>
+    <script>
+        class AdminPanel extends Polymer.Element {
+            static get is() {
+                return 'admin-panel'
+            }
+            static get properties() {
+                return {
+                    trigger: {
+                        observer: '_triggerTriggered'
+                    }
+                }
+            }
+            ready() {
+                super.ready();
+
+            }
+            _triggerTriggered() {
+                this._getUsersList();
+            }
+            _getUsersList() {
+                this.$.ajaxEl.url = '/maria/users'
+                this.$.ajaxEl.method = 'GET'
+                this.$.ajaxEl.generateRequest();
+            }
+            handleResponse(evt) {
+                if (evt.detail.url == '/maria/users') {
+                    console.log(evt.detail.response);
+                }
+            }
+        }
+        window.customElements.define(AdminPanel.is, AdminPanel);
+    </script>
+</dom-module>
