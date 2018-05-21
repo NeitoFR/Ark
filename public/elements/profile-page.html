@@ -15,19 +15,23 @@
             .detail {
                 padding: 5px;
             }
+            .right{
+                text-align: right;
+            }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
         <div class="flex flex--row card">
 
             <div class="flex__item flex flex--col">
-                <div class="flex__item detail">Profil de : {{storedUser.pseudo}}</div>
-                <div class="flex__item detail">Prénom : {{storedUser.prenom}}</div>
-                <div class="flex__item detail">Nom : {{storedUser.nom}}</div>
+                <div class="flex__item detail left">Profil de : {{storedUser.pseudo}}</div>
+                <div class="flex__item detail left">Prénom : {{storedUser.prenom}}</div>
+                <div class="flex__item detail left">Nom : {{storedUser.nom}}</div>
             </div>
             <div class="flex__item--top flex flex--col">
-                <div class="flex__item detail">Groupe : {{_printUserGroup(storedUser.id_Groupe)}}</div>
-                <div class="flex__item detail">Adresse : {{_printAdresse()}}</div>
+                <div class="flex__item detail right">Groupe : {{_printUserGroup(storedUser.id_Groupe)}}</div>
+                <div class="flex__item detail right">Adresse : {{_printAdresse()}}</div>
+                <div class="flex__item detail right">Numéro : {{storedUser.phone}}</div>
             </div>
 
             <!-- <div class="flex__item flex flex--row">
