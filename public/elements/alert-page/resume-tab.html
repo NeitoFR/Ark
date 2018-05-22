@@ -309,29 +309,40 @@
             }
             _checkParticipant(stringP, stringV) {
                 if (this.projectData) {
+                    // console.log('Checking participant...');
+                    
+                    var particpe = false;
                     if (stringP) {
                         var rawP = stringP.split('|');
                         rawP.splice(0, 1);
                         for (var i = 0; i < rawP.length; i++) {
                             var temp = rawP[i].split(';');
                             if (temp[0] == this.storedUser.id_Utilisateurs) {
+                                particpe = true;
                                 this.set('partBut', true);
                                 break;
                             }
                         }
                     }
-                    if (this.partBut == true) return;
+                    // if (this.partBut == true) return;
                     if (stringV) {
                         var rawV = stringV.split('|');
                         rawV.splice(0, 1);
                         for (var i = 0; i < rawV.length; i++) {
                             var temp = rawV[i].split(';');
                             if (temp[0] == this.storedUser.id_Utilisateurs) {
+                                particpe = true;                                
                                 this.set('partBut', true);
                                 break;
                             }
                         }
                     }
+                    if(particpe == false){
+                        this.set('partBut', false);
+                        console.log('Vous pouvez participé');
+                    }
+                    // particpe == false ? this.set('partBut', false) : console.log('Vous participé déjà');
+                    
                 }
             }
             _projectDataChanged(projectData) {
@@ -346,7 +357,7 @@
             _checkValideur(valString){
                 var acteurs = [];
                 valString = valString.split('|');
-
+                
                 valString.forEach(groupe => {
                     if(groupe.includes(';'))
                     {

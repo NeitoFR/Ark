@@ -18,7 +18,7 @@ var init = function (base) {
 exports.getUsers = function (callback) {
     var c = init(process.env.B_USER);
     
-    c.query('SELECT * FROM Utilisateurs', function (err, res) {
+    c.query('SELECT * FROM utilisateurs', function (err, res) {
         if (err) {
             c.end();
             callback(err, null);
@@ -30,7 +30,7 @@ exports.getUsers = function (callback) {
 }
 exports.getUserInfo = function (id, callback) {
     var c = init(process.env.B_USER);
-    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM Utilisateurs WHERE id_Utilisateurs=\'" + id + "\';";
+    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE id_Utilisateurs=\'" + id + "\';";
     c.query(query, function (err, res) {
         if (err) {
             c.end();
@@ -45,9 +45,9 @@ exports.sumbitParticipation = function (data, callback) {
     var c = init(process.env.B_MISSION);
     // console.log(data);
     
-    // var query = 'INSERT INTO `Missions` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
+    // var query = 'INSERT INTO `missions` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
     // VALUES (NULL, \''+data.pseudo+'\', \''+data.nom+'\', \''+data.prenom+'\', \''+data.password+'\', \'0\', \'0\', \'1\', \''+data.email+'\', \''+data.phone+'\', \''+data.country+'\', \''+data.city+'\', \''+data.address+'\', \'1\');';
-    var query = 'UPDATE Missions SET m_potentiel = CONCAT(m_potentiel, \'' + data.string + '\') WHERE id_Mission=\'' + data.id_Mission + '\';';
+    var query = 'UPDATE missions SET m_potentiel = CONCAT(m_potentiel, \'' + data.string + '\') WHERE id_Mission=\'' + data.id_Mission + '\';';
     
     c.query(query, function (err, res) {
         if (err) {
@@ -63,9 +63,9 @@ exports.submitAvis = function (data, callback) {
     var c = init(process.env.B_MISSION);
     // callback(null, 'Merci d\'avoir '+data.avis);
     
-    // var query = 'INSERT INTO `Missions` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
+    // var query = 'INSERT INTO `missions` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
     // VALUES (NULL, \''+data.pseudo+'\', \''+data.nom+'\', \''+data.prenom+'\', \''+data.password+'\', \'0\', \'0\', \'1\', \''+data.email+'\', \''+data.phone+'\', \''+data.country+'\', \''+data.city+'\', \''+data.address+'\', \'1\');';
-    // var query = 'UPDATE Missions SET m_potentiel = CONCAT(m_potentiel, \''+data.string+'\') WHERE id_Mission=\''+data.id_Mission+'\';';
+    // var query = 'UPDATE missions SET m_potentiel = CONCAT(m_potentiel, \''+data.string+'\') WHERE id_Mission=\''+data.id_Mission+'\';';
     
     // c.query(query, function(err, res)
     // {
@@ -110,7 +110,7 @@ exports.getVCurStep = function (id_Mission, callback) {
 //Authentication related query
 exports.createUser = function (data, callback) {
     var c = init(process.env.B_USER);
-    var query = 'INSERT INTO `Utilisateurs` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
+    var query = 'INSERT INTO `utilisateurs` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
     VALUES (NULL, \'' + data.pseudo + '\', \'' + data.nom + '\', \'' + data.prenom + '\', \'' + data.password + '\', \'0\', \'0\', \'1\', \'' + data.email + '\', \'' + data.phone + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.address + '\', \'1\');';
     //console.log(query);
     c.query(query, function (err, res) {
@@ -126,7 +126,7 @@ exports.createUser = function (data, callback) {
 exports.verifyUser = function (data, callback) {
     var c = init(process.env.B_USER),
     
-    query = 'SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM Utilisateurs WHERE `pseudo` = \'' + data.pseudo + '\' AND `password` = \'' + data.password + '\';';
+    query = 'SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE `pseudo` = \'' + data.pseudo + '\' AND `password` = \'' + data.password + '\';';
     c.query(query, function (err, res) {
         if (err) {
             c.end();
@@ -142,7 +142,7 @@ exports.addComment = function (data, callback) {
     // console.log('data', data)
     var c = init(process.env.B_MISSION),
     toAppend = '|' + Object.keys(data)[0] + "|" + data[Object.keys(data)[0]],
-    query = 'UPDATE Missions SET commentaires = CONCAT(commentaires, \'' + toAppend + '\') WHERE id_Mission=\'' + data.id + '\';';
+    query = 'UPDATE missions SET commentaires = CONCAT(commentaires, \'' + toAppend + '\') WHERE id_Mission=\'' + data.id + '\';';
     
     //console.log('comment to append : ', toAppend);
     c.query(query, function (err, res) {
@@ -157,7 +157,7 @@ exports.addComment = function (data, callback) {
 }
 exports.getCommentThread = function (id, callback) {
     var c = init(process.env.B_MISSION),
-    query = "SELECT commentaires FROM Missions WHERE id_Mission=\'" + id + "\';";
+    query = "SELECT commentaires FROM missions WHERE id_Mission=\'" + id + "\';";
     
     c.query(query, function (err, res) {
         if (err) {
@@ -174,7 +174,7 @@ exports.getAlerts = function (wanted, callback) {
     
     switch (wanted) {
         case "all":
-        query = "SELECT id_Mission, nom, resume FROM Missions";
+        query = "SELECT id_Mission, nom, resume FROM missions";
         break;
         
         case "new":
@@ -199,7 +199,7 @@ exports.createAlert = function (data, callback) {
     var c = init(process.env.B_MISSION);
     // console.log(data.log);
     
-    var query = 'INSERT INTO `Missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `visible`)  \
+    var query = 'INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `visible`)  \
     VALUES (NULL, \'' + data.alertName + '\', \'' + data.summary + '\', \'2018-04-12\', \'' + data.continent + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.id_Espece + '\', \'1\', \'' + data.desc + '\', \'\', \'' + data.initiateur + '\', \'||\', \'\', \'\', \'0\', \'0\',\'' + data.log + '\', \'0\');';
     // VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', \'\', \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
     //console.log(query);
@@ -216,7 +216,7 @@ exports.createAlert = function (data, callback) {
 exports.getAlertById = function (id, callback) {
     var c = init(process.env.B_MISSION);
     
-    var query = 'SELECT * FROM Missions WHERE id_Mission=\'' + id + '\';';
+    var query = 'SELECT * FROM missions WHERE id_Mission=\'' + id + '\';';
     //console.log(query);
     c.query(query, function (err, res) {
         if (err) {
@@ -231,7 +231,7 @@ exports.getAlertById = function (id, callback) {
 exports.getEspece = function (id, callback) {
     var c = init(process.env.B_TAXO);
     
-    var query = 'SELECT espece FROM Espece WHERE id_Espece =\'' + id + '\';';
+    var query = 'SELECT espece FROM espece WHERE id_Espece =\'' + id + '\';';
     //console.log(query);
     c.query(query, function (err, res) {
         if (err) {
@@ -248,7 +248,7 @@ exports.getEspece = function (id, callback) {
 exports.getCommentFromMissionId = function (id, callback) {
     var c = init(process.env.B_MISSION);
     
-    var query = 'SELECT commentaires FROM Missions WHERE id_Mission =\'' + id + '\';';
+    var query = 'SELECT commentaires FROM missions WHERE id_Mission =\'' + id + '\';';
     //console.log(query);
     c.query(query, function (err, res) {
         if (err) {
@@ -266,7 +266,7 @@ exports.getCommentFromMissionId = function (id, callback) {
 exports.getAnimals = function (callback) {
     var c = init(process.env.B_TAXO);
     
-    var query = 'SELECT espece, id_Espece FROM Espece;';
+    var query = 'SELECT espece, id_Espece FROM espece;';
     //console.log(query);
     c.query(query, function (err, res) {
         if (err) {

@@ -253,14 +253,10 @@
             }
             _routePageChanged(page) {
                 console.log('page changed', page);
-                this._updateUserData();
-                if (!this.storedUser.pagehistory) this.storedUser.pagehistory = [];
-                this.storedUser.pagehistory.push(this.route.path);
-                this.notifyPath('storedUser.pagehistory');
+                // this._updateUserData();
 
                 this.page = page || 'home-page';
                 if (this.$.drawer.opened) this.$.drawer.close();
-                if (this.storedUser.loggedin) this.storedUser.activePage = this.route.path;
                 switch (page) {
                     case 'alert-create':
                         this.actr = !this.actr;
@@ -293,13 +289,13 @@
                         break;
                 }
             }
-            _updateUserData() {
-                if (this.storedUser.id_Utilisateurs) {
-                    this.$.ajaxEl.url = '/maria/users/' + this.storedUser.id_Utilisateurs;
-                    this.$.ajaxEl.method = 'GET'
-                    this.$.ajaxEl.generateRequest();
-                }
-            }
+            // _updateUserData() {
+            //     if (this.storedUser.id_Utilisateurs) {
+            //         this.$.ajaxEl.url = '/maria/users/' + this.storedUser.id_Utilisateurs;
+            //         this.$.ajaxEl.method = 'GET'
+            //         this.$.ajaxEl.generateRequest();
+            //     }
+            // }
             handleResponse(evt) {
                 if (evt.detail.url.includes('/maria/users/')) {
                     // console.log(evt.detail.response[0]);
