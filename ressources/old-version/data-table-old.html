@@ -129,7 +129,7 @@
             _queryUrlChanged(url)
             {
                 this._getData(url);
-                console.log('request on', url);
+                // console.log('request on', url);
                 this.$.spinner.style.display = 'block';
             }
             _getData(url) {
@@ -139,7 +139,7 @@
             }
             handleResponse(evt)
             {
-                console.log('raw data : ', evt.detail.response);
+                // console.log('raw data : ', evt.detail.response);
                 this.$.spinner.style.display = 'none';
                 //console.log('alert list evt : ', evt.detail.response);
                 this.tableData = this._buildTable(evt.detail.response);

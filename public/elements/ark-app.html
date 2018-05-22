@@ -245,7 +245,9 @@
                 this.notifyPath('page');
             }
             _testButton(evt) {
-                console.log('Stored User :', this.storedUser);
+                // console.log('Stored User :', this.storedUser);
+                console.log('user storage', localStorage.getItem('user-storage'));
+                
             }
             _isAdminPanelVisible(id_group) {
                 return false;
@@ -253,7 +255,7 @@
             }
             _routePageChanged(page) {
                 console.log('page changed', page);
-                // this._updateUserData();
+                this._updateUserData();
 
                 this.page = page || 'home-page';
                 if (this.$.drawer.opened) this.$.drawer.close();
@@ -289,13 +291,13 @@
                         break;
                 }
             }
-            // _updateUserData() {
-            //     if (this.storedUser.id_Utilisateurs) {
-            //         this.$.ajaxEl.url = '/maria/users/' + this.storedUser.id_Utilisateurs;
-            //         this.$.ajaxEl.method = 'GET'
-            //         this.$.ajaxEl.generateRequest();
-            //     }
-            // }
+            _updateUserData() {
+                if (this.storedUser.pseudo) {
+                    this.$.ajaxEl.url = '/maria/users/' + this.storedUser.id_Utilisateurs;
+                    this.$.ajaxEl.method = 'GET'
+                    this.$.ajaxEl.generateRequest();
+                }
+            }
             handleResponse(evt) {
                 if (evt.detail.url.includes('/maria/users/')) {
                     // console.log(evt.detail.response[0]);
