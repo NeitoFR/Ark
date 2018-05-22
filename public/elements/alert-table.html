@@ -49,6 +49,7 @@
         
         <template is="dom-if" if={{spin}}>
             <paper-spinner id="spinner" active></paper-spinner>
+            Chargement de la liste des alertes...
         </template>
         <template is="dom-if" if={{!spin}}>
             <table>
@@ -95,16 +96,16 @@
                 // this._getData();
                 // this.$.spinner.style.display = 'block';
             }
-            _test(evt)
-            {
-                //console.log("Etape 1 ", evt);
+            // _test(evt)
+            // {
+            //     //console.log("Etape 1 ", evt);
                 
-                this.dispatchEvent(new CustomEvent('alert', {detail : {project_id: evt.target.dataset.projectid}}));
-                //console.log(evt);
-                //console.log(evt.target.dataset.mid);
-            }
+            //     this.dispatchEvent(new CustomEvent('alert', {detail : {project_id: evt.target.dataset.projectid}}));
+            //     //console.log(evt);
+            //     //console.log(evt.target.dataset.mid);
+            // }
             _getData(){
-                // console.log('Getting Project List...');
+                console.log('Getting Project List...');
                 
                 this.set('spin', true);
                 this.$.ajaxEl.url = "/missions/get";

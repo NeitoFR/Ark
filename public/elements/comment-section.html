@@ -74,14 +74,14 @@
                     <template is="dom-if" if="[[error]]">
                         <p class="alert-error"><strong>Error : </strong>[[error]]</p>
                     </template>
-                    <div id="new-comment"><paper-textarea char-counter maxlength="250" value={{commentText}} on-value-changed='_checkEmptyness' label="Add a comment"></paper-textarea></div>
+                    <div id="new-comment"><paper-textarea char-counter maxlength="250" value={{commentText}} on-value-changed='_checkEmptyness' label="Ajouter un commentaire"></paper-textarea></div>
                     <!-- <div align="right" style="margin:5px;"><paper-button raised on-tap="_testButton" class="disabled">test button</paper-button></div> -->
-                    <div align="right" style="margin:5px;"><paper-button  disabled={{subState}} raised on-tap="_addComment">Comment</paper-button></div>
+                    <div align="right" style="margin:5px;"><paper-button  disabled={{subState}} raised on-tap="_addComment">ajouter commentaire</paper-button></div>
                 </div>
             </template>
             <template is="dom-if" if="{{!storedUser.loggedin}}">
                 <div class="respond">
-                    <div id="new-comment"><paper-textarea label="Please login first to leave a comment" disabled></paper-textarea></div>
+                    <div id="new-comment"><paper-textarea label="Connecter vous pour laisser un commentaire" disabled></paper-textarea></div>
                 </div>
             </template>
         </div>

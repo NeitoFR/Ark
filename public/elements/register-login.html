@@ -42,37 +42,40 @@
             {
                 padding: 15px;
             }
+            iron-selector .iron-selected{
+                background-color: var(--asc);
+            }
         </style>
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         
         <div class="flex flex--col container">
             <iron-selector selected="{{selTab}}" attr-for-selected="name" fallback-selection="signin" role="navigation" class="flex flex--row flex__item--top header">
-                <div class="flex__item--top flex__item" name="signin">Sign In</div>
-                <div class="flex__item--top flex__item" name="signup">Sign Up</div>
+                <div class="flex__item--top flex__item" name="signin">Connexion</div>
+                <div class="flex__item--top flex__item" name="signup">Créer un compte</div>
             </iron-selector>
             
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
                 <div name="signin">
                     <paper-input label="Pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
-                    <paper-input id="input"label="Password" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
+                    <paper-input id="input"label="Mot de passe" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
                     
-                    <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Sign In</paper-button>
+                    <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Connexion</paper-button>
                 </div>
                 <div name="signup" class="flex flex--row">
                     <div class="flex__item ">
                         <paper-input label="Pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
-                        <paper-input label="Name" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.prenom::input}}"></paper-input>
-                        <paper-input label="Surname" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.nom::input}}"></paper-input>
-                        <paper-input label="Password" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
-                        <paper-button raised on-tap="_submitSignUp" class="primary"  disabled={{disState}}>Sign Up</paper-button>
+                        <paper-input label="Prénom" auto-validate pattern="[a-zA-Z_0-9[[:blank:]]]{6,15}" value="{{formData.prenom::input}}"></paper-input>
+                        <paper-input label="Nom" auto-validate pattern="[a-zA-Z_0-9[[:blank:]]]{6,15}" value="{{formData.nom::input}}"></paper-input>
+                        <paper-input label="Mot de passe" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
+                        <paper-button raised on-tap="_submitSignUp" class="primary"  disabled={{disState}}>Créer un compte</paper-button>
                     </div>
                     <div class="flex__item">
-                        <paper-input label="email" auto-validate pattern="[a-zA-Z_0-9@.]{6,30}" value="{{formData.email::input}}"></paper-input>
-                        <paper-input label="Phone number" auto-validate pattern="[0-9]{6,15}" value="{{formData.phone::input}}"></paper-input>
-                        <paper-input label="Country" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.country::input}}"></paper-input>
-                        <paper-input label="City" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.city::input}}"></paper-input>
-                        <paper-input label="Address" auto-validate pattern="[a-zA-Z_0-9]{6,50}" value="{{formData.address::input}}"></paper-input>
+                        <paper-input label="E-mail" auto-validate pattern="[a-zA-Z_0-9@.]{6,30}" value="{{formData.email::input}}"></paper-input>
+                        <paper-input label="N° de tel" auto-validate pattern="[0-9]{6,15}" value="{{formData.phone::input}}"></paper-input>
+                        <paper-input label="Pays" auto-validate pattern="[a-zA-Z_0-9[[:blank:]]]{6,15}" value="{{formData.country::input}}"></paper-input>
+                        <paper-input label="Ville" auto-validate pattern="[a-zA-Z_0-9[[:blank:]]]{3,15}" value="{{formData.city::input}}"></paper-input>
+                        <paper-input label="Adresse" auto-validate pattern="[a-zA-Z_0-9[[:blank:]]]{6,50}" value="{{formData.address::input}}"></paper-input>
                     </div>
                 </div>
             </iron-pages>
@@ -125,21 +128,19 @@
             
             _submitSignIn() {
                 this.$.loginAjax.url = '/signin';
-                this.$.loginAjax.body = this.formData;
+                this.$.loginAjax.body = {
+                    'pseudo': this.formData.pseudo,
+                    'password': this.formData.password
+                };
                 this.$.loginAjax.generateRequest();
                 this.error = '';
             }
-            
-            handleUserResponse(event) {
-                //var response = JSON.parse(event.detail.response);
-                //console.log('Response from DB', event.detail.status, ' ', event.detail.response);
-                switch (event.detail.status) {
-                    case 201:
-                    this.error = event.detail.response;
-                    break;
-                    
-                    case 200:
-                    var response = JSON.parse(event.detail.response);
+            handleUserResponse(evt){
+                if(evt.detail.url == '/signup'){
+                    this._submitSignIn();
+                }
+                if(evt.detail.url == '/signin'){
+                    var response = JSON.parse(evt.detail.response);
                     this.error = '';
                     //console.log("data : ", response[0].pseudo);
                     this.set('storedUser.loggedin', true);
@@ -147,24 +148,10 @@
                         this.storedUser[key] = response[0][key];
                         this.notifyPath(key);
                     }.bind(this));
-                    //this.storedUser.pagehistory = [];
-                    // this.storedUser = {
-                    //     pseudo: response[0].pseudo,
-                    //     loggedin: true
-                    // };
-                    //console.log('Stored user : ', this.storedUser);
+                    this.formData = {};
                     window.location.replace("/");
-                    break;
-                    
-                    default:
-                    this.error = 'Unexpected error';
-                    break;
                 }
-                
-                //Empty input
-                this.formData = {};
             }
-            
             handleUserError(event) {
                 this.error = event.detail.request.xhr.response;
                 

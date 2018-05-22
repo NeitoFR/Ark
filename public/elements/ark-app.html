@@ -147,10 +147,13 @@
                     </li>
                 </template>
                 <li class="app-title">
-                    <a href="[[rootPath]]home-page">Ark Project</a>
+                </li>
+                <li class="app-title">
+                    <!--  -->
+                    <a href="[[rootPath]]home-page">L'Arche de Noé</a>
                 </li>
                 <li class="app-title" on-tap="_testButton">
-                    <a>See storedUser</a>
+                    <a>Dev button</a>
                 </li>
                 <template is="dom-if" if="{{!storedUser.loggedin}}">
                     <li class="app-link">
@@ -167,12 +170,12 @@
                             </a>
                         </li>
                         <div class="dropdown-content">
-                            <a href="[[rootPath]]profile-page">Profile</a>
-                            <a on-click="_logout">Logout</a>
+                            <a href="[[rootPath]]profile-page">Profil</a>
+                            <a on-click="_logout">Se déconnecter</a>
                         </div>
                     </div>
                     <li class="app-link">
-                        <a href="[[rootPath]]alert-create" data-page="alert-create">Create Alert</a>
+                        <a href="[[rootPath]]alert-create" data-page="alert-create">Nouvelle alerte</a>
                     </li>
                 </template>
             </iron-selector>
@@ -189,14 +192,14 @@
             <admin-panel name='admin-panel' trigger={{admtr}}></admin-panel>
         </iron-pages>
         <app-drawer id='drawer'>
-            <p id="drawer-head">Your Ark</p>
+            <p id="drawer-head">Votre Arche</p>
             <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Home</a>
-                <a href="[[rootPath]]alert-list">Alert List</a>
-                <a href="[[rootPath]]profile-page">Profile</a>
-                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.id_Groupe)}}">
+                <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Acceuil</a>
+                <a href="[[rootPath]]alert-list">Liste des alertes</a>
+                <a href="[[rootPath]]profile-page">Profil</a>
+                <!-- <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.id_Groupe)}}">
                     <a href="[[rootPath]]admin-panel">Admin Panel</a>
-                </template>
+                </template> -->
             </iron-selector>
         </app-drawer>
         <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
@@ -247,7 +250,7 @@
             _testButton(evt) {
                 // console.log('Stored User :', this.storedUser);
                 console.log('user storage', localStorage.getItem('user-storage'));
-                
+
             }
             _isAdminPanelVisible(id_group) {
                 return false;
@@ -301,17 +304,17 @@
             handleResponse(evt) {
                 if (evt.detail.url.includes('/maria/users/')) {
                     // console.log(evt.detail.response[0]);
-                    
+
                     var newUser = evt.detail.response[0];
                     var keys = Object.keys(evt.detail.response[0]);
                     var cpt = [];
                     keys.forEach(key => {
-                        if(this.storedUser[key] != newUser[key]){
+                        if (this.storedUser[key] != newUser[key]) {
                             this.storedUser[key] = newUser[key];
                             cpt.push(key);
                         }
                     });
-                    if(cpt.length != 0) console.log(' nouvelles valeurs', cpt);
+                    if (cpt.length != 0) console.log(' nouvelles valeurs', cpt);
                 }
             }
             _logout() {

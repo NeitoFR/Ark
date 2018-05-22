@@ -34,7 +34,7 @@
                             <div class="flex__item--top log-details">Utilisateur : {{item.pseudo}}</div>
                             <div class="flex__item--top log-details">Message : {{_printMessage(item.id_Message)}}</div>
                             <template is="dom-if" if={{item.complement}}>
-                                <div class="flex__item log-details">Complement : {{item.complement}}</div>
+                                <div class="flex__item log-details">Complément : {{item.complement}}</div>
                             </template>
                         </div>
                     
@@ -68,7 +68,8 @@
                         logMessageCmp:{
                             type: Array,
                             value:[
-                            "Alerte créé."
+                            "Alerte créé.",
+                            "Message de test."
                             ]
                         }
                     }
@@ -99,7 +100,6 @@
                             complement: temp[5]
                         })
                     });
-                    
                     
                     this.logList = final;
                 }
