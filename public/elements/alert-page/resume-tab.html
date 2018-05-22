@@ -368,7 +368,7 @@
                         });
                     }
                 });
-                console.log(acteurs);
+                // console.log(acteurs);
                 for(var i = 0; i < acteurs.length; i++)
                 {
                     if(acteurs[i] == this.storedUser.id_Utilisateurs)
@@ -418,9 +418,14 @@
             }
             _setProgressBarValues(iString) {
                 // console.log(iString);
+                console.log('Checeking progress bar values...', iString);
+                
                 var groups = iString.split('|');
                 for (var i = 0; i < groups.length; i++) {
                     groups[i] = groups[i].split(';');
+                    groups[i].splice(0, 1);
+                    console.log('group '+i, groups[i]);
+                    
                 }
                 // console.log('grouped user', groups);
                 if (groups[0][0] == '') this.set('valval', 0);

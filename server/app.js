@@ -2,13 +2,14 @@
 //require
 var express = require('express'),
 bodyParser = require('body-parser'),
-path = require('path');
+path = require('path'),
+cors = require('cors');
 //Populate process.env variable
 require('dotenv').config();
 const _port = 3000;
 //Server
 var app = express();
-
+app.use(cors());
 //Middleware
 app.use(express.static(path.join(__dirname, '/..', 'public')));
 app.use(bodyParser.json());
