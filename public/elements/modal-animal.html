@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 
-                <iron-ajax id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
+                <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
             </template>
             <script>
                 class ModalAnimal extends Polymer.Element {

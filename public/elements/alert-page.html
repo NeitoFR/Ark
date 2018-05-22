@@ -53,7 +53,7 @@
                 <task-tab name='task-tab' project-data={{projectData}}></task-tab>
             </iron-pages>
             
-            <iron-ajax id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
+            <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
         </div>
     </template>
     <script>

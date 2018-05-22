@@ -85,7 +85,7 @@
                 </div>
             </template>
         </div>
-        <iron-ajax id="commentAjax" on-response='_handleResponse' on-error="_handleError"></iron-ajax>
+        <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="commentAjax" on-response='_handleResponse' on-error="_handleError"></iron-ajax>
     </template>
     <script>
         class CommentSection extends Polymer.Element {
