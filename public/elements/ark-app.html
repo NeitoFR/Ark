@@ -135,7 +135,11 @@
         <!-- Routing stuff -->
         <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-
+        
+        <template is="dom-if" if={{isAdminVisible}}>
+            <admin-panel name='admin-panel' stored-user={{storedUser}} project-data={{projectData}}></admin-panel>
+        </template>
+        
         <!-- Navbar -->
         <ul>
             <iron-selector selected="[[page]]" role="navigation">
@@ -188,8 +192,7 @@
             <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}}></profile-page>
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
-            <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}}></alert-page>
-            <admin-panel name='admin-panel' trigger={{admtr}}></admin-panel>
+            <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage'></alert-page>
         </iron-pages>
         <app-drawer id='drawer'>
             <p id="drawer-head">Votre Arche</p>
@@ -197,9 +200,9 @@
                 <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Acceuil</a>
                 <a href="[[rootPath]]alert-list">Liste des alertes</a>
                 <a href="[[rootPath]]profile-page">Profil</a>
-                <!-- <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.id_Groupe)}}">
-                    <a href="[[rootPath]]admin-panel">Admin Panel</a>
-                </template> -->
+                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.id_Groupe)}}">
+                    <a on-tap='_toggleAdminPanel'>Admin Panel</a>
+                </template>
             </iron-selector>
         </app-drawer>
         <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
@@ -223,7 +226,11 @@
                     },
                     actr: Boolean,
                     pptr: Boolean,
-                    aptr: Boolean
+                    aptr: Boolean,
+                    isAdminVisible:{
+                        type: Boolean,
+                        value: true
+                    }
                 }
             }
             static get observers() {
@@ -235,12 +242,19 @@
                 super.ready();
                 if (!this.storedUser) this.storedUser = {};
                 const alertlist = this.$.alertlist;
+                this.$.alertpage.addEventListener('projectData', function(evt){
+                    // console.log('new project data',evt.detail.projectData);
+                    this.set('projectData', evt.detail.projectData);
+                }.bind(this));
                 /*alertlist.addEventListener('mission', function(evt){
                     //console.log("Etape 3", evt.detail.project_id);
                     this.projectId = evt.detail.project_id;
                     //window.history.pushState({}, null, '/alert-page');
                     this._routePageChanged('alert-page');
                 }.bind(this));*/
+            }
+            _toggleAdminPanel(){
+                this.isAdminVisible = !this.isAdminVisible;
             }
             _changePage(evt) {
                 //console.log(evt.path["0"].dataset.page);
@@ -249,12 +263,12 @@
             }
             _testButton(evt) {
                 // console.log('Stored User :', this.storedUser);
-                console.log('user storage', localStorage.getItem('user-storage'));
-
+                // console.log('user storage', localStorage.getItem('user-storage'));
+                // console.log(this.projectData);
             }
             _isAdminPanelVisible(id_group) {
-                return false;
-                // return id_group == 7 ? true : false;
+                // return false;
+                return id_group == 7 ? true : false;
             }
             _routePageChanged(page) {
                 console.log('page changed', page);
@@ -314,6 +328,7 @@
                             cpt.push(key);
                         }
                     });
+                    
                     if (cpt.length != 0) console.log(' nouvelles valeurs', cpt);
                 }
             }

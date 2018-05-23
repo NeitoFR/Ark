@@ -68,3 +68,12 @@ Remarque :
 Questions : 
     Si l'initiateur supprime son compte ? 
     Avons nous besoin d'une sous table missions (plus courte) ? sinon formalisé les requete de suppressions des anciens projets
+
+22-05 :
+    ☐ Rendre l'alert List page principale
+    ☐ Checker si l'activity-log s'affiche bien
+    ☐ Rajouter les activity-log lié au boutons de l'alert-page
+    ☐ Rajouter le bouton donnation
+    ☐ Rajouter des Missions démo
+    ☐ Nail the status for/backwarding
+    ☐ Faire l'admin panel

@@ -102,7 +102,9 @@
                 this.set('projectData', evt.detail.response[0][0]);
                 this.set('projectData.espece', evt.detail.response[1][0].espece);
                 this.set('logData', evt.detail.response[0][0].activity_log);
+                this.dispatchEvent(new CustomEvent('projectData', {detail : {projectData : this.projectData}}));
                 console.log('Project Data ', this.projectData);
+                
             }
         }
         window.customElements.define(alertPage.is, alertPage);
