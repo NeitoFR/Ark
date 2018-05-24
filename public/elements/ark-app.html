@@ -36,7 +36,7 @@
             :host {
                 display: block;
             }
-
+            
             ul {
                 font-size: 18px;
                 list-style-type: none;
@@ -45,18 +45,18 @@
                 padding: 0;
                 overflow: hidden;
             }
-
+            
             .app-link {
                 float: right;
                 border-left: 1px solid #bbb;
                 cursor: pointer;
             }
-
+            
             .app-title {
                 float: left;
                 cursor: pointer;
             }
-
+            
             .app-link a,
             .app-title a {
                 display: block;
@@ -65,20 +65,20 @@
                 padding: 14px 16px;
                 text-decoration: none;
             }
-
+            
             .app-link a:hover {
                 background-color: var(--asc);
             }
-
+            
             .app-link a:active {
                 background-color: var(--asc);
             }
-
+            
             .dropdown {
                 position: relative;
                 display: inline-block;
             }
-
+            
             .dropdown-content {
                 display: none;
                 position: fixed;
@@ -88,7 +88,7 @@
                 z-index: 1;
                 right: 0;
             }
-
+            
             .dropdown-content a {
                 color: black;
                 padding: 12px 16px;
@@ -96,19 +96,19 @@
                 display: block;
                 border-top: 1px solid #CCC;
             }
-
+            
             .dropdown-content a:hover {
                 background-color: rgba(0, 0, 0, 0.20)
             }
-
+            
             .dropdown:hover .dropdown-content {
                 display: block;
             }
-
+            
             .dropdown:hover .dropbtn {
                 background-color: #3e8e41;
             }
-
+            
             .drawer-list a {
                 display: block;
                 padding: 0 30px;
@@ -116,13 +116,13 @@
                 color: var(--app-secondary-color);
                 line-height: 50px;
                 outline: none;
-
+                
             }
-
+            
             .drawer-list a:hover {
                 background-color: #CCC
             }
-
+            
             ;
             #drawer-head {
                 font-size: 24px;
@@ -136,9 +136,9 @@
         <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
         
-        <template is="dom-if" if={{isAdminVisible}}>
-            <admin-panel name='admin-panel' stored-user={{storedUser}} project-data={{projectData}}></admin-panel>
-        </template>
+        <admin-panel id='adminPanel' stored-user={{storedUser}} project-data={{projectData}}></admin-panel>
+        <!-- <template is="dom-if" if={{isAdminVisible}}>
+        </template> -->
         
         <!-- Navbar -->
         <ul>
@@ -192,7 +192,7 @@
             <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}}></profile-page>
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
-            <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage'></alert-page>
+            <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage' stored-user={{storedUser}}></alert-page>
         </iron-pages>
         <app-drawer id='drawer'>
             <p id="drawer-head">Votre Arche</p>
@@ -200,7 +200,7 @@
                 <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Acceuil</a>
                 <a href="[[rootPath]]alert-list">Liste des alertes</a>
                 <a href="[[rootPath]]profile-page">Profil</a>
-                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.id_Groupe)}}">
+                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
                     <a on-tap='_toggleAdminPanel'>Admin Panel</a>
                 </template>
             </iron-selector>
@@ -235,7 +235,7 @@
             }
             static get observers() {
                 return [
-                    '_routePageChanged(routeData.page)',
+                '_routePageChanged(routeData.page)',
                 ];
             }
             ready() {
@@ -243,18 +243,22 @@
                 if (!this.storedUser) this.storedUser = {};
                 const alertlist = this.$.alertlist;
                 this.$.alertpage.addEventListener('projectData', function(evt){
-                    // console.log('new project data',evt.detail.projectData);
                     this.set('projectData', evt.detail.projectData);
                 }.bind(this));
-                /*alertlist.addEventListener('mission', function(evt){
-                    //console.log("Etape 3", evt.detail.project_id);
-                    this.projectId = evt.detail.project_id;
-                    //window.history.pushState({}, null, '/alert-page');
-                    this._routePageChanged('alert-page');
-                }.bind(this));*/
+                this.$.adminPanel.addEventListener('askprojectdata', function(evt){
+                    this.aptr = !this.aptr;
+                }.bind(this));
+                this.$.adminPanel.addEventListener('askuserdata', function(evt){
+                    this._updateUserDataFromAdmin();
+                }.bind(this));
             }
             _toggleAdminPanel(){
-                this.isAdminVisible = !this.isAdminVisible;
+                // this.isAdminVisible = !this.isAdminVisible;
+                
+                // this.$.adminPanel.setAttribute('style', 'display: none');  
+                getComputedStyle(this.$.adminPanel).display == 'none' ? this.$.adminPanel.setAttribute('style', 'display: block') : this.$.adminPanel.setAttribute('style', 'display: none')
+                
+                // this.$.adminPanel.style.display = 'none' ? this.$.adminPanel.style.display = 'none' :  this.$.adminPanel.style.display = 'block';
             }
             _changePage(evt) {
                 //console.log(evt.path["0"].dataset.page);
@@ -262,50 +266,50 @@
                 this.notifyPath('page');
             }
             _testButton(evt) {
-                // console.log('Stored User :', this.storedUser);
+                console.log('Stored User :', this.storedUser);
                 // console.log('user storage', localStorage.getItem('user-storage'));
-                // console.log(this.projectData);
+                console.log(this.projectData);
             }
-            _isAdminPanelVisible(id_group) {
+            _isAdminPanelVisible(pseudo) {
                 // return false;
-                return id_group == 7 ? true : false;
+                return pseudo == 'neitofr' ? true : false;
             }
             _routePageChanged(page) {
                 console.log('page changed', page);
                 this._updateUserData();
-
+                
                 this.page = page || 'home-page';
                 if (this.$.drawer.opened) this.$.drawer.close();
                 switch (page) {
                     case 'alert-create':
-                        this.actr = !this.actr;
-                        break;
+                    this.actr = !this.actr;
+                    break;
                     case (page.match(/alert-page/) || {}).input:
-                        var path = this.route.path.split('/');
-                        // console.log('matched alert-page, wanted id : ',path[path.length-1]);
-                        this.projectId = path[path.length - 1];
-                        this.aptr = !this.aptr;
-                        // console.log('reaching an '+page);
-
-                        break;
+                    var path = this.route.path.split('/');
+                    // console.log('matched alert-page, wanted id : ',path[path.length-1]);
+                    this.projectId = path[path.length - 1];
+                    this.aptr = !this.aptr;
+                    // console.log('reaching an '+page);
+                    
+                    break;
                     case 'alert-list':
-                        // console.log(this.$.alertlist);
-                        // console.log('Etape 1');
-
-                        this.trigger = !this.trigger;
-                        break;
+                    // console.log(this.$.alertlist);
+                    // console.log('Etape 1');
+                    
+                    this.trigger = !this.trigger;
+                    break;
                     case 'profile-page':
-                        // this.$.profilepage._getUserData();
-                        // this.$$('profile-page')._getUserData();
-                        this.pptr = !this.pptr;
-                        break;
+                    // this.$.profilepage._getUserData();
+                    // this.$$('profile-page')._getUserData();
+                    this.pptr = !this.pptr;
+                    break;
                     case 'admin-panel':
-                        console.log('Accessing Admin Panel...');
-
-                        this.admtr = !this.admtr;
-                        break;
+                    console.log('Accessing Admin Panel...');
+                    
+                    this.admtr = !this.admtr;
+                    break;
                     default:
-                        break;
+                    break;
                 }
             }
             _updateUserData() {
@@ -315,19 +319,32 @@
                     this.$.ajaxEl.generateRequest();
                 }
             }
+            _updateUserDataFromAdmin() {
+                if (this.storedUser.pseudo) {
+                    this.$.ajaxEl.url = '/admin/users/' + this.storedUser.pseudo;
+                    this.$.ajaxEl.method = 'GET'
+                    this.$.ajaxEl.generateRequest();
+                }
+            }
             handleResponse(evt) {
-                if (evt.detail.url.includes('/maria/users/')) {
-                    // console.log(evt.detail.response[0]);
-
+                if (evt.detail.url.includes('/users/')) {
+                    console.log('new user data', evt.detail.response[0]);
+                    var user = localStorage['user-storage'];
+                    user = JSON.parse(user);
                     var newUser = evt.detail.response[0];
                     var keys = Object.keys(evt.detail.response[0]);
                     var cpt = [];
                     keys.forEach(key => {
                         if (this.storedUser[key] != newUser[key]) {
-                            this.storedUser[key] = newUser[key];
+                            // this.storedUser[key] = newUser[key];
+                            const str = 'storedUser.'+key;
+                            this.set(str, newUser[key]);
                             cpt.push(key);
                         }
                     });
+                    user.id_Utilisateurs = evt.detail.response[0].id_Utilisateurs;
+                    user = JSON.stringify(user);
+                    localStorage['user-storage'] = user;
                     
                     if (cpt.length != 0) console.log(' nouvelles valeurs', cpt);
                 }
@@ -344,10 +361,10 @@
                 //console.log('Page changed for ', page);
                 const resolvedPageUrl = this.resolveUrl(page + '.html');
                 Polymer.importHref(
-                    resolvedPageUrl,
-                    null,
-                    this._showPage404.bind(this),
-                    true);
+                resolvedPageUrl,
+                null,
+                this._showPage404.bind(this),
+                true);
             }
             _showPage404() {
                 this.page = 'not-found';

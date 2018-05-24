@@ -35,3 +35,4 @@ var body = {
     'log': ''
 };
 
+console.log('Je veut créé '+process.argv[2]+' alerte');

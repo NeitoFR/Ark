@@ -3,26 +3,6 @@ var express = require('express'),
 
 var app = module.exports = express.Router();
 
-app.get('/maria/users', function (req, res) {
-  maria.getUsers(function (err, data) {
-    if (err) {
-      //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
-      res.status(400).send(err).end();
-    } else {
-      //console.log('Request : SELECT * FROM USER_TABLE :: OK');
-      res.status(200).send(data).end();
-    }
-  });
-});
-app.get('/maria/users/:id', function (req, res) {
-  maria.getUserInfo(req.params.id, function (err, data) {
-    if (err) {
-      res.status(400).send(err).end();
-    } else {
-      res.status(200).send(data).end();
-    }
-  });
-});
 //Authentication related route
 app.post('/signup', function (req, res) {
   maria.createUser(req.body, function (err, data) {
@@ -64,6 +44,28 @@ app.post('/signin', function (req, res) {
     }
   });
 });
+
+app.get('/maria/users', function (req, res) {
+  maria.getUsers(function (err, data) {
+    if (err) {
+      //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
+      res.status(400).send(err).end();
+    } else {
+      //console.log('Request : SELECT * FROM USER_TABLE :: OK');
+      res.status(200).send(data).end();
+    }
+  });
+});
+app.get('/maria/users/:id', function (req, res) {
+  maria.getUserInfo(req.params.id, function (err, data) {
+    if (err) {
+      res.status(400).send(err).end();
+    } else {
+      res.status(200).send(data).end();
+    }
+  });
+});
+
 app.post('/maria/add-comment', function (req, res) {
   //console.log('comment : ', req.body[Object.keys(req.body)[0]]);
   //console.log('user : ', Object.keys(req.body)[0]);
@@ -130,42 +132,7 @@ app.post('/maria/create-alert', function (req, res) {
     }
   });
 });
-app.post('/maria/submit-participation', function (req, res) {
-  // console.log(req.body);
 
-  maria.sumbitParticipation(req.body, function (err, data) {
-    if (err) {
-      //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
-      res.status(400).send(err).end();
-    } else {
-      //console.log('Request : Update commentaire :: OK');
-      res.status(204).send(data).end();
-    }
-  });
-});
-app.post('/maria/submit-avis', function (req, res) {
-  console.log(req.body);
-  maria.getVCurStep(req.body.id_Mission, function (err, data) {
-    if (err) {
-      //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
-      res.status(400).send(err).end();
-    } else {
-      var voteurs = data[0].v_cur_step.split('|');
-      // console.log(voteurs[req.body.avis - 1]);
-      voteurs[req.body.avis - 1] += ';' + req.body.id_Utilisateurs;
-      voteurs = voteurs.join('|');
-      maria.updateVCurStep(req.body.id_Mission, voteurs, function (err, data) {
-        if (err) {
-          console.log(err);
-          
-          res.status(400).send(err).end();
-        } else {
-          res.status(200).send(data).end();
-        }
-      });
-    }
-  });
-});
 app.get('/missions/:project_id', function (req, res) {
   //console.log('url ', req.params);
   var result = [];
@@ -213,6 +180,43 @@ app.get('/maria/get-animals', function (req, res) {
     } else {
       //console.log('Request : SELECT * FROM USER_TABLE :: OK');
       res.status(200).send(data).end();
+    }
+  });
+});
+//Routes that imply Missions evolution
+app.post('/maria/submit-participation', function (req, res) {
+  // console.log(req.body);
+
+  maria.sumbitParticipation(req.body, function (err, data) {
+    if (err) {
+      //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
+      res.status(400).send(err).end();
+    } else {
+      //console.log('Request : Update commentaire :: OK');
+      res.status(204).send(data).end();
+    }
+  });
+});
+app.post('/maria/submit-avis', function (req, res) {
+  console.log(req.body);
+  maria.getVCurStep(req.body.id_Mission, function (err, data) {
+    if (err) {
+      //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
+      res.status(400).send(err).end();
+    } else {
+      var voteurs = data[0].v_cur_step.split('|');
+      // console.log(voteurs[req.body.avis - 1]);
+      voteurs[req.body.avis - 1] += ';' + req.body.id_Utilisateurs;
+      voteurs = voteurs.join('|');
+      maria.updateVCurStep(req.body.id_Mission, voteurs, function (err, data) {
+        if (err) {
+          console.log(err);
+
+          res.status(400).send(err).end();
+        } else {
+          res.status(200).send(data).end();
+        }
+      });
     }
   });
 });
