@@ -357,3 +357,17 @@ exports.logAvis = function (data) {
         }
     });
 }
+exports.logParticipation = function (data) {
+    var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + '4' + ';' + data.id_Status + ';' + '';
+    var c = init(process.env.B_MISSION);
+    var query = 'UPDATE missions SET `activity_log` = CONCAT(activity_log, \'' + string + '\') WHERE id_Mission=\'' + data.id_Mission + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('Error logging', err);
+            c.end();
+        } else {
+            console.log('Logging ok');
+            c.end();
+        }
+    });
+}

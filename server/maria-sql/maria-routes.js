@@ -192,7 +192,7 @@ app.post('/maria/submit-participation', function (req, res) {
       //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
       res.status(400).send(err).end();
     } else {
-      //console.log('Request : Update commentaire :: OK');
+      maria.logParticipation(req.body);
       res.status(204).send(data).end();
     }
   });

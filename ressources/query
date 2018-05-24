@@ -1,4 +1,0 @@
-add alert
-INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `valideur`, `invalideur`, `indecis`, `missionnaires`, `donation`, `retour`, `visible`) VALUES (NULL, 'Mission 4', 'Résumé mission 4', '2018-04-12', 'Asie', 'Chine', 'Pyong Yang', '174', '1', '', NULL, 'String', '', '', '', '0', '0', '0');
-add user
-INSERT INTO `utilisateurs` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) VALUES (NULL, 'pseudo', 'nom', 'prenom', 'password', '0', '0', '1', 'email', '0781', 'pays', 'ville', 'addresse', '1');
