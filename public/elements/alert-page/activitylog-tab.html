@@ -96,11 +96,6 @@
                     }
                 }
             }
-            _testButton() {
-                // console.log(this.logList);
-                // console.log(this.logData);
-
-            }
             _printGroupe(val){
                 return this.grpCmp[val-1];
             }
@@ -112,7 +107,8 @@
             }
             _logDataChanged(val) {
                 var final = [];
-
+                // console.log(val);
+                
                 var rawLogArray = val.split('|');
                 rawLogArray.splice(0, 1);
                 rawLogArray.forEach(string => {

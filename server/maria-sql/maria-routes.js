@@ -198,6 +198,7 @@ app.post('/maria/submit-participation', function (req, res) {
   });
 });
 app.post('/maria/submit-avis', function (req, res) {
+  maria.logAvis(req.body);
   console.log(req.body);
   maria.getVCurStep(req.body.id_Mission, function (err, data) {
     if (err) {
@@ -218,23 +219,23 @@ app.post('/maria/submit-avis', function (req, res) {
         var new_status = req.body.id_Status;
         switch (req.body.avis) {
           case 1:
-          console.log('Upgrade');
-          
+            console.log('Upgrade');
+
             new_status++;
             break;
           case 2:
-          console.log('invalidation');
-          
+            console.log('invalidation');
+
             new_status = -1;
             break;
           case 3:
-          console.log('retrogradation');
-          
+            console.log('retrogradation');
+
             new_status--;
             break;
         }
         if (new_status != -1 && new_status != req.body.id_Status) {
-          
+
           maria.updateMissionStatus(req.body, voteurs, new_status, function (err, data) {
             if (err) {
               console.log("update status", err);
@@ -247,7 +248,6 @@ app.post('/maria/submit-avis', function (req, res) {
         }
       } else {
         voteurs = voteurs.join('|');
-        maria.logAvis(req.body);
         maria.updateVCurStep(req.body.id_Mission, voteurs, function (err, data) {
           if (err) {
             console.log(err);

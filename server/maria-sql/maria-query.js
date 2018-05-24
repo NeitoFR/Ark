@@ -327,11 +327,11 @@ exports.updateVCurStep = function (id_Mission, v_cur_step, callback) {
         }
     });
 }
-exports.updateMissionStatus = function (data, voteurs,_new, callback) {
+exports.updateMissionStatus = function (data, voteurs, _new, callback) {
 
     var c = init(process.env.B_MISSION);
     var old = data.id_Status;
-    
+
     var query = 'UPDATE missions SET `id_Status` = \'' + _new + '\', `v_cur_step` = \'||\' WHERE id_Mission=\'' + data.id_Mission + '\';';
     c.query(query, function (err, res) {
         if (err) {
@@ -344,7 +344,14 @@ exports.updateMissionStatus = function (data, voteurs,_new, callback) {
     });
 }
 exports.logAvis = function (data) {
-    var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + data.avis + ';' + data.id_Status + ';' + '';
+    if (data.complement) {
+        var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + data.avis + ';' + data.id_Status + ';' + data.complement;
+        console.log('complement!', data.complement);
+
+    } else {
+        var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + data.avis + ';' + data.id_Status + ';' + '';
+        console.log('no complement', data.complement);
+    }
     var c = init(process.env.B_MISSION);
     var query = 'UPDATE missions SET `activity_log` = CONCAT(activity_log, \'' + string + '\') WHERE id_Mission=\'' + data.id_Mission + '\';';
     c.query(query, function (err, res) {

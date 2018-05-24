@@ -123,9 +123,86 @@
                 font-size: 0.9em;
                 max-width: 150px;
             }
+
+            #modalwrapper {
+                display: none;
+                position: fixed;
+                z-index: 100;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+            .modal-container {
+                z-index: 101;
+                display: block;
+                background-color: rgb(221, 221, 221);
+                margin: 5% auto;
+                width: 40%;
+            }
+
+            .modal-content div {
+                padding: 5px;
+            }
+
+            .modal-content {
+                padding: 12px 24px;
+            }
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                background-color: var(--apc);
+                overflow: hidden;
+            }
+
+            li {
+                display: inline;
+                color: rgb(224, 224, 224);
+                padding: 12px 10px;
+            }
+
+            .right {
+                float: right;
+            }
+
+            .right:hover {
+                background-color: var(--asc);
+            }
+
+            .left {
+                float: left;
+            }
+
+            .close {
+                cursor: pointer;
+            }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <div id='modalwrapper'>
+            <div class="modal-container">
+                <ul>
+                    <li class="left">Ajouter une espece</li>
+                    <li class="right close" on-click='_toggleModal'>
+                        <iron-icon icon="icons:close"></iron-iscon>
+                    </li>
+                </ul>
 
+                <div class="flex flex--row modal-content">
+                    <div class="flex__item">
+                        <paper-textarea char-counter maxlength="800" label="Précision sur les informations manquantes" always-float-label value="{{complement::input}}"></paper-textarea>
+                    </div>
+                    <div class="flex__item--middle">
+                        <paper-button raised on-tap="_sendInfo" class="primary">demande info</paper-button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="flex flex--row">
             <div class="flex flex--col flex__item--top alert">
                 <div class="flex flex--row flex__item article">
@@ -190,7 +267,7 @@
                                 </div>
                             </div>
                             <div class="flex__item  sd-div">
-                                <paper-button raised on-tap="_sendInfo" class="primary" disabled={{info_but}}>Demande Info</paper-button>
+                                <paper-button raised on-tap="_toggleModal" class="primary" disabled={{info_but}}>Demande Info</paper-button>
                                 <!-- <paper-button raised on-tap="{{_sendAvis(3)}}" class="primary" disabled={{info_but}}>Demande Info</paper-button> -->
                             </div>
                         </div>
@@ -249,6 +326,10 @@
                     toInfo: {
                         type: Number,
                         value: 3
+                    },
+                    complement: {
+                        type: String,
+                        value: ''
                     }
                 }
             }
@@ -258,6 +339,13 @@
                 this.$.commentSection.addEventListener('newcomment', function () {
                     this._getNewComment(this.projectData.id_Mission);
                 }.bind(this));
+            }
+            _toggleModal() {
+                if (getComputedStyle(this.$.modalwrapper).display == 'none')
+                    this.complement = '';
+                getComputedStyle(this.$.modalwrapper).display == 'none' ? this.$.modalwrapper.setAttribute(
+                    'style', 'display: block') : this.$.modalwrapper.setAttribute('style', 'display: none')
+
             }
             _testButton() {
                 this.$.check1.classList.add('green');
@@ -272,6 +360,8 @@
                 this._sendAvis(2);
             }
             _sendInfo() {
+                console.log(this.complement.length, this.complement);
+
                 this._sendAvis(3);
             }
             _sendAvis(avis) {
@@ -284,9 +374,13 @@
                     'id_Groupe': this.storedUser.id_Groupe,
                     'id_Mission': this.projectData.id_Mission,
                     'avis': avis,
-                    'pseudo' : this.storedUser.pseudo,
-                    'id_Status' : this.projectData.id_Status
+                    'pseudo': this.storedUser.pseudo,
+                    'id_Status': this.projectData.id_Status
                 };
+                if (avis == 3 && this.complement.length != 0) {
+                    this.$.ajaxEl.body.complement = this.complement;
+                    this._toggleModal();
+                }
                 this.$.ajaxEl.generateRequest();
             }
             _actionVisible(val) {
@@ -386,7 +480,7 @@
                 return false;
             }
             _setActionButtonState(user_group, mission_status) {
-                console.log('user_group : '+user_group+' mission_status : '+mission_status);
+                console.log('user_group : ' + user_group + ' mission_status : ' + mission_status);
                 if (this._checkValideur(this.projectData.v_cur_step)) {
                     console.log('Deactivating buttons');
 
@@ -479,7 +573,7 @@
                     id_Utilisateurs: this.storedUser.id_Utilisateurs,
                     id_Status: this.projectData.id_Status,
                     id_Mission: this.projectData.id_Mission,
-                    id_Groupe : this.storedUser.id_Groupe,
+                    id_Groupe: this.storedUser.id_Groupe,
                     string: '|' + this.storedUser.id_Utilisateurs + ';' + this.storedUser.pseudo
                 };
                 this.$.ajaxEl.method = "POST";

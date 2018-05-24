@@ -253,12 +253,7 @@
                 }.bind(this));
             }
             _toggleAdminPanel(){
-                // this.isAdminVisible = !this.isAdminVisible;
-                
-                // this.$.adminPanel.setAttribute('style', 'display: none');  
                 getComputedStyle(this.$.adminPanel).display == 'none' ? this.$.adminPanel.setAttribute('style', 'display: block') : this.$.adminPanel.setAttribute('style', 'display: none')
-                
-                // this.$.adminPanel.style.display = 'none' ? this.$.adminPanel.style.display = 'none' :  this.$.adminPanel.style.display = 'block';
             }
             _changePage(evt) {
                 //console.log(evt.path["0"].dataset.page);

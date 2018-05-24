@@ -3,11 +3,12 @@
 <dom-module id='modal-animal'>
     <template>
         <style include='shared-styles'>
-            :host{
+            :host {
                 display: block;
                 --visibilty: "none";
             }
-            #wrapper{
+
+            #wrapper {
                 display: none;
                 position: fixed;
                 z-index: 100;
@@ -18,111 +19,130 @@
                 overflow: auto;
                 background-color: rgba(0, 0, 0, 0.4);
             }
-            .modal{
+
+            .modal {
                 z-index: 101;
                 display: block;
                 background-color: rgb(221, 221, 221);
                 margin: 5% auto;
                 width: 60%;
             }
-            ul{
+
+            ul {
                 list-style-type: none;
                 padding: 0;
-                margin: 0;  
+                margin: 0;
                 width: 100%;
-                background-color:  var(--apc);
+                background-color: var(--apc);
                 overflow: hidden;
             }
-            li{
+
+            li {
                 display: inline;
                 color: rgb(224, 224, 224);
                 padding: 12px 10px;
             }
-            .right{float: right;}
-            .right:hover{background-color: var(--asc);}
-            .left{float: left;}
-            .close{cursor: pointer;}
-            .content{
+
+            .right {
+                float: right;
+            }
+
+            .right:hover {
+                background-color: var(--asc);
+            }
+
+            .left {
+                float: left;
+            }
+
+            .close {
+                cursor: pointer;
+            }
+
+            .content {
                 width: 100%;
                 padding: 15px;
                 box-sizing: border-box;
             }
-            
         </style>
         <div id="wrapper" style="display: none;">
             <div class="modal">
                 <ul>
                     <li class="left">Ajouter une espece</li>
-                    <li class="right close" on-click='_toggleModal'><iron-icon icon="icons:close"></iron-iscon></li>
-                    </ul>
-                    <div class="flex flex--col content">
-                        <div class="flex__item flex flex--row">
-                            <div class="flex__item flex flex--col" style="margin-right: 5px">
-                                <paper-input class="flex__item" label="Regne" always-float-label value="{{formData.regne::input}}"></paper-input>
-                                <paper-input class="flex__item" label="Embranchement" always-float-label value="{{formData.embranchement::input}}"></paper-input>
-                                <paper-input class="flex__item" label="Classe" always-float-label value="{{formData.classe::input}}"></paper-input>
-                                <paper-input class="flex__item" label="Ordre" always-float-label value="{{formData.ordre::input}}"></paper-input>
-                            </div>
-                            <div class="flex__item flex flex--col">
-                                <paper-input class="flex__item" label="Famille" always-float-label value="{{formData.famille::input}}"></paper-input>
-                                <paper-input class="flex__item" label="Genre" always-float-label value="{{formData.genre::input}}"></paper-input>
-                                <paper-input class="flex__item" label="Espece" always-float-label value="{{formData.espece::input}}"></paper-input>
-                                <paper-button raised class="flex__item" on-tap="_postEspece" class="primary" disabled={{disState}}>Valider</paper-button>
-                            </div>
+                    <li class="right close" on-click='_toggleModal'>
+                        <iron-icon icon="icons:close"></iron-iscon>
+                    </li>
+                </ul>
+                <div class="flex flex--col content">
+                    <div class="flex__item flex flex--row">
+                        <div class="flex__item flex flex--col" style="margin-right: 5px">
+                            <paper-input class="flex__item" label="Regne" always-float-label value="{{formData.regne::input}}"></paper-input>
+                            <paper-input class="flex__item" label="Embranchement" always-float-label value="{{formData.embranchement::input}}"></paper-input>
+                            <paper-input class="flex__item" label="Classe" always-float-label value="{{formData.classe::input}}"></paper-input>
+                            <paper-input class="flex__item" label="Ordre" always-float-label value="{{formData.ordre::input}}"></paper-input>
+                        </div>
+                        <div class="flex__item flex flex--col">
+                            <paper-input class="flex__item" label="Famille" always-float-label value="{{formData.famille::input}}"></paper-input>
+                            <paper-input class="flex__item" label="Genre" always-float-label value="{{formData.genre::input}}"></paper-input>
+                            <paper-input class="flex__item" label="Espece" always-float-label value="{{formData.espece::input}}"></paper-input>
+                            <paper-button raised class="flex__item" on-tap="_postEspece" class="primary" disabled={{disState}}>Valider</paper-button>
                         </div>
                     </div>
                 </div>
-                
-                <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
-            </template>
-            <script>
-                class ModalAnimal extends Polymer.Element {
-                    static get is() {
-                        return 'modal-animal'
-                    }
-                    static get properties() {
-                        return {
-                            triggerModal: {
-                                type: Boolean,
-                                observer: '_toggleModal'
-                            },
-                            formData:{
-                                type: Object,
-                                value: {
-                                    regne: "",
-                                    embranchement: "",
-                                    classe: "",
-                                    ordre: "",
-                                    famille: "",
-                                    genre: "",
-                                    espece: ""
-                                }
-                            }
+            </div>
+
+            <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
+    </template>
+    <script>
+        class ModalAnimal extends Polymer.Element {
+            static get is() {
+                return 'modal-animal'
+            }
+            static get properties() {
+                return {
+                    triggerModal: {
+                        type: Boolean,
+                        observer: '_toggleModal'
+                    },
+                    formData: {
+                        type: Object,
+                        value: {
+                            regne: "",
+                            embranchement: "",
+                            classe: "",
+                            ordre: "",
+                            famille: "",
+                            genre: "",
+                            espece: ""
                         }
                     }
-                    ready(){
-                        super.ready();
-                    }
-                    _toggleModal(){
-                        //console.log(this.shadowRoot.querySelector('#wrapper'));
-                        this.shadowRoot.querySelector('#wrapper').style.display == 'none' ? this.shadowRoot.querySelector('#wrapper').style.display =  "block" : this.shadowRoot.querySelector('#wrapper').style.display =  "none";
-                        //this.shadowRoot.querySelector('#wrapper').style.display =  "block";
-                        //this.customStyle["--visibility"] = "block";
-                    }
-                    _test(){
-                        // console.log('!');
-                        
-                    }
-                    _postEspece(){
-                        this.$.ajaxEl.url = ""
-                        this.$.ajaxEl.method = "POST"
-                        this.$.ajaxEl.body = this.formData;
-                        this.$.ajaxEl.generateRequest();
-                    }
-                    handleResponse(evt) {
-                        
-                    }
                 }
-                window.customElements.define(ModalAnimal.is, ModalAnimal);
-            </script>
-        </dom-module>
+            }
+            ready() {
+                super.ready();
+            }
+            _toggleModal() {
+                //console.log(this.shadowRoot.querySelector('#wrapper'));
+                this.shadowRoot.querySelector('#wrapper').style.display == 'none' ? this.shadowRoot.querySelector(
+                        '#wrapper').style.display = "block" : this.shadowRoot.querySelector('#wrapper').style.display =
+                    "none";
+                //this.shadowRoot.querySelector('#wrapper').style.display =  "block";
+                //this.customStyle["--visibility"] = "block";
+            }
+            _test() {
+                // console.log('!');
+
+            }
+            _postEspece() {
+                this.$.ajaxEl.url = ""
+                this.$.ajaxEl.method = "POST"
+                this.$.ajaxEl.body = this.formData;
+                this.$.ajaxEl.generateRequest();
+            }
+            handleResponse(evt) {
+
+            }
+        }
+        window.customElements.define(ModalAnimal.is, ModalAnimal);
+    </script>
+</dom-module>
