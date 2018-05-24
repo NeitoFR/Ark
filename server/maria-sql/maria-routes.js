@@ -207,17 +207,56 @@ app.post('/maria/submit-avis', function (req, res) {
       var voteurs = data[0].v_cur_step.split('|');
       // console.log(voteurs[req.body.avis - 1]);
       voteurs[req.body.avis - 1] += ';' + req.body.id_Utilisateurs;
-      voteurs = voteurs.join('|');
-      maria.logAvis(req.body);
-      maria.updateVCurStep(req.body.id_Mission, voteurs, function (err, data) {
-        if (err) {
-          console.log(err);
-
-          res.status(400).send(err).end();
-        } else {
-          res.status(200).send(data).end();
+      //
+      //Checking if need to change mission status
+      //
+      var tabCmp = [5, 5, 3];
+      var v_int = voteurs[req.body.avis - 1].split(';');
+      v_int.splice(0, 1);
+      if (v_int.length == tabCmp[req.body.avis - 1]) {
+        console.log('Il est temps de passé a l\'étape supérieur');
+        var new_status = req.body.id_Status;
+        switch (req.body.avis) {
+          case 1:
+          console.log('Upgrade');
+          
+            new_status++;
+            break;
+          case 2:
+          console.log('invalidation');
+          
+            new_status = -1;
+            break;
+          case 3:
+          console.log('retrogradation');
+          
+            new_status--;
+            break;
         }
-      });
+        if (new_status != -1 && new_status != req.body.id_Status) {
+          
+          maria.updateMissionStatus(req.body, voteurs, new_status, function (err, data) {
+            if (err) {
+              console.log("update status", err);
+              res.status(400).send(err).end();
+            } else {
+              console.log('Update status ok');
+              res.status(200).send(data).end();
+            }
+          });
+        }
+      } else {
+        voteurs = voteurs.join('|');
+        maria.logAvis(req.body);
+        maria.updateVCurStep(req.body.id_Mission, voteurs, function (err, data) {
+          if (err) {
+            console.log(err);
+            res.status(400).send(err).end();
+          } else {
+            res.status(200).send(data).end();
+          }
+        });
+      }
     }
   });
 });

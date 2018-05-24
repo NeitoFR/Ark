@@ -119,6 +119,23 @@ exports.getCommentThread = function (id, callback) {
         }
     });
 }
+exports.updateAlertStatus = function (data, callback) {
+    var c = init(process.env.B_MISSION);
+
+    var query = 'UPDATE missions SET `id_Status` = \'' + data.id_Status + '\' WHERE id_Mission=\'' + data.id_Mission + '\';';
+
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('Erreur ', err);
+
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
 exports.getAlerts = function (wanted, callback) {
     var query;
 
@@ -148,7 +165,7 @@ exports.getAlerts = function (wanted, callback) {
 exports.createAlert = function (data, callback) {
     var c = init(process.env.B_MISSION);
     // console.log(data.log);
-    data.log = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.data.id_Utilisateurs + ';' +data.data.id_Groupe+ ';' + data.data.pseudo + ';' + '0' + ';' + "1" + ';' + '';
+    data.log = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.data.id_Utilisateurs + ';' + data.data.id_Groupe + ';' + data.data.pseudo + ';' + '0' + ';' + "1" + ';' + '';
 
     var query = 'INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `visible`)  \
     VALUES (NULL, \'' + data.alertName + '\', \'' + data.summary + '\', \'' + (moment().format("DD-MM-YYYY HH:mm")) + '\', \'' + data.continent + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.id_Espece + '\', \'1\', \'' + data.desc + '\', \'\', \'' + data.initiateur + '\', \'||\', \'\', \'\', \'0\', \'0\',\'' + data.log + '\', \'0\');';
@@ -264,23 +281,6 @@ exports.updateIdUser = function (data, callback) {
         }
     });
 }
-exports.updateAlertStatus = function (data, callback) {
-    var c = init(process.env.B_MISSION);
-
-    var query = 'UPDATE missions SET `id_Status` = \'' + data.id_Status + '\' WHERE id_Mission=\'' + data.id_Mission + '\';';
-
-    c.query(query, function (err, res) {
-        if (err) {
-            console.log('Erreur ', err);
-
-            c.end();
-            callback(err, null);
-        } else {
-            c.end();
-            callback(null, res);
-        }
-    });
-}
 exports.sumbitParticipation = function (data, callback) {
     var c = init(process.env.B_MISSION);
     // console.log(data);
@@ -317,6 +317,22 @@ exports.updateVCurStep = function (id_Mission, v_cur_step, callback) {
     console.log('id mission ' + id_Mission);
     var c = init(process.env.B_MISSION);
     var query = 'UPDATE missions SET `v_cur_step` = \'' + v_cur_step + '\' WHERE id_Mission=\'' + id_Mission + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.updateMissionStatus = function (data, voteurs,_new, callback) {
+
+    var c = init(process.env.B_MISSION);
+    var old = data.id_Status;
+    
+    var query = 'UPDATE missions SET `id_Status` = \'' + _new + '\', `v_cur_step` = \'||\' WHERE id_Mission=\'' + data.id_Mission + '\';';
     c.query(query, function (err, res) {
         if (err) {
             c.end();

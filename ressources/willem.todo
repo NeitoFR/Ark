@@ -7,7 +7,13 @@ Liste en vrac :
     ✔ Rajouter les activity-log lié au boutons de l'alert-page @done (2018-5-24 16:57:09)
     ☐ Rajouter le bouton donnation
     ✘ Rajouter des Missions démo @cancelled (2018-5-24 16:57:05)
-    ☐ Nail the missions's status for/backwarding
+    Nail the missions's status for/backwarding :
+        Si status est entre 1 et 3:
+            ✔ Faire ++ ou -- @done (2018-5-24 18:29:12)
+            ☐ Géré le bouton invalider
+        Si status est a 0 :
+            ☐ Géré la demande d'info pour l'auteur
+            
     ✔ Faire l'admin panel @done (2018-5-24 16:57:02)
     ☐ Ajouter les alertes auquelles les users participent sur leur profil
     ☐ Ajouter les alertes auquelles les users participent sur la base
