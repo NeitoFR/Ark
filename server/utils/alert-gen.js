@@ -1,4 +1,5 @@
 var maria = require('mariasql'),
+moment = require('moment');
 
 lipsum = [
     'Nullam placerat eu nulla quis finibus. Aliquam luctus enim id orci pretium, non volutpat elit sollicitudin. Morbi cursus nisl nec sem iaculis varius. Nulla at nisl erat. Maecenas et elit ac magna condimentum mollis. Pellentesque a congue velit. Aenean bibendum massa id dui volutpat fermentum. Phasellus euismod vitae risus ut tristique. Maecenas vitae tincidunt magna. Mauris elementum neque mi, quis gravida libero finibus in. Nunc blandit ornare facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent ultricies ligula vitae neque congue dictum.',
@@ -35,4 +36,4 @@ var body = {
     'log': ''
 };
 
-console.log('Je veut créé '+process.argv[2]+' alerte');
+console.log(moment().format("DD-MM-YYYY HH:mm"));

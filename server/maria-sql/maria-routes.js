@@ -183,7 +183,7 @@ app.get('/maria/get-animals', function (req, res) {
     }
   });
 });
-//Routes that imply Missions evolution
+//Routes that imply Missions evolution and log activity
 app.post('/maria/submit-participation', function (req, res) {
   // console.log(req.body);
 
@@ -208,6 +208,7 @@ app.post('/maria/submit-avis', function (req, res) {
       // console.log(voteurs[req.body.avis - 1]);
       voteurs[req.body.avis - 1] += ';' + req.body.id_Utilisateurs;
       voteurs = voteurs.join('|');
+      maria.logAvis(req.body);
       maria.updateVCurStep(req.body.id_Mission, voteurs, function (err, data) {
         if (err) {
           console.log(err);

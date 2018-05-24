@@ -109,6 +109,15 @@
             ready() {
                 super.ready();
                 this.disState = false;  
+                this.addEventListener('keyup', function(evt){
+                    if(evt.keyCode == 13 && this.selTab == 'signin')
+                        this._submitSignIn();
+                    if(evt.keyCode == 13 && this.selTab == 'signup')
+                        this._submitSignUp();
+
+
+                    
+                })
             }
             _chekckEmptyness(){
                 console.log('pseudo : ', this.formData.pseudo, '| password : ', this.formData.password);

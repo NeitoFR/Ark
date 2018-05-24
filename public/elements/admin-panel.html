@@ -107,7 +107,8 @@
                     },
                     projectData:{
                         type: Object,
-                        observer: '_projectDataChanged'
+                        observer: '_projectDataChanged',
+                        value:{}
                     },
                     storedUser: {
                         type: Object,
@@ -143,28 +144,31 @@
                     case '/admin/update-alert-status':
                         console.log('res from status', evt.detail.response);
                         this.dispatchEvent(new CustomEvent('askprojectdata'));
+                        if(this.projectData.id_Mission)
+                        this.dispatchEvent(new CustomEvent('askprojectdata'));
                         break;
                         
 
                     case '/admin/update-id-group':
                         console.log('res from group', evt.detail.response);
                         this.dispatchEvent(new CustomEvent('askuserdata'));
+                        if(this.projectData.id_Mission)
+                        this.dispatchEvent(new CustomEvent('askprojectdata'));
                         break;
 
                     case '/admin/update-id-user':
                         console.log('res from user', evt.detail.response);
                         this.dispatchEvent(new CustomEvent('askuserdata'));
+                        if(this.projectData.id_Mission)
                         this.dispatchEvent(new CustomEvent('askprojectdata'));
                         
                         break;
-                        
-
                     default:
                         break;
                 }
             }
             _updateAlertStatus() {
-                if (this.projectData) {
+                if (this.projectData.id_Mission) {
                     console.log(this.projectData.id_Status, this.$.ss.value, this.projectData);
                     if (this.projectData.id_Status == this.$.ss.value) {
                         console.log('Its already on this status');

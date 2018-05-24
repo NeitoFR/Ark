@@ -53,7 +53,14 @@ Définition des modules restant à faire :
         ✔ "En cours de validation par le Comité d'évaluation", @done (2018-5-20 19:40:23)
         ✔ "Validé par le Comité" @done (2018-5-20 19:40:23)
     Définir les différent message de log:
-        ✔ "Alerte créé." @done (2018-5-20 23:42:35)
+        ✔ 0 "Alerte créé." @done (2018-5-20 23:42:35)
+        ☐ 1 "Approuve l'alerte"
+        ☐ 2 "Désapprouve l'alerte"
+        ☐ 3 "Souhaite demander des informations supplémentaire"
+        ☐ 4 "A soumis sa participation"
+        ☐ 5 "A fait une donnation"
+        ☐ 6 "Passe à l'étape suivant"
+        ☐ 7 "Passe a l'étape précédente"
     Sur la table Mission: 
         ✔ Rajouter un champ 'initiateur' @done (2018-5-20 16:50:07)
         ✔ Rajouter un champ 'activty_log' |timestamp;id_user;id_messagee;pseudo;id_state;'demandeinfo'| @done (2018-5-20 16:50:05)

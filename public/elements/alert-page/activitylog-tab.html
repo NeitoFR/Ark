@@ -5,105 +5,134 @@
 <dom-module id='activitylog-tab'>
     <template>
         <style include='shared-styles'>
-            .wrapper{
+            .wrapper {
                 padding: 18px;
                 background-color: rgb(200, 200, 200);
                 width: 40%;
                 border-radius: 2px;
             }
-            .container{
+
+            .container {
                 border-top: 1px solid grey;
                 background-color: rgb(218, 218, 218);
             }
-            
 
-            .log-details{
+
+            .log-details {
                 padding: 10px;
             }
         </style>
         <div class="flex flex--col wrapper">
             <!-- <paper-button raised on-tap="_testButton" class="primary">Test</paper-button> -->
-            
+
             <div class="">
                 <template is="dom-repeat" items="{{logList}}" as="item">
-                        <div class="flex flex--col container">
-                            <div class="flex__item flex flex--row">
-                                <div class="flex__item log-details">{{item.timestamp}}</div>
-                                <div class="flex__item--top log-details">{{_printStatus(item.id_Status)}}</div>
-                            </div>
-                            <div class="flex__item--top log-details">Utilisateur : {{item.pseudo}}</div>
-                            <div class="flex__item--top log-details">Message : {{_printMessage(item.id_Message)}}</div>
-                            <template is="dom-if" if={{item.complement}}>
-                                <div class="flex__item log-details">Complément : {{item.complement}}</div>
-                            </template>
+                    <div class="flex flex--col container">
+                        <div class="flex__item flex flex--row">
+                            <div class="flex__item log-details">{{item.timestamp}}</div>
+                            <div class="flex__item--top log-details">{{_printStatus(item.id_Status)}}</div>
                         </div>
-                    
+                        <div class="flex__item flex flex--row">
+                            <div class="flex__item log-details">Utilisateur : {{item.pseudo}}</div>
+                            <div class="flex__item--top log-details">Groupe : {{_printGroupe(item.id_Groupe)}}</div>
+                        </div>
+                        <div class="flex__item--top log-details">Message : {{_printMessage(item.id_Message)}}</div>
+                        <template is="dom-if" if={{item.complement}}>
+                            <div class="flex__item log-details">Complément : {{item.complement}}</div>
+                        </template>
+                    </div>
+
                 </template>
-                
+
             </div>
-        </template>
-        <script>
-            class ActivitylogTab extends Polymer.Element {
-                static get is() {
-                    return 'activitylog-tab'
-                }
-                static get properties() {
-                    return {
-                        logData:{
-                            observer: '_logDataChanged'
-                        },
-                        logList:{
-                            type: Array
-                        },
-                        statusCmp:{
-                            type: Array,
-                            value: [
+    </template>
+    <script>
+        class ActivitylogTab extends Polymer.Element {
+            static get is() {
+                return 'activitylog-tab'
+            }
+            static get properties() {
+                return {
+                    logData: {
+                        observer: '_logDataChanged'
+                    },
+                    logList: {
+                        type: Array
+                    },
+                    statusCmp: {
+                        type: Array,
+                        value: [
                             "En attente d'info de l'auteur.",
                             "En cours de validation par l'équipe d'écoute.",
                             "En cours de validation par l'équipe d'experts.",
                             "En cours de validation par le Comité d'évaluation.",
                             "Validé par le Comité."
-                            ]
-                        },
-                        logMessageCmp:{
-                            type: Array,
-                            value:[
+                        ]
+                    },
+                    grpCmp: {
+                        type: Array,
+                        value:[
+                            'Sentinelle',
+                            'Missionnaire',
+                            'Agent de site',
+                            'Narrateur',
+                            'Equipe d\'écoute',
+                            'Equipe d\'expert',
+                            'Comité d\'évaluation'
+                        ]
+                    },
+                    logMessageCmp: {
+                        type: Array,
+                        value: [
                             "Alerte créé.",
-                            "Message de test."
-                            ]
-                        }
+                            "Approuve l'alerte",
+                            "Désapprouve l'alerte",
+                            "Souhaite demander des informations supplémentaire",
+                            "A soumis sa participation",
+                            "A fait une donnation",
+                            "Passe à l'étape suivant",
+                            "Passe a l'étape précédente"
+                        ]
                     }
                 }
-                _testButton(){
-                    // console.log(this.logList);
-                    // console.log(this.logData);
-                    
-                }
-                _printStatus(val){
-                    return this.statusCmp[val];
-                }
-                _printMessage(val){
-                    return this.logMessageCmp[val];
-                }
-                _logDataChanged(val){
-                    var final = [];
-                    var rawLogArray = val.split('|');
-                    rawLogArray.splice(0, 1);
-                    rawLogArray.forEach(string => {
-                        var temp = string.split(';');
-                        final.push({
-                            timestamp: temp[0],
-                            id_Utilisateurs: temp[1],
-                            id_Message: temp[2],
-                            pseudo: temp[3],
-                            id_Status: temp[4],
-                            complement: temp[5]
-                        })
-                    });
-                    
-                    this.logList = final;
-                }
             }
-            window.customElements.define(ActivitylogTab.is, ActivitylogTab);
-        </script>
-    </dom-module>
+            _testButton() {
+                // console.log(this.logList);
+                // console.log(this.logData);
+
+            }
+            _printGroupe(val){
+                return this.grpCmp[val-1];
+            }
+            _printStatus(val) {
+                return this.statusCmp[val];
+            }
+            _printMessage(val) {
+                return this.logMessageCmp[val];
+            }
+            _logDataChanged(val) {
+                var final = [];
+
+                var rawLogArray = val.split('|');
+                rawLogArray.splice(0, 1);
+                rawLogArray.forEach(string => {
+                    console.log('log', string);
+
+                    var temp = string.split(';');
+                    final.push({
+                        timestamp: temp[0],
+                        id_Utilisateurs: temp[1],
+                        id_Groupe: temp[2], 
+                        pseudo: temp[3],
+                        id_Message: temp[4],
+                        id_Status: temp[5],
+                        complement: temp[6]
+                    })
+                });
+
+                this.logList = final;
+            }
+        }
+        window.customElements.define(ActivitylogTab.is, ActivitylogTab);
+    </script>
+</dom-module>

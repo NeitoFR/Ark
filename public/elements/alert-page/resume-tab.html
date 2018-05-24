@@ -249,9 +249,6 @@
                     toInfo: {
                         type: Number,
                         value: 3
-                    },
-                    storedUser: {
-                        observer: '_storedUserChanged'
                     }
                 }
             }
@@ -286,7 +283,9 @@
                     'id_Utilisateurs': this.storedUser.id_Utilisateurs,
                     'id_Groupe': this.storedUser.id_Groupe,
                     'id_Mission': this.projectData.id_Mission,
-                    'avis': avis
+                    'avis': avis,
+                    'pseudo' : this.storedUser.pseudo,
+                    'id_Status' : this.projectData.id_Status
                 };
                 this.$.ajaxEl.generateRequest();
             }
@@ -323,7 +322,7 @@
                         rawP.splice(0, 1);
                         for (var i = 0; i < rawP.length; i++) {
                             var temp = rawP[i].split(';');
-                            console.log(temp[0] + ':' + this.storedUser.id_Utilisateurs);
+                            // console.log(temp[0] + ':' + this.storedUser.id_Utilisateurs);
 
                             if (temp[0] == this.storedUser.id_Utilisateurs) {
                                 console.log('Participe déjà');
@@ -388,7 +387,7 @@
                 return false;
             }
             _setActionButtonState(user_group, mission_status) {
-                // console.log('user_group : '+user_group+' mission_status : '+mission_status);
+                console.log('user_group : '+user_group+' mission_status : '+mission_status);
                 if (this._checkValideur(this.projectData.v_cur_step)) {
                     console.log('Deactivating buttons');
 

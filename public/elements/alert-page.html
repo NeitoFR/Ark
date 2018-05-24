@@ -48,7 +48,7 @@
                 </template>
             </iron-selector>
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
-                <resume-tab name='resume-tab' project-data={{projectData}} id='rstab'></resume-tab>
+                <resume-tab name='resume-tab' project-data={{projectData}} stored-user={{storedUser}} id='rstab'></resume-tab>
                 <activitylog-tab name='activitylog-tab' project-data={{projectData}} log-data={{logData}}></activitylog-tab>
                 <task-tab name='task-tab' project-data={{projectData}}></task-tab>
             </iron-pages>

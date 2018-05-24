@@ -343,6 +343,7 @@
                         }
                     });
                     user.id_Utilisateurs = evt.detail.response[0].id_Utilisateurs;
+                    user.id_Groupe = evt.detail.response[0].id_Groupe;
                     user = JSON.stringify(user);
                     localStorage['user-storage'] = user;
                     
