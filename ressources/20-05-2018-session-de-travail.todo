@@ -13,7 +13,7 @@ Définition des modules restant à faire :
             ☐ Crypter les envoi client/serveur (F/B)
         ☐ Faire en sorte que l'URL soit /home-page à l'arriver sur le site;(F)
     profile-page :
-        ☐ Agencer les elements (F)
+        ✔ Agencer les elements (F) @done (2018-5-24 23:32:49)
     alerte-create :
         ☐ Terminer l'ajout d'animaux(B) 
     register-login:

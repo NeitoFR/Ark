@@ -5,6 +5,7 @@
     <template>
         <style include='shared-styles'>
             .admin {
+                /* display: none; */
                 position: fixed;
                 background-color: rgb(41, 27, 12);
                 color: rgb(231, 231, 231);
@@ -88,7 +89,7 @@
                 </div>
                 <div class="flex__item flex flex--col">
                     <div class="flex__item--top btn" on-click="_updateAll">Update all</div>
-                    <div class="flex__item--top btn" on-click="_testButton">Test</div>
+                    <div class="flex__item--top btn" on-click="_testButton">Disapear</div>
                     <div class="flex__item--top btn" on-click="_switchSide">Switch Side</div>
                 </div>
             </div>
@@ -120,9 +121,10 @@
                 super.ready();
             }
             _storedUserChanged(su) {
-                this.$.sg.value = su.id_Groupe;
+                
+                if(su.id_Groupe)this.$.sg.value = su.id_Groupe;
                 // this.id_user = su.id_Utilisateurs;
-                this.$.idu.value = su.id_Utilisateurs;
+                if(su.id_Utilisateurs)this.$.idu.value = su.id_Utilisateurs;
             }
             _projectDataChanged(pd){
                 this.$.ss.value = pd.id_Status;
@@ -234,9 +236,11 @@
             _testButton() {
                 // console.log(this.storedUser, this.projectData);
                 // console.log(this.$.ss.value, this.$.sg.value, this.id_user);
-                var user = localStorage['user-storage']
-                user = JSON.parse(user);
-                console.log(user);
+                // var user = localStorage['user-storage']
+                // user = JSON.parse(user);
+                // console.log(user);
+                this.dispatchEvent(new CustomEvent('closeModal'));
+                
             }
         }
         window.customElements.define(AdminPanel.is, AdminPanel);

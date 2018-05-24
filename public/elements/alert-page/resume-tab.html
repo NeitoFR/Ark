@@ -54,10 +54,21 @@
                 padding: 3px 0px;
             }
 
+            .donation {
+                padding: 20px;
+                text-align: center;
+                background-color: rgb(228, 212, 67);
+            }
+
+            .donation paper-button {
+                background-color: rgb(219, 219, 61);
+            }
+
             .steps,
             .step-details,
             .actions,
-            .participate {
+            .participate,
+            .donation {
                 border-bottom: solid 1px rgb(185, 185, 185);
 
             }
@@ -124,7 +135,7 @@
                 max-width: 150px;
             }
 
-            #modalwrapper {
+            #modalwrapper, #modalwrapper2 {
                 display: none;
                 position: fixed;
                 z-index: 100;
@@ -184,6 +195,25 @@
             }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <div id='modalwrapper2'>
+                <div class="modal-container">
+                    <ul>
+                        <li class="left">Informations supplémentaires</li>
+                        <li class="right close" on-click='_toggleModal2'>
+                            <iron-icon icon="icons:close"></iron-iscon>
+                        </li>
+                    </ul>
+    
+                    <div class="flex flex--row modal-content">
+                        <div class="flex__item">
+                            <paper-textarea char-counter maxlength="800" label="Précision sur les informations manquantes" always-float-label value="{{complement::input}}"></paper-textarea>
+                        </div>
+                        <div class="flex__item--middle">
+                            <paper-button raised on-tap="_sendInfo" class="primary">demande info</paper-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div id='modalwrapper'>
             <div class="modal-container">
                 <ul>
@@ -228,6 +258,9 @@
 
             <!-- Side Menu -->
             <div class="flex flex--col flex__item--top menu">
+                <div class="flex__item donation">
+                    <paper-button raised on-tap="_testButton" class="primary">Donation</paper-button>
+                </div>
                 <div class="flex__item  steps">
                     <p>Résumé Etape</p>
                     <iron-pages selected="{{selSteps}}" attr-for-selected="name" fallback-selection="mainSteps" role="main">
@@ -245,8 +278,16 @@
                                 <span class="subtitle">Valider par le Comité d'évaluation</span>
                             </paper-checkbox>
                         </div>
-                        <div name='Steps0'>
-                            En attente d'info de la part de l'auteur...
+                        <div name='Steps0' class="flex flex--col">
+                            <div class="flex__item">
+                                En attente d'info de la part de l'auteur...
+                            </div>
+                            <template is="dom-if" if={{!_actionVisible(projectData.initiateur)}}>
+                                <div class="flex__item" style="text-align: center">
+                                    <paper-button raised on-tap="_toggleModal2" class="primary">update Info</paper-button>
+                                </div>
+                            </template>
+
                         </div>
                     </iron-pages>
                 </div>
@@ -340,11 +381,21 @@
                     this._getNewComment(this.projectData.id_Mission);
                 }.bind(this));
             }
+            isInitiateur() {
+                return this.projectData.initiateur == this.storedUser.initiateur ? true : false;
+            }
             _toggleModal() {
                 if (getComputedStyle(this.$.modalwrapper).display == 'none')
                     this.complement = '';
                 getComputedStyle(this.$.modalwrapper).display == 'none' ? this.$.modalwrapper.setAttribute(
                     'style', 'display: block') : this.$.modalwrapper.setAttribute('style', 'display: none')
+
+            }
+            _toggleModal2() {
+                if (getComputedStyle(this.$.modalwrapper2).display == 'none')
+                    this.complement = '';
+                getComputedStyle(this.$.modalwrapper2).display == 'none' ? this.$.modalwrapper2.setAttribute(
+                    'style', 'display: block') : this.$.modalwrapper2.setAttribute('style', 'display: none')
 
             }
             _testButton() {

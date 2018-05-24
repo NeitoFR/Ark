@@ -36,7 +36,7 @@
             :host {
                 display: block;
             }
-            
+
             ul {
                 font-size: 18px;
                 list-style-type: none;
@@ -45,18 +45,18 @@
                 padding: 0;
                 overflow: hidden;
             }
-            
+
             .app-link {
                 float: right;
                 border-left: 1px solid #bbb;
                 cursor: pointer;
             }
-            
+
             .app-title {
                 float: left;
                 cursor: pointer;
             }
-            
+
             .app-link a,
             .app-title a {
                 display: block;
@@ -65,20 +65,20 @@
                 padding: 14px 16px;
                 text-decoration: none;
             }
-            
+
             .app-link a:hover {
                 background-color: var(--asc);
             }
-            
+
             .app-link a:active {
                 background-color: var(--asc);
             }
-            
+
             .dropdown {
                 position: relative;
                 display: inline-block;
             }
-            
+
             .dropdown-content {
                 display: none;
                 position: fixed;
@@ -88,7 +88,7 @@
                 z-index: 1;
                 right: 0;
             }
-            
+
             .dropdown-content a {
                 color: black;
                 padding: 12px 16px;
@@ -96,19 +96,19 @@
                 display: block;
                 border-top: 1px solid #CCC;
             }
-            
+
             .dropdown-content a:hover {
                 background-color: rgba(0, 0, 0, 0.20)
             }
-            
+
             .dropdown:hover .dropdown-content {
                 display: block;
             }
-            
+
             .dropdown:hover .dropbtn {
                 background-color: #3e8e41;
             }
-            
+
             .drawer-list a {
                 display: block;
                 padding: 0 30px;
@@ -116,13 +116,13 @@
                 color: var(--app-secondary-color);
                 line-height: 50px;
                 outline: none;
-                
+
             }
-            
+
             .drawer-list a:hover {
                 background-color: #CCC
             }
-            
+
             ;
             #drawer-head {
                 font-size: 24px;
@@ -135,11 +135,11 @@
         <!-- Routing stuff -->
         <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-        
+
         <admin-panel id='adminPanel' stored-user={{storedUser}} project-data={{projectData}}></admin-panel>
         <!-- <template is="dom-if" if={{isAdminVisible}}>
         </template> -->
-        
+
         <!-- Navbar -->
         <ul>
             <iron-selector selected="[[page]]" role="navigation">
@@ -156,9 +156,11 @@
                     <!--  -->
                     <a href="[[rootPath]]home-page">L'Arche de Noé</a>
                 </li>
-                <li class="app-title" on-tap="_testButton">
-                    <a>Dev button</a>
-                </li>
+                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
+                    <li class="app-title" on-tap="_toggleAdminPanel">
+                        <a>Admin Panel</a>
+                    </li>
+                </template>
                 <template is="dom-if" if="{{!storedUser.loggedin}}">
                     <li class="app-link">
                         <a href="[[rootPath]]register-login">
@@ -227,7 +229,7 @@
                     actr: Boolean,
                     pptr: Boolean,
                     aptr: Boolean,
-                    isAdminVisible:{
+                    isAdminVisible: {
                         type: Boolean,
                         value: true
                     }
@@ -235,30 +237,30 @@
             }
             static get observers() {
                 return [
-                '_routePageChanged(routeData.page)',
+                    '_routePageChanged(routeData.page)',
                 ];
             }
             ready() {
                 super.ready();
                 if (!this.storedUser) this.storedUser = {};
                 const alertlist = this.$.alertlist;
-                this.$.alertpage.addEventListener('projectData', function(evt){
+                this.$.alertpage.addEventListener('projectData', function (evt) {
                     this.set('projectData', evt.detail.projectData);
                 }.bind(this));
-                this.$.adminPanel.addEventListener('askprojectdata', function(evt){
+                this.$.adminPanel.addEventListener('askprojectdata', function (evt) {
                     this.aptr = !this.aptr;
                 }.bind(this));
-                this.$.adminPanel.addEventListener('askuserdata', function(evt){
+                this.$.adminPanel.addEventListener('askuserdata', function (evt) {
                     this._updateUserDataFromAdmin();
                 }.bind(this));
+                this.$.adminPanel.addEventListener('closeModal', function (evt) {
+                    this._toggleAdminPanel();
+                }.bind(this));
+                this._toggleAdminPanel();
             }
-            _toggleAdminPanel(){
-                getComputedStyle(this.$.adminPanel).display == 'none' ? this.$.adminPanel.setAttribute('style', 'display: block') : this.$.adminPanel.setAttribute('style', 'display: none')
-            }
-            _changePage(evt) {
-                //console.log(evt.path["0"].dataset.page);
-                this.page = evt.path["0"].dataset.page;
-                this.notifyPath('page');
+            _toggleAdminPanel() {
+                getComputedStyle(this.$.adminPanel).display == 'none' ? this.$.adminPanel.setAttribute('style',
+                    'display: block') : this.$.adminPanel.setAttribute('style', 'display: none')
             }
             _testButton(evt) {
                 console.log('Stored User :', this.storedUser);
@@ -272,39 +274,39 @@
             _routePageChanged(page) {
                 console.log('page changed', page);
                 this._updateUserData();
-                
+
                 this.page = page || 'home-page';
                 if (this.$.drawer.opened) this.$.drawer.close();
                 switch (page) {
                     case 'alert-create':
-                    this.actr = !this.actr;
-                    break;
+                        this.actr = !this.actr;
+                        break;
                     case (page.match(/alert-page/) || {}).input:
-                    var path = this.route.path.split('/');
-                    // console.log('matched alert-page, wanted id : ',path[path.length-1]);
-                    this.projectId = path[path.length - 1];
-                    this.aptr = !this.aptr;
-                    // console.log('reaching an '+page);
-                    
-                    break;
+                        var path = this.route.path.split('/');
+                        // console.log('matched alert-page, wanted id : ',path[path.length-1]);
+                        this.projectId = path[path.length - 1];
+                        this.aptr = !this.aptr;
+                        // console.log('reaching an '+page);
+
+                        break;
                     case 'alert-list':
-                    // console.log(this.$.alertlist);
-                    // console.log('Etape 1');
-                    
-                    this.trigger = !this.trigger;
-                    break;
+                        // console.log(this.$.alertlist);
+                        // console.log('Etape 1');
+
+                        this.trigger = !this.trigger;
+                        break;
                     case 'profile-page':
-                    // this.$.profilepage._getUserData();
-                    // this.$$('profile-page')._getUserData();
-                    this.pptr = !this.pptr;
-                    break;
+                        // this.$.profilepage._getUserData();
+                        // this.$$('profile-page')._getUserData();
+                        this.pptr = !this.pptr;
+                        break;
                     case 'admin-panel':
-                    console.log('Accessing Admin Panel...');
-                    
-                    this.admtr = !this.admtr;
-                    break;
+                        console.log('Accessing Admin Panel...');
+
+                        this.admtr = !this.admtr;
+                        break;
                     default:
-                    break;
+                        break;
                 }
             }
             _updateUserData() {
@@ -332,7 +334,7 @@
                     keys.forEach(key => {
                         if (this.storedUser[key] != newUser[key]) {
                             // this.storedUser[key] = newUser[key];
-                            const str = 'storedUser.'+key;
+                            const str = 'storedUser.' + key;
                             this.set(str, newUser[key]);
                             cpt.push(key);
                         }
@@ -341,7 +343,7 @@
                     user.id_Groupe = evt.detail.response[0].id_Groupe;
                     user = JSON.stringify(user);
                     localStorage['user-storage'] = user;
-                    
+
                     if (cpt.length != 0) console.log(' nouvelles valeurs', cpt);
                 }
             }
@@ -357,10 +359,10 @@
                 //console.log('Page changed for ', page);
                 const resolvedPageUrl = this.resolveUrl(page + '.html');
                 Polymer.importHref(
-                resolvedPageUrl,
-                null,
-                this._showPage404.bind(this),
-                true);
+                    resolvedPageUrl,
+                    null,
+                    this._showPage404.bind(this),
+                    true);
             }
             _showPage404() {
                 this.page = 'not-found';
