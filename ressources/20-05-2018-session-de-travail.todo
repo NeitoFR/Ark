@@ -42,10 +42,7 @@ Définition des modules restant à faire :
 
     alerte-list:
         ✔ Recharger la liste des alerte lorsque selectedRoute change @done (2018-5-20 23:42:11)
-    Créer la table Taches:
-        Les champs:
-            ☐ id_taches (clé primaire)
-            ☐ id_projet (clé étrangere sur la table missions)            
+    ✔ Créer la table Taches: @done (2018-5-24 16:56:48)
     Définir les différent message de status:
         ✔ "En attente d'info de l'auteur ", @done (2018-5-20 19:40:21)
         ✔ "En cours de validation par l'équipe d'écoute", @done (2018-5-20 19:40:22)
@@ -54,13 +51,13 @@ Définition des modules restant à faire :
         ✔ "Validé par le Comité" @done (2018-5-20 19:40:23)
     Définir les différent message de log:
         ✔ 0 "Alerte créé." @done (2018-5-20 23:42:35)
-        ☐ 1 "Approuve l'alerte"
-        ☐ 2 "Désapprouve l'alerte"
-        ☐ 3 "Souhaite demander des informations supplémentaire"
-        ☐ 4 "A soumis sa participation"
-        ☐ 5 "A fait une donnation"
-        ☐ 6 "Passe à l'étape suivant"
-        ☐ 7 "Passe a l'étape précédente"
+        ✔ 1 "Approuve l'alerte" @done (2018-5-24 16:55:48)
+        ✔ 2 "Désapprouve l'alerte" @done (2018-5-24 16:55:48)
+        ✔ 3 "Souhaite demander des informations supplémentaire" @done (2018-5-24 16:55:47)
+        ✔ 4 "A soumis sa participation" @done (2018-5-24 16:55:47)
+        ✔ 5 "A fait une donnation" @done (2018-5-24 16:55:47)
+        ✔ 6 "Passe à l'étape suivant" @done (2018-5-24 16:55:47)
+        ✔ 7 "Passe a l'étape précédente" @done (2018-5-24 16:55:46)
     Sur la table Mission: 
         ✔ Rajouter un champ 'initiateur' @done (2018-5-20 16:50:07)
         ✔ Rajouter un champ 'activty_log' |timestamp;id_user;id_messagee;pseudo;id_state;'demandeinfo'| @done (2018-5-20 16:50:05)
@@ -76,11 +73,3 @@ Questions :
     Si l'initiateur supprime son compte ? 
     Avons nous besoin d'une sous table missions (plus courte) ? sinon formalisé les requete de suppressions des anciens projets
 
-22-05 :
-    ☐ Rendre l'alert List page principale
-    ☐ Checker si l'activity-log s'affiche bien
-    ☐ Rajouter les activity-log lié au boutons de l'alert-page
-    ☐ Rajouter le bouton donnation
-    ☐ Rajouter des Missions démo
-    ☐ Nail the status for/backwarding
-    ☐ Faire l'admin panel

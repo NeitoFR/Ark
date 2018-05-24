@@ -328,22 +328,6 @@ exports.updateVCurStep = function (id_Mission, v_cur_step, callback) {
     });
 }
 exports.logAvis = function (data) {
-    //|timestamp;id_user;id_messagee;pseudo;id_state;'demandeinfo'
-    // timestamp : moment
-    // id_user : data.id_Utilisateurs
-    // pseudo : data.pseudo
-    // id_message : a definir
-    // id_state : data.id_Status
-    // Complement : '';
-    // var id_message = null;
-    // "Alerte créé.",
-    // "Approuve l'alerte",
-    // "Désapprouve l'alerte",
-    // "Souhaite demander des informations supplémentaire",
-    // "A soumis sa participation",
-    // "A fait une donnation",
-    // "Passe à l'étape suivant",
-    // "Passe a l'étape précédente"
     var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + data.avis + ';' + data.id_Status + ';' + '';
     var c = init(process.env.B_MISSION);
     var query = 'UPDATE missions SET `activity_log` = CONCAT(activity_log, \'' + string + '\') WHERE id_Mission=\'' + data.id_Mission + '\';';

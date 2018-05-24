@@ -1,0 +1,14 @@
+Ressources utiles : 
+    A quoi ressemble un log : 
+        ✔ var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + '4' + ';' + data.id_Status + ';' + ''; @done (2018-5-24 17:03:31)
+Liste en vrac :
+    ☐ Rendre l'alert List page principale
+    ✔ Checker si l'activity-log s'affiche bien @done (2018-5-24 16:57:11)
+    ✔ Rajouter les activity-log lié au boutons de l'alert-page @done (2018-5-24 16:57:09)
+    ☐ Rajouter le bouton donnation
+    ✘ Rajouter des Missions démo @cancelled (2018-5-24 16:57:05)
+    ☐ Nail the missions's status for/backwarding
+    ✔ Faire l'admin panel @done (2018-5-24 16:57:02)
+    ☐ Ajouter les alertes auquelles les users participent sur leur profil
+    ☐ Ajouter les alertes auquelles les users participent sur la base
+
