@@ -191,7 +191,7 @@
             <home-page name="home-page"></home-page>
             <not-found name="not-found"></not-found>
             <register-login name="register-login"></register-login>
-            <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}}></profile-page>
+            <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}} table-data={{storedUser.mes_alertes}}></profile-page>
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
             <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage' stored-user={{storedUser}}></alert-page>
@@ -341,6 +341,7 @@
                     });
                     user.id_Utilisateurs = evt.detail.response[0].id_Utilisateurs;
                     user.id_Groupe = evt.detail.response[0].id_Groupe;
+                    user.mes_alertes = evt.detail.response[0].mes_alertes;
                     user = JSON.stringify(user);
                     localStorage['user-storage'] = user;
 

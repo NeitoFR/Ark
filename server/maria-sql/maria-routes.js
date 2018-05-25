@@ -193,6 +193,8 @@ app.post('/maria/submit-participation', function (req, res) {
       res.status(400).send(err).end();
     } else {
       maria.logParticipation(req.body);
+      maria.logNewAlert(req.body);
+      // maria.logAlerte(req.body);
       res.status(204).send(data).end();
     }
   });

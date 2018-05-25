@@ -30,7 +30,7 @@ exports.getUsers = function (callback) {
 }
 exports.getUserDataFromPseudo = function (pseudo, callback) {
     var c = init(process.env.B_USER);
-    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE pseudo=\'" + pseudo + "\';";
+    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, mes_alertes, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE pseudo=\'" + pseudo + "\';";
     c.query(query, function (err, res) {
         if (err) {
             c.end();
@@ -43,7 +43,7 @@ exports.getUserDataFromPseudo = function (pseudo, callback) {
 }
 exports.getUserInfo = function (id, callback) {
     var c = init(process.env.B_USER);
-    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE id_Utilisateurs=\'" + id + "\';";
+    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, mes_alertes, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE id_Utilisateurs=\'" + id + "\';";
     c.query(query, function (err, res) {
         if (err) {
             c.end();
@@ -60,8 +60,8 @@ exports.getUserInfo = function (id, callback) {
 //Authentication related query
 exports.createUser = function (data, callback) {
     var c = init(process.env.B_USER);
-    var query = 'INSERT INTO `utilisateurs` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
-    VALUES (NULL, \'' + data.pseudo + '\', \'' + data.nom + '\', \'' + data.prenom + '\', \'' + data.password + '\', \'0\', \'0\', \'1\', \'' + data.email + '\', \'' + data.phone + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.address + '\', \'1\');';
+    var query = 'INSERT INTO `utilisateurs` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `mes_alertes`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
+    VALUES (NULL, \'' + data.pseudo + '\', \'' + data.nom + '\', \'' + data.prenom + '\', \'' + data.password + '\', \'\', \'0\', \'1\', \'' + data.email + '\', \'' + data.phone + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.address + '\', \'1\');';
     //console.log(query);
     c.query(query, function (err, res) {
         if (err) {
@@ -76,7 +76,7 @@ exports.createUser = function (data, callback) {
 exports.verifyUser = function (data, callback) {
     var c = init(process.env.B_USER),
 
-        query = 'SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE `pseudo` = \'' + data.pseudo + '\' AND `password` = \'' + data.password + '\';';
+        query = 'SELECT id_Utilisateurs, pseudo, nom, prenom, mes_alertes, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE `pseudo` = \'' + data.pseudo + '\' AND `password` = \'' + data.password + '\';';
     c.query(query, function (err, res) {
         if (err) {
             c.end();
@@ -340,6 +340,20 @@ exports.updateMissionStatus = function (data, voteurs, _new, callback) {
         } else {
             c.end();
             callback(null, res);
+        }
+    });
+}
+exports.logNewAlert = function (data) {
+    var string = '|' + data.id_Mission + ';' + data.nom + ';' + data.resume;
+    var c = init(process.env.B_USER);    
+    var query = 'UPDATE utilisateurs SET `mes_alertes` = CONCAT(mes_alertes, \'' + string + '\') WHERE id_Utilisateurs =\'' + data.id_Utilisateurs + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('Error logging', err);
+            c.end();
+        } else {
+            console.log('Logging ok');
+            c.end();
         }
     });
 }

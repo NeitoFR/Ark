@@ -389,14 +389,12 @@
                     this.complement = '';
                 getComputedStyle(this.$.modalwrapper).display == 'none' ? this.$.modalwrapper.setAttribute(
                     'style', 'display: block') : this.$.modalwrapper.setAttribute('style', 'display: none')
-
             }
             _toggleModal2() {
                 if (getComputedStyle(this.$.modalwrapper2).display == 'none')
                     this.complement = '';
                 getComputedStyle(this.$.modalwrapper2).display == 'none' ? this.$.modalwrapper2.setAttribute(
                     'style', 'display: block') : this.$.modalwrapper2.setAttribute('style', 'display: none')
-
             }
             _testButton() {
                 this.$.check1.classList.add('green');
@@ -625,7 +623,9 @@
                     id_Status: this.projectData.id_Status,
                     id_Mission: this.projectData.id_Mission,
                     id_Groupe: this.storedUser.id_Groupe,
-                    string: '|' + this.storedUser.id_Utilisateurs + ';' + this.storedUser.pseudo
+                    string: '|' + this.storedUser.id_Utilisateurs + ';' + this.storedUser.pseudo,
+                    resume: this.projectData.resume,
+                    nom: this.projectData.nom
                 };
                 this.$.ajaxEl.method = "POST";
                 this.$.ajaxEl.generateRequest();
