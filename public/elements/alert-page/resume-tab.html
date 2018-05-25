@@ -135,7 +135,8 @@
                 max-width: 150px;
             }
 
-            #modalwrapper, #modalwrapper2 {
+            #modalwrapper,
+            #modalwrapper2 {
                 display: none;
                 position: fixed;
                 z-index: 100;
@@ -195,29 +196,11 @@
             }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        <div id='modalwrapper2'>
-                <div class="modal-container">
-                    <ul>
-                        <li class="left">Informations supplémentaires</li>
-                        <li class="right close" on-click='_toggleModal2'>
-                            <iron-icon icon="icons:close"></iron-iscon>
-                        </li>
-                    </ul>
-    
-                    <div class="flex flex--row modal-content">
-                        <div class="flex__item">
-                            <paper-textarea char-counter maxlength="800" label="Précision sur les informations manquantes" always-float-label value="{{complement::input}}"></paper-textarea>
-                        </div>
-                        <div class="flex__item--middle">
-                            <paper-button raised on-tap="_sendInfo" class="primary">demande info</paper-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Début modal de l'equipe qui demande des infos-->
         <div id='modalwrapper'>
             <div class="modal-container">
                 <ul>
-                    <li class="left">Ajouter une espece</li>
+                    <li class="left">Préciser les informations que vous jugé manquantes</li>
                     <li class="right close" on-click='_toggleModal'>
                         <iron-icon icon="icons:close"></iron-iscon>
                     </li>
@@ -228,11 +211,35 @@
                         <paper-textarea char-counter maxlength="800" label="Précision sur les informations manquantes" always-float-label value="{{complement::input}}"></paper-textarea>
                     </div>
                     <div class="flex__item--middle">
-                        <paper-button raised on-tap="_sendInfo" class="primary">demande info</paper-button>
+                        <paper-button raised on-tap="_sendInfo" class="primary">valider</paper-button>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Fin modal de l'equipe qui demande des infos-->
+        <!--  -->
+        <!-- Début modal de l'iniateur-->
+        <div id='modalwrapper2'>
+            <div class="modal-container">
+                <ul>
+                    <li class="left">Informations supplémentaires</li>
+                    <li class="right close" on-click='_toggleModal2'>
+                        <iron-icon icon="icons:close"></iron-iscon>
+                    </li>
+                </ul>
+
+                <div class="flex flex--row modal-content">
+                    <div class="flex__item">
+                        <paper-textarea char-counter maxlength="2000" label="Précisé les infos manquantes" always-float-label value="{{newContenu::input}}"></paper-textarea>
+                    </div>
+                    <div class="flex__item--middle">
+                        <paper-button raised on-tap="_updateContent" class="primary">valider</paper-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Fin modal de l'iniateur-->
+        <!--  -->
         <div class="flex flex--row">
             <div class="flex flex--col flex__item--top alert">
                 <div class="flex flex--row flex__item article">
@@ -284,7 +291,7 @@
                             </div>
                             <template is="dom-if" if={{!_actionVisible(projectData.initiateur)}}>
                                 <div class="flex__item" style="text-align: center">
-                                    <paper-button raised on-tap="_toggleModal2" class="primary">update Info</paper-button>
+                                    <paper-button raised on-tap="_getContent" class="primary">ajouter Info</paper-button>
                                 </div>
                             </template>
 
@@ -381,38 +388,47 @@
                     this._getNewComment(this.projectData.id_Mission);
                 }.bind(this));
             }
-            isInitiateur() {
-                return this.projectData.initiateur == this.storedUser.initiateur ? true : false;
+            handleResponse(evt) {
+                if (evt.detail.url == "/mission/update-contenu") {
+                    console.log('Contenu mise à jour', evt.detail.response);
+                    if(getComputedStyle(this.$.modalwrapper2).display == 'block')
+                    this._toggleModal2();
+                    this.dispatchEvent(new CustomEvent('askprojectdata'));
+                }
+                if (evt.detail.url.includes("/mission/contenu")) {
+                    console.log('**********getting alert content', evt.detail.response[0].contenu);
+                    this.set('newContenu', evt.detail.response[0].contenu);
+                    this._toggleModal2();
+                }
+                if (evt.detail.url == '/maria/submit-participation') {
+                    this.dispatchEvent(new CustomEvent('askprojectdata'));
+                }
+                if (evt.detail.url.includes("comment")) {
+                    console.log('comment ', evt.detail.response);
+                    this.set('commentThread', evt.detail.response[0].commentaires)
+                }
+                if (evt.detail.url = '/maria/submit-avis') {
+                    console.log(evt.detail.response);
+                    this.dispatchEvent(new CustomEvent('askprojectdata'));
+                }
             }
-            _toggleModal() {
-                if (getComputedStyle(this.$.modalwrapper).display == 'none')
-                    this.complement = '';
-                getComputedStyle(this.$.modalwrapper).display == 'none' ? this.$.modalwrapper.setAttribute(
-                    'style', 'display: block') : this.$.modalwrapper.setAttribute('style', 'display: none')
+            _submitParticip() {
+                var url = '/maria/submit-participation';
+                this.$.ajaxEl.url = url;
+                this.$.ajaxEl.body = {
+                    pseudo: this.storedUser.pseudo,
+                    id_Utilisateurs: this.storedUser.id_Utilisateurs,
+                    id_Status: this.projectData.id_Status,
+                    id_Mission: this.projectData.id_Mission,
+                    id_Groupe: this.storedUser.id_Groupe,
+                    string: '|' + this.storedUser.id_Utilisateurs + ';' + this.storedUser.pseudo,
+                    resume: this.projectData.resume,
+                    nom: this.projectData.nom
+                };
+                this.$.ajaxEl.method = "POST";
+                this.$.ajaxEl.generateRequest();
             }
-            _toggleModal2() {
-                if (getComputedStyle(this.$.modalwrapper2).display == 'none')
-                    this.complement = '';
-                getComputedStyle(this.$.modalwrapper2).display == 'none' ? this.$.modalwrapper2.setAttribute(
-                    'style', 'display: block') : this.$.modalwrapper2.setAttribute('style', 'display: none')
-            }
-            _testButton() {
-                this.$.check1.classList.add('green');
-            }
-            // _storedUserChanged(){
-            //     this.dispatchEvent(new CustomEvent('askprojectdata'));
-            // }
-            _sendVal() {
-                this._sendAvis(1);
-            }
-            _sendInval() {
-                this._sendAvis(2);
-            }
-            _sendInfo() {
-                console.log(this.complement.length, this.complement);
-
-                this._sendAvis(3);
-            }
+            
             _sendAvis(avis) {
                 console.log();
 
@@ -432,28 +448,58 @@
                 }
                 this.$.ajaxEl.generateRequest();
             }
-            _actionVisible(val) {
-                return this.storedUser.id_Utilisateurs == this.projectData.initiateur ? false : true;
-            }
             _getNewComment(projectId) {
                 var url = '/comment/' + projectId;
                 this.$.ajaxEl.url = url;
                 this.$.ajaxEl.method = "GET";
                 this.$.ajaxEl.generateRequest();
             }
-            handleResponse(evt) {
-                if (evt.detail.url == '/maria/submit-participation') {
-                    this.dispatchEvent(new CustomEvent('askprojectdata'));
-                }
-                if (evt.detail.url.includes("comment")) {
-                    console.log('comment ', evt.detail.response);
-                    this.set('commentThread', evt.detail.response[0].commentaires)
-                }
-                if (evt.detail.url = '/maria/submit-avis') {
-                    console.log(evt.detail.response);
-                    this.dispatchEvent(new CustomEvent('askprojectdata'));
-                }
+            _getContent() {
+                this.$.ajaxEl.url = "/mission/contenu/" + this.projectData.id_Mission;
+                this.$.ajaxEl.method = "GET";
+                this.$.ajaxEl.generateRequest();
             }
+            _updateContent() {
+                this.$.ajaxEl.url = "/mission/update-contenu";
+                this.$.ajaxEl.method = "POST";
+                this.$.ajaxEl.body = {
+                    id_Mission: this.projectData.id_Mission,
+                    contenu: this.newContenu
+                }
+                this.$.ajaxEl.generateRequest();
+            }
+            isInitiateur() {
+                return this.projectData.initiateur == this.storedUser.initiateur ? true : false;
+            }
+            _actionVisible(val) {
+                return this.storedUser.id_Utilisateurs == this.projectData.initiateur ? false : true;
+            }
+            _toggleModal() {
+                this.complement = '';
+                getComputedStyle(this.$.modalwrapper).display == 'none' ? this.$.modalwrapper.setAttribute(
+                    'style', 'display: block') : this.$.modalwrapper.setAttribute('style', 'display: none')
+            }
+            _toggleModal2() {
+                // if (getComputedStyle(this.$.modalwrapper2).display == 'none')
+                //     this.complement = '';
+                getComputedStyle(this.$.modalwrapper2).display == 'none' ? this.$.modalwrapper2.setAttribute(
+                    'style', 'display: block') : this.$.modalwrapper2.setAttribute('style', 'display: none')
+            }
+            _testButton() {
+                this.$.check1.classList.add('green');
+            }
+            _sendVal() {
+                this._sendAvis(1);
+            }
+            _sendInval() {
+                this._sendAvis(2);
+            }
+            _sendInfo() {
+                console.log(this.complement.length, this.complement);
+
+                this._sendAvis(3);
+            }
+            
             _checkParticipant(stringP, stringV) {
                 if (this.projectData) {
                     console.log('Checking participant...');
@@ -614,22 +660,7 @@
                     this.set('isChecked3', false);
                 }
             }
-            _submitParticip() {
-                var url = '/maria/submit-participation';
-                this.$.ajaxEl.url = url;
-                this.$.ajaxEl.body = {
-                    pseudo: this.storedUser.pseudo,
-                    id_Utilisateurs: this.storedUser.id_Utilisateurs,
-                    id_Status: this.projectData.id_Status,
-                    id_Mission: this.projectData.id_Mission,
-                    id_Groupe: this.storedUser.id_Groupe,
-                    string: '|' + this.storedUser.id_Utilisateurs + ';' + this.storedUser.pseudo,
-                    resume: this.projectData.resume,
-                    nom: this.projectData.nom
-                };
-                this.$.ajaxEl.method = "POST";
-                this.$.ajaxEl.generateRequest();
-            }
+
         }
         window.customElements.define(ResumeTab.is, ResumeTab);
     </script>

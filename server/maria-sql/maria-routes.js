@@ -183,6 +183,29 @@ app.get('/maria/get-animals', function (req, res) {
     }
   });
 });
+app.get('/mission/contenu/:id', function (req, res) {
+  console.log('Wanting content of mission '+req.params.id);
+  
+    maria.getContenuById(req.params.id, function (err, data) {
+        if (err) {
+          
+            res.status(400).send(err).end();
+        } else {
+          // console.log('content', data);
+          
+            res.status(200).send(data).end();
+        }
+    });
+});
+app.post('/mission/update-contenu', function (req, res) {
+    maria.updateContenuById(req.body, function (err, data) {
+        if (err) {
+            res.status(400).send(err).end();
+        } else {
+            res.status(200).send(data).end();
+        }
+    });
+});
 //Routes that imply Missions evolution and log activity
 app.post('/maria/submit-participation', function (req, res) {
   // console.log(req.body);

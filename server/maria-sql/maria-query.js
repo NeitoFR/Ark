@@ -345,7 +345,7 @@ exports.updateMissionStatus = function (data, voteurs, _new, callback) {
 }
 exports.logNewAlert = function (data) {
     var string = '|' + data.id_Mission + ';' + data.nom + ';' + data.resume;
-    var c = init(process.env.B_USER);    
+    var c = init(process.env.B_USER);
     var query = 'UPDATE utilisateurs SET `mes_alertes` = CONCAT(mes_alertes, \'' + string + '\') WHERE id_Utilisateurs =\'' + data.id_Utilisateurs + '\';';
     c.query(query, function (err, res) {
         if (err) {
@@ -389,6 +389,35 @@ exports.logParticipation = function (data) {
         } else {
             console.log('Logging ok');
             c.end();
+        }
+    });
+}
+exports.getContenuById = function (id, callback) {
+    var c = init(process.env.B_MISSION);
+    var query = 'SELECT contenu FROM missions WHERE id_Mission = \'' + id + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('Error getting contenu', err);
+            c.end();            
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.updateContenuById = function (data, callback) {
+    var c = init(process.env.B_MISSION);
+    var query = 'UPDATE missions SET `contenu` = \''+data.contenu+'\' WHERE id_Mission=\'' + data.id_Mission + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('Error logging', err);
+            c.end();
+            callback(err, null);
+        } else {
+            console.log('Logging ok');
+            c.end();
+            callback(null, res);
         }
     });
 }

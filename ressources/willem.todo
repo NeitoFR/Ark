@@ -7,7 +7,7 @@ Liste en vrac :
     ✔ Rajouter les activity-log lié au boutons de l'alert-page @done (2018-5-24 16:57:09)
     ✔ Rajouter le bouton donnation @done (2018-5-24 23:47:56)
     ✘ Rajouter des Missions démo @cancelled (2018-5-24 16:57:05)
-    ☐ Completer le modal qui permet à l'initiateur de mettre à jour la description de son alerte.
+    ✔ Completer le modal qui permet à l'initiateur de mettre à jour la description de son alerte. @done (2018-5-25 18:31:26)
 
     Nail the missions's status for/backwarding :
         Si status est entre 1 et 3:
@@ -19,7 +19,7 @@ Liste en vrac :
             ☐ Faire un autre iron-pages pour dire  'Félicitations projet accepté' ?
     ✔ Binder le touche Entrée a Connexion / Inscription @done (2018-5-24 23:30:27)
     ✔ Faire l'admin panel @done (2018-5-24 16:57:02)
-    ☐ Ajouter les alertes auquelles les users participent sur leur profil
-    ☐ Ajouter les alertes auquelles les users participent sur la base
-    ☐ Définir le log
+    ✔ Ajouter les alertes auquelles les users participent sur leur profil @done (2018-5-25 13:29:10)
+    ✔ Ajouter les alertes auquelles les users participent sur la base @done (2018-5-25 13:29:11)
+    ✔ Définir le format de log pour les alertes user : |id_Mission;nom;resume @done (2018-5-25 13:29:12)
 
