@@ -162,13 +162,27 @@ exports.getAlerts = function (wanted, callback) {
         }
     });
 }
+exports.getTaskOfMission = function (id, callback) {
+    var c = init(process.env.B_GEST);
+
+    var query = 'SELECT `id_Tache` ,`resume` ,`date_debut` ,`date_fin` ,`liste_actions` ,`participants` ,`deroulement` ,`id_Mission` ,`id_Commandes` ,`a_nettoyer` FROM taches WHERE id_Mission=\'' + id + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
 exports.createAlert = function (data, callback) {
     var c = init(process.env.B_MISSION);
     // console.log(data.log);
     data.log = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.data.id_Utilisateurs + ';' + data.data.id_Groupe + ';' + data.data.pseudo + ';' + '0' + ';' + "1" + ';' + '';
 
-    var query = 'INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `visible`)  \
-    VALUES (NULL, \'' + data.alertName + '\', \'' + data.summary + '\', \'' + (moment().format("DD-MM-YYYY HH:mm")) + '\', \'' + data.continent + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.id_Espece + '\', \'1\', \'' + data.desc + '\', \'\', \'' + data.initiateur + '\', \'||\', \'\', \'\', \'0\', \'0\',\'' + data.log + '\', \'0\');';
+    var query = 'INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `liste_taches`, `visible`)  \
+    VALUES (NULL, \'' + data.alertName + '\', \'' + data.summary + '\', \'' + (moment().format("DD-MM-YYYY HH:mm")) + '\', \'' + data.continent + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.id_Espece + '\', \'1\', \'' + data.desc + '\', \'\', \'' + data.initiateur + '\', \'||\', \'\', \'\', \'0\', \'0\',\'' + data.log + '\',\'\', \'0\');';
     // VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', \'\', \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
     //console.log(query);
     c.query(query, function (err, res) {
