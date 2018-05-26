@@ -21,7 +21,10 @@ Définition des modules restant à faire :
     Cahier de bord :
         ☐ Où le placer : Lien vers PDF dans l'onglet Résumé
     Systeme de commande:
-        ☐ A redéfinir
+        (A redéfinir)
+        ☐ Pour chaquex tâches un bouton qui permet de passer des commandes
+        ☐ Une tache peut avoir plusieurs commandes
+        
     alert-page: 
         ✔ Recharger les données de l'alerte quand on y réaccède @done (2018-5-21 09:51:09)
         ✔ Transformer en iron-pages + iron-selector @done (2018-5-20 14:26:29) :
@@ -39,7 +42,10 @@ Définition des modules restant à faire :
                 ✔ dom-repreat OK @done (2018-5-21 09:54:58)
                 ✘ Meme visuel que l'element commentaire ? @cancelled (2018-5-21 09:55:26)
             Onlget Tâches : 
+                (Ajout d'un champ 'Resume' pour le visuel dans l'onglet Taches)
+                ☐ Actif à partir du status 2
 
+                ✔ Accessible qu'au Expert et au Comité @done (2018-5-26 11:49:47)
     alerte-list:
         ✔ Recharger la liste des alerte lorsque selectedRoute change @done (2018-5-20 23:42:11)
     ✔ Créer la table Taches: @done (2018-5-24 16:56:48)

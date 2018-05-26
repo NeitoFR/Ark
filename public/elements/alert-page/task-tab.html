@@ -5,7 +5,37 @@
     <template>
         <style include='shared-styles'>
         </style>
-        Onglet des tâches en construction
+        <div class="flex flex--col container">
+            <iron-pages selected="{{selSteps}}" attr-for-selected="name" fallback-selection="" role="main">
+                <div class="" name="no-task">
+                    No Task Yet
+                </div>
+                <div class="" name="task">
+                        <div class="flex__item table">
+                                <table>
+                                    <thead>
+                                        <th>ID Tache</th>
+                                        <th>Date de passage de la commande</th>
+                                        <th>Résumé</th>
+                                    </thead>
+                                    <tbody>
+                                        <template is="dom-repeat" items="{{sortedTableData}}" as="data">
+                                            <tr>
+                                                <!-- <td class="link" on-click="_test" data-projectid$="[[data.id_Mission]]">{{data.id_Mission}}</td> -->
+                                                <td>
+                                                    <a href="[[rootPath]]alert-page/{{data.id_Mission}}" data-page={{data.id_Mission}}>{{data.id_tache}}</a>
+                                                </td>
+                                                <td>{{data.date_debut}}</td>
+                                                <td>{{data.resume}}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                </div>
+            </iron-pages>
+        </div>
+        
     </template>
     <script>
         class TaskTab extends Polymer.Element {
@@ -14,8 +44,14 @@
             }
             static get properties() {
                  return {
-
-                }
+                     rawTaskList: {
+                        observer: '_rawTaskListChanged'
+                     },
+                     taskList: Array
+                }  
+            }
+            ready(){
+                super.ready();
             }
         }
         window.customElements.define(TaskTab.is, TaskTab);
