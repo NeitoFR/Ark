@@ -234,8 +234,8 @@ app.post('/maria/submit-participation', function (req, res) {
   });
 });
 app.post('/maria/submit-avis', function (req, res) {
-  maria.logAvis(req.body);
   console.log(req.body);
+  maria.logAvis(req.body);
   maria.getVCurStep(req.body.id_Mission, function (err, data) {
     if (err) {
       //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
@@ -247,11 +247,11 @@ app.post('/maria/submit-avis', function (req, res) {
       //
       //Checking if need to change mission status
       //
-      var tabCmp = [5, 5, 3];
+      var tabCmp = [2, 2, 2];
       var v_int = voteurs[req.body.avis - 1].split(';');
       v_int.splice(0, 1);
       if (v_int.length == tabCmp[req.body.avis - 1]) {
-        console.log('Il est temps de passé a l\'étape supérieur');
+        console.log('Il est temps de passé a l\'étape suivante');
         var new_status = req.body.id_Status;
         switch (req.body.avis) {
           case 1:
@@ -271,6 +271,7 @@ app.post('/maria/submit-avis', function (req, res) {
             break;
         }
         if (new_status != -1 && new_status != req.body.id_Status) {
+          // console.log('!!!!');
 
           maria.updateMissionStatus(req.body, voteurs, new_status, function (err, data) {
             if (err) {
@@ -279,6 +280,27 @@ app.post('/maria/submit-avis', function (req, res) {
             } else {
               console.log('Update status ok');
               res.status(200).send(data).end();
+            }
+          });
+        }
+        if (new_status == -1) {
+          console.log('Deleting Task');
+
+          maria.deleteRelatedTask(req.body, function (err, data) {
+            if (err) {
+              console.log("error deleting task", err);
+            } else {
+              console.log('Deleting task OK');
+            }
+          });
+          console.log('Deleting mission');
+          maria.deleteOrHideMission(req.body, function (err, data) {
+            if (err) {
+              console.log("error deleting mission", err);
+              res.status(400).send(err).end();
+            } else {
+              console.log('delete or hide mission ok');
+              res.status(200).send({code : 17}).end();
             }
           });
         }

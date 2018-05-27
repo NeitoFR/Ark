@@ -126,8 +126,7 @@ exports.updateAlertStatus = function (data, callback) {
 
     c.query(query, function (err, res) {
         if (err) {
-            console.log('Erreur ', err);
-
+            console.log('Erreur updating status', err);
             c.end();
             callback(err, null);
         } else {
@@ -141,7 +140,7 @@ exports.getAlerts = function (wanted, callback) {
 
     switch (wanted) {
         case "all":
-            query = "SELECT id_Mission, nom, resume FROM missions";
+            query = "SELECT id_Mission, nom, resume FROM missions WHERE `visible` <> 1";
             break;
 
         case "new":
@@ -162,6 +161,40 @@ exports.getAlerts = function (wanted, callback) {
         }
     });
 }
+exports.deleteOrHideMission = function (data, callback) {
+    var c = init(process.env.B_MISSION);
+    var query = '';
+    if(data.id_Status == 0 || data.id_Status == 1)
+    query = 'DELETE FROM `missions` WHERE `missions`.`id_Mission` = '+data.id_Mission+';'
+    else
+    query = 'UPDATE `missions` SET `visible` = \'1\' WHERE `missions`.`id_Mission` = '+data.id_Mission+';'
+
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.deleteRelatedTask = function (data, callback) {
+    var c = init(process.env.B_GEST);
+
+    var query = 'UPDATE `taches` SET `a_nettoyer` = \'1\' WHERE `taches`.`id_Mission` = '+data.id_Mission+';';
+
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+
 exports.getTaskOfMission = function (id, callback) {
     var c = init(process.env.B_GEST);
 
