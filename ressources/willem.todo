@@ -30,8 +30,9 @@ Liste en vrac :
     Nail the missions's status for/backwarding :
         Si status est entre 1 et 3:
             ✔ Faire ++ ou -- @done (2018-5-24 18:29:12)
-            ✔ Géré le bouton invalider @done (2018-5-27 16:37:10)
-            Probleme : Delete de la liste des user @critical 
+            ✔ Géré le bouton invalider @done (2018-5-27 11:18:57)
+            Soucis bouton invalider : 
+                Liste des mission sur page de profil (Voir question)
         Si status est a 0 :
             ✔ Géré la demande d'info pour l'auteur @done (2018-5-24 23:18:43)
         Si status est à 4 : 
