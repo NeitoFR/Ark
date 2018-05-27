@@ -1,41 +1,61 @@
 <link rel='import' href='../../bower_components/polymer/polymer-element.html'>
+<link rel='import' href='../../bower_components/px-accordion/px-accordion-group.html'>
+<link rel='import' href='../../bower_components/px-accordion/px-accordion.html'>
 <link rel='import' href='../shared-styles.html'>
 
 <dom-module id='task-tab'>
     <template>
         <style include='shared-styles'>
+            .container {
+                background-color: white;
+                padding: 24px;  
+            }
+
+            .no-task {
+                text-align: center;
+                font-size: 1.5rem;
+                padding: 75px;
+            }
+
+            .task {
+                margin: auto;
+                width: 90%;
+                padding: 0px 40px;
+            }
+
+            px-accordion-group {
+                width: 70%;
+            }
         </style>
         <div class="flex flex--col container">
-            <iron-pages selected="{{selSteps}}" attr-for-selected="name" fallback-selection="" role="main">
-                <div class="" name="no-task">
+            <div class="flex__item">Ajouter une tache a cette mission</div>
+            <iron-pages selected="{{selView}}" attr-for-selected="name" fallback-selection="task" role="main">
+                <div class="no-task" name="no-task">
                     No Task Yet
                 </div>
-                <div class="" name="task">
-                        <div class="flex__item table">
-                                <table>
-                                    <thead>
-                                        <th>ID Tache</th>
-                                        <th>Date de passage de la commande</th>
-                                        <th>Résumé</th>
-                                    </thead>
-                                    <tbody>
-                                        <template is="dom-repeat" items="{{sortedTableData}}" as="data">
-                                            <tr>
-                                                <!-- <td class="link" on-click="_test" data-projectid$="[[data.id_Mission]]">{{data.id_Mission}}</td> -->
-                                                <td>
-                                                    <a href="[[rootPath]]alert-page/{{data.id_Mission}}" data-page={{data.id_Mission}}>{{data.id_tache}}</a>
-                                                </td>
-                                                <td>{{data.date_debut}}</td>
-                                                <td>{{data.resume}}</td>
-                                            </tr>
-                                        </template>
-                                    </tbody>
-                                </table>
-                            </div>
+                <div class="task" name="task">
+                    <px-accordion-group>
+                        <px-accordion header-value="Header Caption"></px-accordion>
+
+                        <template is="dom-repeat" items={{taskList}} as='task'>
+                            <px-accordion header-value="{{task.id_Tache}}" status={{task.date_debut}}>
+                                <div class="flex flex--row">
+                                    <div class="flex__item">{{task.resume}}</div>
+                                    <div class="flex__item--top">
+                                        <div class="flex__item flex--col">
+                                            <div class="flex__item">Liste des participants</div>
+                                            <div class="flex__item">{{task.participants}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </px-accordion>
+                        </template>
+
+                    </px-accordion-group>
                 </div>
             </iron-pages>
         </div>
-        
+
     </template>
     <script>
         class TaskTab extends Polymer.Element {
@@ -43,15 +63,47 @@
                 return 'task-tab'
             }
             static get properties() {
-                 return {
-                     rawTaskList: {
+                return {
+                    trigger: {
+                        observer: '_triggerChanged'
+                    },
+                    rawTaskList: {
+                        type: Array,
                         observer: '_rawTaskListChanged'
-                     },
-                     taskList: Array
-                }  
+                    },
+                    taskList: {
+                        type: Array,
+                        value: []
+                    }
+                }
             }
-            ready(){
+            ready() {
                 super.ready();
+            }
+            _rawTaskListChanged(list) {
+                if (list[0]) {
+                    var tab = [];
+                    list.forEach(task => {
+                        console.log(task);
+                        tab.push({
+                            'a_nettoyer': task.a_nettoyer,
+                            'date_debut': task.date_debut,
+                            'date_fin': task.date_fin,
+                            'deroulement': task.deroulement,
+                            'id_Commandes': task.id_Commandes,
+                            'id_Mission': task.id_Mission,
+                            'id_Tache': task.id_Tache,
+                            'liste_actions': task.liste_actions,
+                            'participants': task.participants,
+                            'resume': task.resume
+                        })
+                    });
+                    this.set('taskList', tab);
+                    this.set('selView', 'task');
+                }
+                else{
+                    this.set('selView', 'no-task');
+                }
             }
         }
         window.customElements.define(TaskTab.is, TaskTab);
