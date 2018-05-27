@@ -36,4 +36,4 @@ var body = {
     'log': ''
 };
 
-console.log(moment().format("DD-MM-YYYY HH:mm"));
+console.log(moment(1525903200000).format("DD-MM-YYYY"));

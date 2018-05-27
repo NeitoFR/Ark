@@ -1,6 +1,7 @@
 <link rel='import' href='../../bower_components/polymer/polymer-element.html'>
 <link rel='import' href='../../bower_components/px-accordion/px-accordion-group.html'>
 <link rel='import' href='../../bower_components/px-accordion/px-accordion.html'>
+<link rel='import' href='../../bower_components/datetime-picker/date-picker.html'>
 <link rel='import' href='../shared-styles.html'>
 
 <dom-module id='task-tab'>
@@ -8,7 +9,7 @@
         <style include='shared-styles'>
             .container {
                 background-color: white;
-                padding: 24px;  
+                padding: 24px;
             }
 
             .no-task {
@@ -26,39 +27,141 @@
             px-accordion-group {
                 width: 70%;
             }
+
+            .ajout paper-button {
+                background-color: var(--apc);
+                color: white;
+            }
+
+            .ajout {
+
+                font-size: 1.2rem;
+                padding: 15px;
+                margin: auto;
+            }
+
+            #modalwrapper {
+                display: none;
+                position: fixed;
+                z-index: 100;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+            .modal-container {
+                z-index: 101;
+                display: block;
+                background-color: rgb(221, 221, 221);
+                margin: 5% auto;
+                width: 55%;
+            }
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                background-color: var(--apc);
+                overflow: hidden;
+            }
+
+            li {
+                display: inline;
+                color: rgb(224, 224, 224);
+                padding: 12px 10px;
+            }
+
+            .right {
+                float: right;
+            }
+
+            .right:hover {
+                background-color: var(--asc);
+            }
+
+            .left {
+                float: left;
+            }
+
+            .close {
+                cursor: pointer;
+            }
+
+            .modal-top {
+                padding: 30px 30px 10px 30px;
+            }
+
+            .modal-bottom {
+                padding: 10px 30px 30px 30px;
+            }
         </style>
+        <!--  -->
+        <!-- Start of Modal -->
+        <!--  -->
+        <div id="modalwrapper">
+            <div class="modal-container">
+                <ul>
+                    <li class="left">Ajout d'une tache pour la mission : {{projectData.nom}}</li>
+                    <li class="right close" on-click='_toggleModal'>
+                        <iron-icon icon="icons:close"></iron-iscon>
+                    </li>
+                </ul>
+                <div class="flex flex--col content">
+                    <div class="flex__item flex flex--row">
+                        <div class="flex__item modal-item modal-top">Date de début estimé :
+                            <date-picker value={{formData.date_debut}}></date-picker>
+                        </div>
+                        <div class="flex__item--bottom modal-item modal-top">
+                            <date-picker value={{formData.date_fin}}></date-picker> : Date de fin estimé</div>
+                    </div>
+                    <div class="flex__item flex flex--row">
+                        <div class="flex__item modal-item modal-bottom">
+                            <paper-input class="flex__item" label="Résumé" always-float-label value="{{formData.resume::input}}"></paper-input>
+                        </div>
+                        <div class="flex__item--bottom modal-item modal-bottom">
+                            <paper-button on-tap='_addTask' raised>valider</paper-button>
+                        </div>
+                    </div>
+                    <!-- champs d'une tache -->
+                    <!-- id_Tache resume date_debut date_fin liste_actions participants deroulement	id_Mission id_Commandes a_nettoyer -->
+                </div>
+            </div>
+        </div>
+
+        <!--  -->
+        <!-- End of Modal -->
+        <!--  -->
         <div class="flex flex--col container">
-            <div class="flex__item">Ajouter une tache a cette mission</div>
+            <div class="flex__item flex flex--row ajout">
+                <paper-button on-tap='_toggleModal' raised>ajouter une tache a cette mission</paper-button>
+            </div>
             <iron-pages selected="{{selView}}" attr-for-selected="name" fallback-selection="task" role="main">
                 <div class="no-task" name="no-task">
                     No Task Yet
                 </div>
                 <div class="task" name="task">
                     <px-accordion-group>
-                        <px-accordion header-value="Header Caption"></px-accordion>
 
                         <template is="dom-repeat" items={{taskList}} as='task'>
-                            <px-accordion header-value="{{task.id_Tache}}" status={{task.date_debut}}>
+                            <px-accordion header-value="Tache {{task.id_Tache}}" status="{{_printDate(task)}}">
                                 <div class="flex flex--row">
                                     <div class="flex__item">{{task.resume}}</div>
                                     <div class="flex__item--top">
                                         <div class="flex__item flex--col">
-<<<<<<< HEAD
-                                            <div class="flex__item">Liste des participants</div>
-                                            <div class="flex__item">{{task.participants}}</div>
-=======
->>>>>>> 9881bcba1e98336fea09884e10c59a689dddc592
                                         </div>
                                     </div>
                                 </div>
                             </px-accordion>
                         </template>
-
                     </px-accordion-group>
                 </div>
             </iron-pages>
         </div>
-
+        <iron-ajax id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
     </template>
     <script>
         class TaskTab extends Polymer.Element {
@@ -77,11 +180,43 @@
                     taskList: {
                         type: Array,
                         value: []
+                    },
+                    formData: {
+                        type: Object,
+                        value: {}
                     }
                 }
             }
             ready() {
                 super.ready();
+            }
+            _printDate(task) {
+                console.log('Formatting date for task');
+
+                return 'Du ' + task.date_debut + ' au ' + task.date_fin;
+            }
+            _testButton() {
+                console.log('Date ', this.formData);
+
+            }
+            handleResponse(evt) {
+                if (evt.detail.url == '/add/task') {
+                    this.dispatchEvent(new CustomEvent('askprojectdata'));
+                    console.log('Task added succesfully');
+                }
+            }
+            _addTask() {
+                this.$.ajaxEl.url = '/add/task';
+                this.$.ajaxEl.method = "POST";
+                this.formData.id_Mission = this.projectData.id_Mission;
+                this.$.ajaxEl.body = this.formData;
+                // console.log(this.formData);
+
+                this.$.ajaxEl.generateRequest();
+            }
+            _toggleModal() {
+                getComputedStyle(this.$.modalwrapper).display == 'none' ? this.$.modalwrapper.setAttribute(
+                    'style', 'display: block') : this.$.modalwrapper.setAttribute('style', 'display: none')
             }
             _rawTaskListChanged(list) {
                 if (list[0]) {
@@ -103,8 +238,7 @@
                     });
                     this.set('taskList', tab);
                     this.set('selView', 'task');
-                }
-                else{
+                } else {
                     this.set('selView', 'no-task');
                 }
             }

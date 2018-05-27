@@ -217,6 +217,15 @@ app.get('/get-task/:id', function (req, res) {
     }
   });
 });
+app.post('/add/task', function (req, res) {
+    maria.addTask(req.body, function (err, data) {
+        if (err) {
+            res.status(400).send(err).end();
+        } else {
+            res.status(200).send(data).end();
+        }
+    });
+});
 //Routes that imply Missions evolution and log activity
 app.post('/maria/submit-participation', function (req, res) {
   // console.log(req.body);

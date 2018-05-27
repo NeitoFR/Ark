@@ -161,6 +161,24 @@ exports.getAlerts = function (wanted, callback) {
         }
     });
 }
+exports.addTask = function (data, callback) {
+    var c = init(process.env.B_GEST);
+
+    var query = 'INSERT INTO `taches` (`id_Tache`, `resume`, `date_debut`, `date_fin`, `liste_actions`, `participants`, `deroulement`, `id_Mission`, `id_Commandes`, `a_nettoyer`) VALUES (NULL, \''+data.resume+'\', \''+moment(data.debut).format('DD-MM-YYYY')+'\', \''+moment(data.date_fin).format('DD-MM-YYYY')+'\', \'\', \'\', \'\', \''+data.id_Mission+'\', \'\', \'0\')';
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('error adding task ',err);
+            
+            c.end();
+            callback(err, null);
+        } else {
+            console.log('add task ok');
+            
+            c.end();
+            callback(null, res);
+        }
+    });
+}
 exports.deleteOrHideMission = function (data, callback) {
     var c = init(process.env.B_MISSION);
     var query = '';

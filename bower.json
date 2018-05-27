@@ -47,6 +47,7 @@
     "paper-progress": "PolymerElements/paper-progress#^2.1.1",
     "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4",
     "px-accordion": "^1.1.2",
-    "px-icon-set": "^2.1.9"
+    "px-icon-set": "^2.1.9",
+    "datetime-picker": "fooloomanzoo/datetime-picker#^2.9.1"
   }
 }

@@ -86,7 +86,7 @@
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
                 <resume-tab name='resume-tab' project-data={{projectData}} stored-user={{storedUser}} id='rstab'></resume-tab>
                 <activitylog-tab name='activitylog-tab' project-data={{projectData}} log-data={{logData}}></activitylog-tab>
-                <task-tab name='task-tab' project-data={{projectData}} raw-task-list={{rawTaskList}} trigger={{tttr}}></task-tab>
+                <task-tab name='task-tab' project-data={{projectData}} id='tstab' raw-task-list={{rawTaskList}} trigger={{tttr}}></task-tab>
             </iron-pages>
 
             <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
@@ -113,6 +113,9 @@
             ready() {
                 super.ready();
                 this.$.rstab.addEventListener('askprojectdata', function () {
+                    this._getProjectData(this.projectId);
+                }.bind(this));
+                this.$.tstab.addEventListener('askprojectdata', function () {
                     this._getProjectData(this.projectId);
                 }.bind(this));
             }
