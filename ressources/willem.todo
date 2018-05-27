@@ -8,20 +8,35 @@ Liste en vrac :
     ✔ Checker si l'activity-log s'affiche bien @done (2018-5-24 16:57:11)
     ✔ Rajouter les activity-log lié au boutons de l'alert-page @done (2018-5-24 16:57:09)
     ✔ Rajouter le bouton donnation @done (2018-5-24 23:47:56)
+    ✔ Binder le touche Entrée a Connexion / Inscription @done (2018-5-24 23:30:27)
+    ✔ Faire l'admin panel @done (2018-5-24 16:57:02)
     ✘ Rajouter des Missions démo @cancelled (2018-5-24 16:57:05)
     ✔ Completer le modal qui permet à l'initiateur de mettre à jour la description de son alerte. @done (2018-5-25 18:31:26)
+    ✔ Ajouter les alertes auquelles les users participent sur leur profil @done (2018-5-25 13:29:10)
+    ✔ Ajouter les alertes auquelles les users participent sur la base @done (2018-5-25 13:29:11)
+    ✔ Définir le format de log pour les alertes user : |id_Mission;nom;resume @done (2018-5-25 13:29:12)
+    ✔ Afficher les participants d'une mission @done (2018-5-27 16:37:39)
+    ✔ Faire le CSS des onglet dans l'alert-page @done (2018-5-27 16:37:32)
+    ✔ Rajout d'un champ 'liste_taches' TEXT a parser : ;id_tache;id_tache en fait ca ne sers surement à rien @done (2018-5-27 16:40:13)
+    ☐ Faire des jolis Accordion pour les taches
+    ☐ Initialisé la page About
+    Rédigé la page About :
+        ☐ Proposition d'un projet
+        ☐ Candidater
+        ☐ Les Taches
+        ☐ Le déroulement d'un projet abouti
+        ☐ Le cahier de bord
 
     Nail the missions's status for/backwarding :
         Si status est entre 1 et 3:
             ✔ Faire ++ ou -- @done (2018-5-24 18:29:12)
-            ☐ Géré le bouton invalider
+            ✔ Géré le bouton invalider @done (2018-5-27 16:37:10)
+            Probleme : Delete de la liste des user @critical 
         Si status est a 0 :
             ✔ Géré la demande d'info pour l'auteur @done (2018-5-24 23:18:43)
         Si status est à 4 : 
             ☐ Faire un autre iron-pages pour dire  'Félicitations projet accepté' ?
-    ✔ Binder le touche Entrée a Connexion / Inscription @done (2018-5-24 23:30:27)
-    ✔ Faire l'admin panel @done (2018-5-24 16:57:02)
-    ✔ Ajouter les alertes auquelles les users participent sur leur profil @done (2018-5-25 13:29:10)
-    ✔ Ajouter les alertes auquelles les users participent sur la base @done (2018-5-25 13:29:11)
-    ✔ Définir le format de log pour les alertes user : |id_Mission;nom;resume @done (2018-5-25 13:29:12)
-    ☐ Rajout d'un champ 'liste_taches' TEXT a parser : ;id_tache;id_tache en fait ca ne sers surement à rien
+
+Questions : 
+    Team viewer pour le jury ?
+    Clé étrangère ? 

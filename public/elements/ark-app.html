@@ -26,6 +26,7 @@
 <link rel="lazy-import" href="profile-page.html">
 <link rel="lazy-import" href="alert-list.html">
 <link rel="lazy-import" href="alert-create.html">
+<link rel="lazy-import" href="about-page.html">
 <link rel='import' href='admin-panel.html'>
 <link rel="import" href="alert-page.html">
 <!-- No lazy import on those for the global variable to be accessible at loading -->
@@ -196,6 +197,7 @@
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
             <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage' stored-user={{storedUser}}></alert-page>
+            <about-page name="about-page"trigger={{abtr}} pseudo={{storedUser.pseudo}}></alert-page>
         </iron-pages>
         <app-drawer id='drawer'>
             <p id="drawer-head">Votre Arche</p>
@@ -203,6 +205,7 @@
                 <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Acceuil</a>
                 <a href="[[rootPath]]alert-list">Liste des alertes</a>
                 <a href="[[rootPath]]profile-page">Profil</a>
+                <a href="[[rootPath]]about-page">Tout savoir sur l'Arche</a>
                 <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
                     <a on-tap='_toggleAdminPanel'>Admin Panel</a>
                 </template>
