@@ -1,0 +1,23 @@
+Réunion : 
+    Les 3 maquettes :
+        Dev Jeremy - Willem : 
+            
+        Widnows Killian - Lucas : 
+            4 VM, 1  : AD DNS DHCP, serveur de fichier DFS , redondé, répliqué,
+            ce qui sera montré : extinction d'une VM : de l'autre cote les fichiers sont toujours dispo, DHCP AD
+            Au niveau de l'AD tout est répliqué 
+
+            Il manque WSUS et DFS, 
+        Système Vishnou - Pascal : 
+            Pascal : DNS et Load Balancing, Hyperviseur, (Soit interface VMWare, plus un ping qui tourne)
+            Jeremy : Un bouton dans la UI qui coupe l'appli. Idée supplémentaire, String en bas a droite
+            qui montre l'ip de la machine sur laquelle tourne l'appli
+        
+        Les points que tout le monde doit fournir à Pascal :
+            -Temps de travail
+            -Tache
+            -Présentation perso
+            -Avis personnel sur le projet
+    Remarque :
+        - On doit tous passé sur le devis, rajouté la devise
+        - Pensé au coût caché réseau, faire un paragraphe dessus.

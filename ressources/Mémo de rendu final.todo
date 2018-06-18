@@ -1,0 +1,49 @@
+Réunion : 
+    Sujet : 
+        Méthode : Suivi de la note présente sur air table : https://docs.google.com/document/d/1TsOqvbKnBphmEk7amD0HIIuRhJ4r1aq2hajUzr_bMHA/edit
+        Point manquant : 
+            ✔ Justification de la structure de l'application @done (2018-6-19 00:34:50)
+            ☐ Compartif technos
+            ☐ deux branches master et dev
+        
+Lexique : 
+    ☐ Front-end
+    ☐ Back-end
+    ☐ API
+    ☐ HTML 
+    ☐ Polymer
+    ☐ NodeJS
+    ☐ Framework
+    ☐ HTTP
+    ☐ UI
+    ☐ Web Components
+    ☐ NPM
+    ☐ Modal
+
+Les Routes :
+    GET
+    ☐ /maria/users
+    ☐ /maria/users/:id
+    ☐ /maria/get-comments/:id
+    ☐ /missions/alert-status-1
+    ☐ /missions/:project_id
+    ☐ /comment/:id
+    ☐ /maria/get-animals
+    ☐ /mission/contenu/:id
+    ☐ /get-task/:id
+
+    POST 
+    ☐ /signin
+    ☐ /signup
+    ☐ /maria/add-comment
+    ☐ /missions/get
+    ☐ /maria/create-alert
+    ☐ /mission/update-contenu
+    ☐ /add/task
+    ☐ /maria/submit-participation
+    ☐ /maria/submit-avis
+
+    ADMIN
+    ☐ /admin/update-id-group
+    ☐ /admin/update-id-user
+    ☐ /admin/update-alert-status
