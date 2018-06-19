@@ -1,0 +1,183 @@
+GET :
+    Route : /missions/:id/get-comments
+    Utilité : Récupéré la liste des commentaires d'un projet après l'avoir commenté
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : String
+    Route : /missions/:id
+    Utilité : Récupéré les informations concernant une missions
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : {
+                id_Mission: String,
+                nom: String,
+                resume: String,
+                date_creation: String,
+                continent: String,
+                pays: String,
+                ville: String,
+                id_Espece: String,
+                id_Status: String,
+                contenu: String,
+                commentaires: String,
+                initiateur: String,
+                v_cur_step: String,
+                m_potentiel: '',
+                m_valider: String,
+                donation: String,
+                retour: String,
+                activity_log: String,
+                liste_taches: String,
+                visible: String
+            },{ espece: String }        
+POST :
+    Route : /signin
+    Utilité : Se connecter
+    Requete :
+        {
+            'pseudo': String
+            'password': String
+        }
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : {
+                id_Utilisateurs: String,
+                pseudo: String,
+                nom: String,
+                prenom: String,
+                mes_alertes: String,
+                nb_Projet: String,
+                id_Groupe: String,
+                email: String,
+                phone: String,
+                pays: String,
+                ville: String,
+                adresse: String
+            }
+
+    Route : /signup
+    Utilité : S'inscrire
+    Requete :
+        {
+            address : String
+            city : String
+            country : String
+            email : String
+            nom : String
+            password : String
+            phone : String
+            prenom : String
+            pseudo : String
+        }
+    Reponse : 
+        Erreur : 
+            Status : 400
+            erreur : String
+        OK : 
+            Status : 200
+            données utiles : aucune
+
+    Route : /missions/:id/add-comments
+    Utilité : Ajouter un commentaire à un projet
+    Requete :
+        {
+            pseudo : String,
+            commentaire : String
+        }
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 204
+            données utiles : aucune
+    Route : /missions/new
+    Utilité : Ajouter un nouveau projet 
+    Requete :
+        {
+            alertName: String,
+            summary: String,
+            continent: String,
+            country: String,
+            city: String,
+            desc: String,
+            animal: String,
+            id_Espece: String,
+            initiateur: String,
+            data: { 
+                pseudo: StringString, 
+                id_Utilisateurs: String, 
+                id_Groupe:String 
+            }
+        }
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : aucune
+    Route : /
+    Utilité : 
+    Requete :
+        {
+
+        }
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : JSON
+    Route : /
+    Utilité : 
+    Requete :
+        {
+
+        }
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : JSON
+    Route : /
+    Utilité : 
+    Requete :
+        {
+
+        }
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : JSON
+    Route : /
+    Utilité : 
+    Requete :
+        {
+
+        }
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : JSON

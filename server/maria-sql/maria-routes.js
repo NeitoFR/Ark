@@ -4,6 +4,7 @@ var express = require('express'),
 var app = module.exports = express.Router();
 
 //Authentication related route
+//ok
 app.post('/signup', function (req, res) {
   maria.createUser(req.body, function (err, data) {
     if (err) {
@@ -27,6 +28,7 @@ app.post('/signup', function (req, res) {
     }
   });
 });
+//ok
 app.post('/signin', function (req, res) {
   maria.verifyUser(req.body, function (err, data) {
     if (err) {
@@ -36,26 +38,16 @@ app.post('/signin', function (req, res) {
 
       //console.log('Request : Verify user :: OK\n data : ', data);
       if (data.info.numRows == 0) {
-        res.status(201).send('pseudo or password incorrect').end();
+        res.status(400).send('pseudo or password incorrect').end();
       }
       if (data.info.numRows == 1) {
+      console.log(data);
         res.status(200).send(data).end();
       }
     }
   });
 });
-
-app.get('/maria/users', function (req, res) {
-  maria.getUsers(function (err, data) {
-    if (err) {
-      //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
-      res.status(400).send(err).end();
-    } else {
-      //console.log('Request : SELECT * FROM USER_TABLE :: OK');
-      res.status(200).send(data).end();
-    }
-  });
-});
+//skip
 app.get('/maria/users/:id', function (req, res) {
   maria.getUserInfo(req.params.id, function (err, data) {
     if (err) {
@@ -65,11 +57,12 @@ app.get('/maria/users/:id', function (req, res) {
     }
   });
 });
-
-app.post('/maria/add-comment', function (req, res) {
+//ok
+app.post('/missions/:id/add-comments', function (req, res) {
   //console.log('comment : ', req.body[Object.keys(req.body)[0]]);
   //console.log('user : ', Object.keys(req.body)[0]);
-  maria.addComment(req.body, function (err, data) {
+  maria.addComment(req.body, req.params.id, function (err, data) {
+    
     if (err) {
       //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
       res.status(400).send(err).end();
@@ -79,19 +72,7 @@ app.post('/maria/add-comment', function (req, res) {
     }
   });
 });
-app.get('/maria/get-comments/:id', function (req, res) {
-  maria.getCommentThread(req.params.id, function (err, data) {
-    if (err) {
-      //console.log('Request : SELECT commentaire :: ERROR');
-      res.status(400).send(err).end();
-    } else {
-      //console.log('Request : SELECT commentaire :: OK');
-      var str = Object.values(data[0]);
-      //console.log('thread', str[0]);
-      res.send(str[0]).end();
-    }
-  });
-});
+//skip
 app.post('/missions/get', function (req, res) {
   //console.log("body", req.body.wanted);
 
@@ -105,19 +86,9 @@ app.post('/missions/get', function (req, res) {
     }
   });
 });
-app.get('/missions/alert-status-1', function (req, res) {
-  maria.getAlertByStatus(1, function (err, data) {
-    if (err) {
-      //console.log('Request : SELECT * FROM USER_TABLE :: ERROR');
-      res.status(400).send(err).end();
-    } else {
-      //console.log('Request : SELECT * FROM USER_TABLE :: OK');
-      res.status(200).send(data).end();
-    }
-  });
-});
-app.post('/maria/create-alert', function (req, res) {
-  //console.log(req.body);
+//ok
+app.post('/missions/new', function (req, res) {
+  // console.log(req.body);
 
   //console.log('comment : ', req.body[Object.keys(req.body)[0]]);
   //console.log('user : ', Object.keys(req.body)[0]);
@@ -128,6 +99,8 @@ app.post('/maria/create-alert', function (req, res) {
     } else {
       //console.log('Request : Update commentaire :: OK');
       //res.status(200).send('Commentaire ajouté').end();
+      // console.log('res',data);
+      
       res.status(204).send(data).end();
     }
   });
@@ -153,16 +126,17 @@ app.get('/missions/:project_id', function (req, res) {
         } else {
           //console.log('Request : SELECT * FROM USER_TABLE :: OK');
           // console.log('animal ', data);
-
+          // console.log('project data', result);
+          
           result.push(data);
           res.status(200).send(result).end();
-
         }
       });
     }
   });
 });
-app.get('/comment/:id', function (req, res) {
+//ok
+app.get('/missions/:id/get-comments', function (req, res) {
   maria.getCommentFromMissionId(req.params.id, function (err, data) {
     if (err) {
       res.status(400).send(err).end();

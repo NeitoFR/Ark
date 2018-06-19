@@ -431,7 +431,7 @@
                 if (evt.detail.url == '/maria/submit-participation') {
                     this.dispatchEvent(new CustomEvent('askprojectdata'));
                 }
-                if (evt.detail.url.includes("comment")) {
+                if (evt.detail.url.includes("get-comments")) {
                     console.log('comment ', evt.detail.response);
                     this.set('commentThread', evt.detail.response[0].commentaires)
                 }
@@ -484,7 +484,7 @@
                 this.$.ajaxEl.generateRequest();
             }
             _getNewComment(projectId) {
-                var url = '/comment/' + projectId;
+                var url = '/missions/' + projectId+'/get-comments';
                 this.$.ajaxEl.url = url;
                 this.$.ajaxEl.method = "GET";
                 this.$.ajaxEl.generateRequest();

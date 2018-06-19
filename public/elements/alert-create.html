@@ -158,7 +158,7 @@
                     //console.log("list", list);
                     this.animalList = list;
                     break;
-                    case "/maria/create-alert":
+                    case "/missions/new":
                     console.log('Mission bien ajouté');
                     this.set('formData', {});
                     window.location.replace('/');
@@ -185,7 +185,7 @@
                 this._getAnimalList();
             }
             _postAlert(){
-                this.$.createAjax.url = "/maria/create-alert";
+                this.$.createAjax.url = "/missions/new";
                 this.$.createAjax.method = "POST";
                 this.formData.initiateur = this.storedUser.id_Utilisateurs;
                 // this.formData.log = '|'+timestamp+';'+this.storedUser.id_Utilisateurs+';0;'+this.storedUser.pseudo+';1;';

@@ -69,6 +69,7 @@
                         <paper-input label="Nom" auto-validate pattern="[a-zA-Z_0-9[[:blank:]]]{6,15}" value="{{formData.nom::input}}"></paper-input>
                         <paper-input label="Mot de passe" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
                         <paper-button raised on-tap="_submitSignUp" class="primary" disabled={{disState}}>Créer un compte</paper-button>
+                        <!-- <paper-button raised on-tap="_testButton" class="primary" disabled={{disState}}>Créer un compte</paper-button> -->
                     </div>
                     <div class="flex__item">
                         <paper-input label="E-mail" auto-validate pattern="[a-zA-Z_0-9@.]{6,30}" value="{{formData.email::input}}"></paper-input>
@@ -116,12 +117,6 @@
                         this._submitSignUp();
                 })
             }
-            _chekckEmptyness(){
-                console.log('pseudo : ', this.formData.pseudo, '| password : ', this.formData.password);
-            }
-            _setReqBody() {
-                
-            }
             _testButton(evt){
                 console.log(this.formData);
             }
@@ -147,6 +142,7 @@
                 }
                 if(evt.detail.url == '/signin'){
                     var response = JSON.parse(evt.detail.response);
+                    // console.log(evt.detail.response);
                     this.error = '';
                     //console.log("data : ", response[0].pseudo);
                     this.set('storedUser.loggedin', true);

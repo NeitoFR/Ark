@@ -88,11 +88,11 @@ exports.verifyUser = function (data, callback) {
 
     });
 }
-exports.addComment = function (data, callback) {
-    // console.log('data', data)
+exports.addComment = function (data, id, callback) {
+    // console.log('data', data, 'id', id)
     var c = init(process.env.B_MISSION),
         toAppend = '|' + Object.keys(data)[0] + "|" + data[Object.keys(data)[0]],
-        query = 'UPDATE missions SET commentaires = CONCAT(commentaires, \'' + toAppend + '\') WHERE id_Mission=\'' + data.id + '\';';
+        query = 'UPDATE missions SET commentaires = CONCAT(commentaires, \'' + toAppend + '\') WHERE id_Mission=\'' + id + '\';';
 
     //console.log('comment to append : ', toAppend);
     c.query(query, function (err, res) {
