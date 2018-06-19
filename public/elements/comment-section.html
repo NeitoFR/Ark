@@ -140,7 +140,7 @@
                 else {
                     var id = window.location.href.split('/');
 
-                    this.$.commentAjax.url = '/missions/' + id[id.length-1] + '/add-comments';
+                    this.$.commentAjax.url = '/missions/' + id[id.length-1] + '/set-comments';
                     this.$.commentAjax.method = 'POST';
                     this.$.commentAjax.body = this._buildComment();
                     this.$.commentAjax.contentType = 'application/json';
@@ -169,7 +169,7 @@
 
             }
             _handleResponse(evt) {
-                if(evt.detail.url.includes('add')){
+                if(evt.detail.url.includes('set')){
                     this.commentText = '';
                     this.dispatchEvent(new CustomEvent('newcomment'));
                 }

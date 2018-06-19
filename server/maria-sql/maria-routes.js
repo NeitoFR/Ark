@@ -58,7 +58,7 @@ app.get('/maria/users/:id', function (req, res) {
   });
 });
 //ok
-app.post('/missions/:id/add-comments', function (req, res) {
+app.post('/missions/:id/set-comments', function (req, res) {
   //console.log('comment : ', req.body[Object.keys(req.body)[0]]);
   //console.log('user : ', Object.keys(req.body)[0]);
   maria.addComment(req.body, req.params.id, function (err, data) {
@@ -105,7 +105,7 @@ app.post('/missions/new', function (req, res) {
     }
   });
 });
-
+//ok
 app.get('/missions/:project_id', function (req, res) {
   //console.log('url ', req.params);
   var result = [];
@@ -145,7 +145,8 @@ app.get('/missions/:id/get-comments', function (req, res) {
     }
   });
 });
-app.get('/maria/get-animals', function (req, res) {
+//ok
+app.get('/taxonomie/get-animals', function (req, res) {
   //console.log('url ', req.params);
   maria.getAnimals(function (err, data) {
     if (err) {
@@ -157,7 +158,8 @@ app.get('/maria/get-animals', function (req, res) {
     }
   });
 });
-app.get('/mission/contenu/:id', function (req, res) {
+//ok
+app.get('/mission/:id/get-contenu', function (req, res) {
   console.log('Wanting content of mission ' + req.params.id);
 
   maria.getContenuById(req.params.id, function (err, data) {
@@ -171,8 +173,9 @@ app.get('/mission/contenu/:id', function (req, res) {
     }
   });
 });
-app.post('/mission/update-contenu', function (req, res) {
-  maria.updateContenuById(req.body, function (err, data) {
+//ok
+app.post('/mission/:id/set-contenu', function (req, res) {
+  maria.updateContenuById(req.body, req.params.id, function (err, data) {
     if (err) {
       res.status(400).send(err).end();
     } else {

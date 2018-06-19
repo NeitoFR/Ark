@@ -143,8 +143,8 @@
             }
             handleResponse(evt){
                 switch (evt.detail.url) {
-                    case "/maria/get-animals":
-                    console.log('Animal list', evt.detail.response);
+                    case "/taxonomie/get-animals":
+                    // console.log('Animal list', evt.detail.response);
                     var tab = evt.detail.response;
                     var list = [];
                     tab.forEach(animal => {
@@ -177,7 +177,7 @@
                 this._postAlert();
             }
             _getAnimalList(){
-                this.$.createAjax.url = "/maria/get-animals";
+                this.$.createAjax.url = "/taxonomie/get-animals";
                 this.$.createAjax.method = "GET";
                 this.$.createAjax.generateRequest();
             }

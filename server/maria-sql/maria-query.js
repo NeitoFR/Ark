@@ -471,9 +471,9 @@ exports.getContenuById = function (id, callback) {
         }
     });
 }
-exports.updateContenuById = function (data, callback) {
+exports.updateContenuById = function (data, id, callback) {
     var c = init(process.env.B_MISSION);
-    var query = 'UPDATE missions SET `contenu` = \''+data.contenu+'\' WHERE id_Mission=\'' + data.id_Mission + '\';';
+    var query = 'UPDATE missions SET `contenu` = \''+data.contenu+'\' WHERE id_Mission=\'' + id + '\';';
     c.query(query, function (err, res) {
         if (err) {
             console.log('Error logging', err);

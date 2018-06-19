@@ -417,13 +417,13 @@
                 }.bind(this));
             }
             handleResponse(evt) {
-                if (evt.detail.url == "/mission/update-contenu") {
+                if (evt.detail.url.includes("set-contenu")) {
                     console.log('Contenu mise à jour', evt.detail.response);
                     if (getComputedStyle(this.$.modalwrapper2).display == 'block')
                         this._toggleModal2();
                     this.dispatchEvent(new CustomEvent('askprojectdata'));
                 }
-                if (evt.detail.url.includes("/mission/contenu")) {
+                if (evt.detail.url.includes("get-contenu")) {
                     console.log('**********getting alert content', evt.detail.response[0].contenu);
                     this.set('newContenu', evt.detail.response[0].contenu);
                     this._toggleModal2();
@@ -484,21 +484,20 @@
                 this.$.ajaxEl.generateRequest();
             }
             _getNewComment(projectId) {
-                var url = '/missions/' + projectId+'/get-comments';
+                var url = '/missions/' + projectId + '/get-comments';
                 this.$.ajaxEl.url = url;
                 this.$.ajaxEl.method = "GET";
                 this.$.ajaxEl.generateRequest();
             }
             _getContent() {
-                this.$.ajaxEl.url = "/mission/contenu/" + this.projectData.id_Mission;
+                this.$.ajaxEl.url = "/mission/" + this.projectData.id_Mission + "/get-contenu";
                 this.$.ajaxEl.method = "GET";
                 this.$.ajaxEl.generateRequest();
             }
             _updateContent() {
-                this.$.ajaxEl.url = "/mission/update-contenu";
+                this.$.ajaxEl.url = "/mission/" + this.projectData.id_Mission + "/set-contenu";
                 this.$.ajaxEl.method = "POST";
                 this.$.ajaxEl.body = {
-                    id_Mission: this.projectData.id_Mission,
                     contenu: this.newContenu
                 }
                 this.$.ajaxEl.generateRequest();

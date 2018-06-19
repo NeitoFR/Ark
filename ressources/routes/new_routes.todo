@@ -37,7 +37,20 @@ GET :
                 activity_log: String,
                 liste_taches: String,
                 visible: String
-            },{ espece: String }        
+            },{ espece: String }     
+    Route : /taxonomie/get-animals
+    Utilité : Récupéré la liste des noms et identifiants des animaux présents dans la base
+    Reponse : 
+        Erreur : 
+            Status : 400
+            Erreur : String
+        OK : 
+            Status : 200
+            données utiles : Array        
+
+
+
+
 POST :
     Route : /signin
     Utilité : Se connecter
@@ -89,7 +102,7 @@ POST :
             Status : 200
             données utiles : aucune
 
-    Route : /missions/:id/add-comments
+    Route : /missions/:id/set-comments
     Utilité : Ajouter un commentaire à un projet
     Requete :
         {
@@ -129,55 +142,16 @@ POST :
         OK : 
             Status : 200
             données utiles : aucune
-    Route : /
-    Utilité : 
+    Route : /missions/:id/set-contenu
+    Utilité : Met à jour le champ contenu d'un projet
     Requete :
         {
-
+            contenu: this.newContenu
         }
     Reponse : 
         Erreur : 
             Status : 400
             Erreur : String
         OK : 
-            Status : 200
-            données utiles : JSON
-    Route : /
-    Utilité : 
-    Requete :
-        {
-
-        }
-    Reponse : 
-        Erreur : 
-            Status : 400
-            Erreur : String
-        OK : 
-            Status : 200
-            données utiles : JSON
-    Route : /
-    Utilité : 
-    Requete :
-        {
-
-        }
-    Reponse : 
-        Erreur : 
-            Status : 400
-            Erreur : String
-        OK : 
-            Status : 200
-            données utiles : JSON
-    Route : /
-    Utilité : 
-    Requete :
-        {
-
-        }
-    Reponse : 
-        Erreur : 
-            Status : 400
-            Erreur : String
-        OK : 
-            Status : 200
-            données utiles : JSON
+            Status : 204
+            données utiles : aucune
