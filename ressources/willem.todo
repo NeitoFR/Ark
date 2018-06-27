@@ -1,0 +1,51 @@
+Feature à Developper du 22/06 au 03/07  :
+    ☐ Mail de récup de mot de passe
+    ☐ Thèmes couleur en fonction des rôles
+    ☐ Cryptage des données
+
+Ressources utiles : 
+    A quoi ressemble un log : 
+        ✔ var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + '4' + ';' + data.id_Status + ';' + 'complement'; @done (2018-5-24 17:03:31)
+
+        
+Liste en vrac :
+    ☐ Rendre l'alert List page principale
+    ✔ Checker si l'activity-log s'affiche bien @done (2018-5-24 16:57:11)
+    ✔ Rajouter les activity-log lié au boutons de l'alert-page @done (2018-5-24 16:57:09)
+    ✔ Rajouter le bouton donnation @done (2018-5-24 23:47:56)
+    ✔ Binder le touche Entrée a Connexion / Inscription @done (2018-5-24 23:30:27)
+    ✔ Faire l'admin panel @done (2018-5-24 16:57:02)
+    ✘ Rajouter des Missions démo @cancelled (2018-5-24 16:57:05)
+    ✔ Completer le modal qui permet à l'initiateur de mettre à jour la description de son alerte. @done (2018-5-25 18:31:26)
+    ✔ Ajouter les alertes auquelles les users participent sur leur profil @done (2018-5-25 13:29:10)
+    ✔ Ajouter les alertes auquelles les users participent sur la base @done (2018-5-25 13:29:11)
+    ✔ Définir le format de log pour les alertes user : |id_Mission;nom;resume @done (2018-5-25 13:29:12)
+    ✔ Afficher les participants d'une mission @done (2018-5-27 16:37:39)
+    ✔ Faire le CSS des onglet dans l'alert-page @done (2018-5-27 16:37:32)
+    ✔ Rajout d'un champ 'liste_taches' TEXT a parser : ;id_tache;id_tache en fait ca ne sers surement à rien @done (2018-5-27 16:40:13)
+    ✔ Initialiser les Accordion pour les taches @done (2018-5-27 22:25:00)
+    ☐ Developper les Accordion pour les taches
+    ✔ Faire la route d'ajout de tache @done (2018-5-27 22:23:53)
+    ✔ Trouver et utiliser des Date Picker @done (2018-5-27 22:24:07)
+    ✔ Initialisé la page About @done (2018-5-27 22:24:10)
+    Rédigé la page About :
+        ☐ Proposer d'un projet
+        ☐ Candidater
+        ☐ Les Taches
+        ☐ Le déroulement d'un projet abouti
+        ☐ Le cahier de bord
+
+    Nail the missions's status for/backwarding :
+        Si status est entre 1 et 3:
+            ✔ Faire ++ ou -- @done (2018-5-24 18:29:12)
+            ✔ Géré le bouton invalider @done (2018-5-27 11:18:57)
+            Soucis bouton invalider : 
+                Liste des mission sur page de profil (Voir question)
+        Si status est a 0 :
+            ✔ Géré la demande d'info pour l'auteur @done (2018-5-24 23:18:43)
+        Si status est à 4 : 
+            ☐ Faire un autre iron-pages pour dire  'Félicitations projet accepté' ?
+
+Questions : 
+    Team viewer pour le jury ?
+    Clé étrangère ? 

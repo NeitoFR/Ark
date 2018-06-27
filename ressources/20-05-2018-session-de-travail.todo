@@ -13,7 +13,7 @@ Définition des modules restant à faire :
             ☐ Crypter les envoi client/serveur (F/B)
         ☐ Faire en sorte que l'URL soit /home-page à l'arriver sur le site;(F)
     profile-page :
-        ☐ Agencer les elements (F)
+        ✔ Agencer les elements (F) @done (2018-5-24 23:32:49)
     alerte-create :
         ☐ Terminer l'ajout d'animaux(B) 
     register-login:
@@ -21,7 +21,10 @@ Définition des modules restant à faire :
     Cahier de bord :
         ☐ Où le placer : Lien vers PDF dans l'onglet Résumé
     Systeme de commande:
-        ☐ A redéfinir
+        (A redéfinir)
+        ☐ Pour chaquex tâches un bouton qui permet de passer des commandes
+        ☐ Une tache peut avoir plusieurs commandes
+        
     alert-page: 
         ✔ Recharger les données de l'alerte quand on y réaccède @done (2018-5-21 09:51:09)
         ✔ Transformer en iron-pages + iron-selector @done (2018-5-20 14:26:29) :
@@ -39,13 +42,13 @@ Définition des modules restant à faire :
                 ✔ dom-repreat OK @done (2018-5-21 09:54:58)
                 ✘ Meme visuel que l'element commentaire ? @cancelled (2018-5-21 09:55:26)
             Onlget Tâches : 
+                (Ajout d'un champ 'Resume' pour le visuel dans l'onglet Taches)
+                ☐ Actif à partir du status 2
 
+                ✔ Accessible qu'au Expert et au Comité @done (2018-5-26 11:49:47)
     alerte-list:
         ✔ Recharger la liste des alerte lorsque selectedRoute change @done (2018-5-20 23:42:11)
-    Créer la table Taches:
-        Les champs:
-            ☐ id_taches (clé primaire)
-            ☐ id_projet (clé étrangere sur la table missions)            
+    ✔ Créer la table Taches: @done (2018-5-24 16:56:48)
     Définir les différent message de status:
         ✔ "En attente d'info de l'auteur ", @done (2018-5-20 19:40:21)
         ✔ "En cours de validation par l'équipe d'écoute", @done (2018-5-20 19:40:22)
@@ -53,7 +56,14 @@ Définition des modules restant à faire :
         ✔ "En cours de validation par le Comité d'évaluation", @done (2018-5-20 19:40:23)
         ✔ "Validé par le Comité" @done (2018-5-20 19:40:23)
     Définir les différent message de log:
-        ✔ "Alerte créé." @done (2018-5-20 23:42:35)
+        ✔ 0 "Alerte créé." @done (2018-5-20 23:42:35)
+        ✔ 1 "Approuve l'alerte" @done (2018-5-24 16:55:48)
+        ✔ 2 "Désapprouve l'alerte" @done (2018-5-24 16:55:48)
+        ✔ 3 "Souhaite demander des informations supplémentaire" @done (2018-5-24 16:55:47)
+        ✔ 4 "A soumis sa participation" @done (2018-5-24 16:55:47)
+        ✔ 5 "A fait une donnation" @done (2018-5-24 16:55:47)
+        ✔ 6 "Passe à l'étape suivant" @done (2018-5-24 16:55:47)
+        ✔ 7 "Passe a l'étape précédente" @done (2018-5-24 16:55:46)
     Sur la table Mission: 
         ✔ Rajouter un champ 'initiateur' @done (2018-5-20 16:50:07)
         ✔ Rajouter un champ 'activty_log' |timestamp;id_user;id_messagee;pseudo;id_state;'demandeinfo'| @done (2018-5-20 16:50:05)
@@ -68,3 +78,4 @@ Remarque :
 Questions : 
     Si l'initiateur supprime son compte ? 
     Avons nous besoin d'une sous table missions (plus courte) ? sinon formalisé les requete de suppressions des anciens projets
+

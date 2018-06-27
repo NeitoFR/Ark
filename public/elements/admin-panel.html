@@ -4,9 +4,95 @@
 <dom-module id='admin-panel'>
     <template>
         <style include='shared-styles'>
+            .admin {
+                /* display: none; */
+                position: fixed;
+                background-color: rgb(41, 27, 12);
+                color: rgb(231, 231, 231);
+                /* bottom: 0; */
+                /* left: 0; */
+                margin: 20px;
+                width: 600px;
+                height: 100px;
+                border: 2px solid black;
+                border-radius: 3px;
+                z-index: 1;
+                padding: 8px;
+            }
+            .left{
+                bottom: 0;
+                left:0;
+            }
+            .right{
+                bottom: 0;
+                right:0;
+            }
+
+            .col {
+                width: 150px;
+            }
+
+            paper-input {
+                --paper-input-container-input-color: white;
+                --paper-input-container-color: rgba(141, 141, 141, 0.253);
+            }
+
+            .btn {
+                border: 1px solid white;
+                border-radius: 3px;
+                text-align: center;
+                margin: 5px;
+                padding: 3px;
+                cursor: pointer;
+                color: black;
+                background-color: grey;
+            }
+
+            .btn:hover {
+                background-color: rgb(199, 199, 199)
+            }
         </style>
-        <div>
-            Admin Panel
+        <div class="admin left flex flex--row" id='adm'>
+            <div class="flex flex--row">
+                <div class="flex flex--col flex__item col">
+                    <div class="flex__item">Alert Status : {{projectData.id_Status}}</div>
+                    <div class="flex__item">id_Groupe : {{storedUser.id_Groupe}}</div>
+                    <div class="flex__item">id_User : {{storedUser.id_Utilisateurs}}</div>
+                </div>
+                <div class="flex flex--col flex__item">
+                    <div class="flex__item">
+                        <select id='ss'>
+                            <option value="0">A modifier par la Sentinelle</option>
+                            <option value="1">En cours de validatioon équipe d écoute</option>
+                            <option value="2">En cours de validatioon équipe d experts</option>
+                            <option value="3">En cours de validatioon Comité</option>
+                            <option value="4">Projet en cours de réalisation</option>
+                        </select>
+                    </div>
+                    <div class=" flex__item">
+                        <select id='sg'>
+                            <option value="1">Utilisateur(1)</option>
+                            <option value="5">Ecoute(5)</option>
+                            <option value="6">Expert(6)</option>
+                            <option value="7">Comité(7)</option>
+                        </select>
+                    </div>
+                    <div class="flex__item">
+                        <input type="number" name="id_user" id="idu">
+                        <!-- <paper-input no-label-float label="id_user" auto-validate pattern="[0-9]{1,3}" value="{{id_user::input}}"></paper-input> -->
+                    </div>
+                </div>
+                <div class="flex__item flex flex--col">
+                    <div class="flex__item--top btn" on-click="_updateAlertStatus">Update this</div>
+                    <div class="flex__item--top btn" on-click="_updateIdGroup">Update this</div>
+                    <div class="flex__item--top btn" on-click="_updateIdUser">Update this</div>
+                </div>
+                <div class="flex__item flex flex--col">
+                    <div class="flex__item--top btn" on-click="_updateAll">Update all</div>
+                    <div class="flex__item--top btn" on-click="_testButton">Disapear</div>
+                    <div class="flex__item--top btn" on-click="_switchSide">Switch Side</div>
+                </div>
+            </div>
         </div>
         <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
     </template>
@@ -19,25 +105,142 @@
                 return {
                     trigger: {
                         observer: '_triggerTriggered'
+                    },
+                    projectData:{
+                        type: Object,
+                        observer: '_projectDataChanged',
+                        value:{}
+                    },
+                    storedUser: {
+                        type: Object,
+                        observer: '_storedUserChanged'
                     }
                 }
             }
             ready() {
                 super.ready();
-
             }
-            _triggerTriggered() {
-                this._getUsersList();
+            _storedUserChanged(su) {
+                
+                if(su.id_Groupe)this.$.sg.value = su.id_Groupe;
+                // this.id_user = su.id_Utilisateurs;
+                if(su.id_Utilisateurs)this.$.idu.value = su.id_Utilisateurs;
             }
-            _getUsersList() {
-                this.$.ajaxEl.url = '/maria/users'
-                this.$.ajaxEl.method = 'GET'
-                this.$.ajaxEl.generateRequest();
+            _projectDataChanged(pd){
+                this.$.ss.value = pd.id_Status;
+            }
+            _switchSide(){
+                // this.dispatchEvent(new CustomEvent('swtich_side'));
+                console.log(this.$.adm.classList);
+                if(this.$.adm.classList.contains('left')){
+                    this.$.adm.classList.remove('left');
+                    this.$.adm.classList.add('right');
+                }
+                else{
+                    this.$.adm.classList.remove('right');
+                    this.$.adm.classList.add('left');
+                }
             }
             handleResponse(evt) {
-                if (evt.detail.url == '/maria/users') {
-                    // console.log(evt.detail.response);
+                switch (evt.detail.url) {
+                    case '/admin/update-alert-status':
+                        console.log('res from status', evt.detail.response);
+                        this.dispatchEvent(new CustomEvent('askprojectdata'));
+                        if(this.projectData.id_Mission)
+                        this.dispatchEvent(new CustomEvent('askprojectdata'));
+                        break;
+                        
+
+                    case '/admin/update-id-group':
+                        console.log('res from group', evt.detail.response);
+                        this.dispatchEvent(new CustomEvent('askuserdata'));
+                        if(this.projectData.id_Mission)
+                        this.dispatchEvent(new CustomEvent('askprojectdata'));
+                        break;
+
+                    case '/admin/update-id-user':
+                        console.log('res from user', evt.detail.response);
+                        this.dispatchEvent(new CustomEvent('askuserdata'));
+                        if(this.projectData.id_Mission)
+                        this.dispatchEvent(new CustomEvent('askprojectdata'));
+                        
+                        break;
+                    default:
+                        break;
                 }
+            }
+            _updateAlertStatus() {
+                if (this.projectData.id_Mission) {
+                    console.log(this.projectData.id_Status, this.$.ss.value, this.projectData);
+                    if (this.projectData.id_Status == this.$.ss.value) {
+                        console.log('Its already on this status');
+
+                    } else {
+                        this.$.ajaxEl.url = '/admin/update-alert-status';
+                        this.$.ajaxEl.method = 'POST';
+                        this.$.ajaxEl.body = {
+                            'id_Mission': this.projectData.id_Mission,
+                            'id_Status': this.$.ss.value
+                        };
+                        this.$.ajaxEl.generateRequest();
+                    }
+                } else {
+                    console.log('Project Data not set');
+
+                }
+
+            }
+            _updateIdGroup() {
+                //Set this selected one equel to the real onez
+                if (this.storedUser) {
+                    console.log(this.storedUser.id_Groupe, this.$.sg.value);
+                    if (this.storedUser.id_Groupe == this.$.sg.value) {
+                        console.log('You already have this user group');
+                    } else {
+                        this.$.ajaxEl.url = '/admin/update-id-group';
+                        this.$.ajaxEl.method = 'POST';
+                        this.$.ajaxEl.body = {
+                            'pseudo': this.storedUser.pseudo,
+                            'id_Groupe': this.$.sg.value
+                        };
+                        this.$.ajaxEl.generateRequest();
+                    }
+                }
+            }
+            _updateIdUser() {
+                var idu = this.$.idu.value;
+                console.log(this.$.idu.value);
+                if(!isNaN(idu)){
+                    if(this.storedUser.pseudo){
+                        if(idu == this.storedUser.id_Utilisateurs){
+                            console.log('You already have this user id');
+                        } else {
+                            this.$.ajaxEl.url = '/admin/update-id-user';
+                            this.$.ajaxEl.method = 'POST';
+                            this.$.ajaxEl.body = {
+                                'new': idu,
+                                'old': this.storedUser.id_Utilisateurs,
+                            };
+                            this.$.ajaxEl.generateRequest();
+                        }
+                    } else {
+                        console.log('Something weird happenned');
+                    }
+                }
+            }
+            _updateAll() {
+                this._updateAlertStatus();
+                this._updateIdGroup();
+                this._updateIdUser();
+            }
+            _testButton() {
+                // console.log(this.storedUser, this.projectData);
+                // console.log(this.$.ss.value, this.$.sg.value, this.id_user);
+                // var user = localStorage['user-storage']
+                // user = JSON.parse(user);
+                // console.log(user);
+                this.dispatchEvent(new CustomEvent('closeModal'));
+                
             }
         }
         window.customElements.define(AdminPanel.is, AdminPanel);

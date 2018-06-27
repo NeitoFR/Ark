@@ -8,87 +8,98 @@
                 background-color: white;
                 padding: 24px;
                 border-right: solid 1px rgb(185, 185, 185);
-                
+
             }
-            
+
             .menu {
                 width: 20%;
                 background-color: white;
             }
-            
+
             .alert,
             .menu {
                 box-sizing: border-box;
             }
-            
+
             paper-progress {
                 --paper-progress-height: 25px;
             }
-            
+
             #progecoute {
                 --paper-progress-active-color: rgb(209, 212, 17);
             }
-            
+
             #progexpert {
                 --paper-progress-active-color: blue;
             }
-            
+
             #progcomite {
                 --paper-progress-active-color: red;
             }
-            
+
             #progval {
                 --paper-progress-active-color: var(--apc);
             }
-            
+
             #proginval {
                 --paper-progress-active-color: red;
             }
-            
+
             #proginfo {
                 --paper-progress-active-color: rgb(209, 212, 17);
             }
-            
+
             .sd-div {
                 text-align: center;
                 padding: 3px 0px;
             }
-            
+
+            .donation {
+                padding: 20px;
+                text-align: center;
+                background-color: rgb(228, 212, 67);
+            }
+
+            .donation paper-button {
+                background-color: rgb(219, 219, 61);
+            }
+
             .steps,
             .step-details,
             .actions,
-            .participate {
+            .participate,
+            .donation {
                 border-bottom: solid 1px rgb(185, 185, 185);
-                
+
             }
-            
+
             .participate {
                 text-align: center;
                 padding: 15px;
             }
-            
+
             .steps {
                 padding: 10px 24px 40px;
             }
-            
+
             .step-details {
                 padding: 20px 24px 20px;
-                
+
             }
-            
+
             .actions {
                 padding: 40px 24px 10px;
             }
-            
+
             .article {
                 padding: 7px 0px;
             }
-            
+
             paper-checkbox {
                 --paper-checkbox-vertical-align: top;
                 padding: 5px;
             }
-            
+
             paper-checkbox.red {
                 border: 1px solid var(--paper-red-400);
                 /* background-color: var(--paper-red-200); */
@@ -100,7 +111,7 @@
                 --paper-checkbox-unchecked-ink-color: var(--paper-red-900);
                 --paper-checkbox-label-color: var(--paper-red-700);
             }
-            
+
             paper-checkbox.green {
                 /* --paper-checkbox-size: 2em; */
                 border: 1px solid var(--paper-green-400);
@@ -112,20 +123,135 @@
                 --paper-checkbox-unchecked-ink-color: var(--paper-green-900);
                 --paper-checkbox-label-color: var(--paper-green-700);
             }
-            
+
             paper-checkbox .title {
                 display: block;
                 font-size: 1.2em;
             }
-            
+
             paper-checkbox .subtitle {
                 display: block;
                 font-size: 0.9em;
                 max-width: 150px;
             }
+
+            #modalwrapper,
+            #modalwrapper2 {
+                display: none;
+                position: fixed;
+                z-index: 100;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+            .modal-container {
+                z-index: 101;
+                display: block;
+                background-color: rgb(221, 221, 221);
+                margin: 5% auto;
+                width: 40%;
+            }
+
+            .modal-content div {
+                padding: 5px;
+            }
+
+            .modal-content {
+                padding: 12px 24px;
+            }
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                background-color: var(--apc);
+                overflow: hidden;
+            }
+
+            li {
+                display: inline;
+                color: rgb(224, 224, 224);
+                padding: 12px 10px;
+            }
+
+            .right {
+                float: right;
+            }
+
+            .right:hover {
+                background-color: var(--asc);
+            }
+
+            .left {
+                float: left;
+            }
+
+            .close {
+                cursor: pointer;
+            }
+
+            .partlist {
+                margin: 24px;
+                padding: 18px;
+                background-color: rgb(212, 212, 212);
+                border-radius: 3px;
+            }
+
+            .participant {
+                border-top: 1px solid rgb(70, 70, 70);
+                padding: 8px;
+            }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        
+        <!-- Début modal de l'equipe qui demande des infos-->
+        <div id='modalwrapper'>
+            <div class="modal-container">
+                <ul>
+                    <li class="left">Préciser les informations que vous jugé manquantes</li>
+                    <li class="right close" on-click='_toggleModal'>
+                        <iron-icon icon="icons:close"></iron-iscon>
+                    </li>
+                </ul>
+
+                <div class="flex flex--row modal-content">
+                    <div class="flex__item">
+                        <paper-textarea char-counter maxlength="800" label="Précision sur les informations manquantes" always-float-label value="{{complement::input}}"></paper-textarea>
+                    </div>
+                    <div class="flex__item--middle">
+                        <paper-button raised on-tap="_sendInfo" class="primary">valider</paper-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Fin modal de l'equipe qui demande des infos-->
+        <!--  -->
+        <!-- Début modal de l'iniateur-->
+        <div id='modalwrapper2'>
+            <div class="modal-container">
+                <ul>
+                    <li class="left">Informations supplémentaires</li>
+                    <li class="right close" on-click='_toggleModal2'>
+                        <iron-icon icon="icons:close"></iron-iscon>
+                    </li>
+                </ul>
+
+                <div class="flex flex--row modal-content">
+                    <div class="flex__item">
+                        <paper-textarea char-counter maxlength="2000" label="Précisé les infos manquantes" always-float-label value="{{newContenu::input}}"></paper-textarea>
+                    </div>
+                    <div class="flex__item--middle">
+                        <paper-button raised on-tap="_updateContent" class="primary">valider</paper-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Fin modal de l'iniateur-->
+        <!--  -->
         <div class="flex flex--row">
             <div class="flex flex--col flex__item--top alert">
                 <div class="flex flex--row flex__item article">
@@ -144,13 +270,31 @@
                 <div class="flex__item article">
                     {{projectData.contenu}}
                 </div>
-                <div class="flex__item article">
-                    <comment-section id="commentSection" comment-thread={{commentThread}}></comment-section>
+                <div class="flex__item flex flex--row article">
+                    <div class="flex__item">
+                        <comment-section id="commentSection" comment-thread={{commentThread}}></comment-section>
+                    </div>
+                    <div class="flex__item--top flex flex--col partlist">
+
+                        <template is="dom-if" if={{isTherePart}}>
+                            <div class="flex__item" style="font-size: 1.5rem">Participants</div>
+                            <template is="dom-repeat" items={{partList}} as=item>
+                                <div class="flex__item participant" data-idu$={{item.id}}>{{item.pseudo}}</div>
+                            </template>
+                        </template>
+                        <template is="dom-if" if={{!isTherePart}}>
+                            <div class="flex__item" style="font-size: 1rem">Aucun Participants</div>
+                        </template>
+                    </div>
                 </div>
             </div>
-            
+            <!-- -->
             <!-- Side Menu -->
+            <!--  -->
             <div class="flex flex--col flex__item--top menu">
+                <div class="flex__item donation">
+                    <paper-button raised on-tap="_testButton" class="primary">Donation</paper-button>
+                </div>
                 <div class="flex__item  steps">
                     <p>Résumé Etape</p>
                     <iron-pages selected="{{selSteps}}" attr-for-selected="name" fallback-selection="mainSteps" role="main">
@@ -168,12 +312,20 @@
                                 <span class="subtitle">Valider par le Comité d'évaluation</span>
                             </paper-checkbox>
                         </div>
-                        <div name='Steps0'>
-                            En attente d'info de la part de l'auteur...
+                        <div name='Steps0' class="flex flex--col">
+                            <div class="flex__item">
+                                En attente d'info de la part de l'auteur...
+                            </div>
+                            <template is="dom-if" if={{!_actionVisible(projectData.initiateur)}}>
+                                <div class="flex__item" style="text-align: center">
+                                    <paper-button raised on-tap="_getContent" class="primary">ajouter Info</paper-button>
+                                </div>
+                            </template>
+
                         </div>
                     </iron-pages>
                 </div>
-                
+
                 <template is="dom-if" if={{_actionVisible(projectData.initiateur)}}>
                     <div class="flex__item actions">
                         <div class="flex flex--col">
@@ -190,21 +342,21 @@
                                 </div>
                             </div>
                             <div class="flex__item  sd-div">
-                                <paper-button raised on-tap="_sendInfo" class="primary" disabled={{info_but}}>Demande Info</paper-button>
+                                <paper-button raised on-tap="_toggleModal" class="primary" disabled={{info_but}}>Demande Info</paper-button>
                                 <!-- <paper-button raised on-tap="{{_sendAvis(3)}}" class="primary" disabled={{info_but}}>Demande Info</paper-button> -->
                             </div>
                         </div>
                     </div>
                 </template>
-                
+
                 <div class="flex__item step-details">
                     <p>Détails Etape actuel </p>
                     Validation
-                    <paper-progress value="{{valval}}" max="5" min="0" id="progval"></paper-progress>
+                    <paper-progress value="{{valval}}" max="2" min="0" id="progval"></paper-progress>
                     Invalidation
-                    <paper-progress value="{{valinval}}" max="5" min="0" id="proginval"></paper-progress>
+                    <paper-progress value="{{valinval}}" max="2" min="0" id="proginval"></paper-progress>
                     Demande d'info
-                    <paper-progress value="{{valinfo}}" max="3" min="0" id="proginfo"></paper-progress>
+                    <paper-progress value="{{valinfo}}" max="2" min="0" id="proginfo"></paper-progress>
                 </div>
                 <div class="flex__item participate">
                     <paper-button raised on-tap="_submitParticip" class="primary" disabled={{partBut}}>Participer</paper-button>
@@ -212,7 +364,7 @@
             </div>
         </div>
         <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
-        
+
     </template>
     <script>
         class ResumeTab extends Polymer.Element {
@@ -238,86 +390,165 @@
                     val_but: Boolean,
                     inval_but: Boolean,
                     info_but: Boolean,
-                    toVal : {
+                    isTherePart: Boolean,
+                    toVal: {
                         type: Number,
                         value: 1
                     },
-                    toInval : {
+                    toInval: {
                         type: Number,
                         value: 2
                     },
-                    toInfo : {
+                    toInfo: {
                         type: Number,
                         value: 3
+                    },
+                    complement: {
+                        type: String,
+                        value: ''
                     }
                 }
             }
-            _testButton(){
-                this.$.check1.classList.add('green');
-            }
             ready() {
                 super.ready();
-                
+
                 this.$.commentSection.addEventListener('newcomment', function () {
                     this._getNewComment(this.projectData.id_Mission);
                 }.bind(this));
             }
-            _sendVal(){
-                this._sendAvis(1);
+            handleResponse(evt) {
+                if (evt.detail.url.includes("set-contenu")) {
+                    console.log('Contenu mise à jour', evt.detail.response);
+                    if (getComputedStyle(this.$.modalwrapper2).display == 'block')
+                        this._toggleModal2();
+                    this.dispatchEvent(new CustomEvent('askprojectdata'));
+                }
+                if (evt.detail.url.includes("get-contenu")) {
+                    console.log('**********getting alert content', evt.detail.response[0].contenu);
+                    this.set('newContenu', evt.detail.response[0].contenu);
+                    this._toggleModal2();
+                }
+                if (evt.detail.url == '/maria/submit-participation') {
+                    this.dispatchEvent(new CustomEvent('askprojectdata'));
+                }
+                if (evt.detail.url.includes("get-comments")) {
+                    console.log('comment ', evt.detail.response);
+                    this.set('commentThread', evt.detail.response[0].commentaires)
+                }
+                if (evt.detail.url = '/maria/submit-avis') {
+                    console.log(evt.detail.response);
+                    if (evt.detail.response.code) {
+                        if (evt.detail.response.code == 17) {
+                            console.log('Mission deleted');
+                            window.location.replace('/');
+                        }
+                    } else {
+                        this.dispatchEvent(new CustomEvent('askprojectdata'));
+                    }
+                }
             }
-            _sendInval(){
-                this._sendAvis(2);
+            _submitParticip() {
+                var url = '/maria/submit-participation';
+                this.$.ajaxEl.url = url;
+                this.$.ajaxEl.body = {
+                    pseudo: this.storedUser.pseudo,
+                    id_Utilisateurs: this.storedUser.id_Utilisateurs,
+                    id_Status: this.projectData.id_Status,
+                    id_Mission: this.projectData.id_Mission,
+                    id_Groupe: this.storedUser.id_Groupe,
+                    string: '|' + this.storedUser.id_Utilisateurs + ';' + this.storedUser.pseudo,
+                    resume: this.projectData.resume,
+                    nom: this.projectData.nom
+                };
+                this.$.ajaxEl.method = "POST";
+                this.$.ajaxEl.generateRequest();
             }
-            _sendInfo(){
-                this._sendAvis(3);
-            }
-            _sendAvis(avis){
+
+            _sendAvis(avis) {
                 console.log();
-                
-                this.$.ajaxEl.url = '/maria/submit-avis'   
+
+                this.$.ajaxEl.url = '/maria/submit-avis'
                 this.$.ajaxEl.method = 'POST'
                 this.$.ajaxEl.body = {
                     'id_Utilisateurs': this.storedUser.id_Utilisateurs,
                     'id_Groupe': this.storedUser.id_Groupe,
                     'id_Mission': this.projectData.id_Mission,
-                    'avis': avis
+                    'avis': avis,
+                    'pseudo': this.storedUser.pseudo,
+                    'id_Status': this.projectData.id_Status
                 };
+                if (avis == 3 && this.complement.length != 0) {
+                    this.$.ajaxEl.body.complement = this.complement;
+                    this._toggleModal();
+                }
                 this.$.ajaxEl.generateRequest();
             }
-            _actionVisible(val) {
-                // return true;
-                return this.storedUser.id_Utilisateurs == this.projectData.initiateur ? false : true;
-            }
             _getNewComment(projectId) {
-                var url = '/comment/' + projectId;
+                var url = '/missions/' + projectId + '/get-comments';
                 this.$.ajaxEl.url = url;
                 this.$.ajaxEl.method = "GET";
                 this.$.ajaxEl.generateRequest();
             }
-            handleResponse(evt) {
-                if (evt.detail.url == '/maria/submit-participation') {
-                    this.dispatchEvent(new CustomEvent('askprojectdata'));
-                }
-                if (evt.detail.url.includes("comment")) {
-                    console.log('comment ', evt.detail.response);
-                    this.set('commentThread', evt.detail.response[0].commentaires)
-                }
-                if(evt.detail.url = '/maria/submit-avis'){
-                    console.log(evt.detail.response);
-                    this.dispatchEvent(new CustomEvent('askprojectdata'));
-                }
+            _getContent() {
+                this.$.ajaxEl.url = "/mission/" + this.projectData.id_Mission + "/get-contenu";
+                this.$.ajaxEl.method = "GET";
+                this.$.ajaxEl.generateRequest();
             }
+            _updateContent() {
+                this.$.ajaxEl.url = "/mission/" + this.projectData.id_Mission + "/set-contenu";
+                this.$.ajaxEl.method = "POST";
+                this.$.ajaxEl.body = {
+                    contenu: this.newContenu
+                }
+                this.$.ajaxEl.generateRequest();
+            }
+            isInitiateur() {
+                return this.projectData.initiateur == this.storedUser.initiateur ? true : false;
+            }
+            _actionVisible(val) {
+                return this.storedUser.id_Utilisateurs == this.projectData.initiateur ? false : true;
+            }
+            _toggleModal() {
+                this.complement = '';
+                getComputedStyle(this.$.modalwrapper).display == 'none' ? this.$.modalwrapper.setAttribute(
+                    'style', 'display: block') : this.$.modalwrapper.setAttribute('style', 'display: none')
+            }
+            _toggleModal2() {
+                // if (getComputedStyle(this.$.modalwrapper2).display == 'none')
+                //     this.complement = '';
+                getComputedStyle(this.$.modalwrapper2).display == 'none' ? this.$.modalwrapper2.setAttribute(
+                    'style', 'display: block') : this.$.modalwrapper2.setAttribute('style', 'display: none')
+            }
+            _testButton() {
+                this.$.check1.classList.add('green');
+            }
+            _sendVal() {
+                this._sendAvis(1);
+            }
+            _sendInval() {
+                this._sendAvis(2);
+            }
+            _sendInfo() {
+                console.log(this.complement.length, this.complement);
+
+                this._sendAvis(3);
+            }
+
             _checkParticipant(stringP, stringV) {
                 if (this.projectData) {
-                    // console.log('Checking participant...');
-                    
+                    console.log('Checking participant...');
+
                     var particpe = false;
                     if (stringP) {
                         var rawP = stringP.split('|');
                         rawP.splice(0, 1);
                         for (var i = 0; i < rawP.length; i++) {
                             var temp = rawP[i].split(';');
+                            // console.log(temp[0] + ':' + this.storedUser.id_Utilisateurs);
+
                             if (temp[0] == this.storedUser.id_Utilisateurs) {
+                                console.log('Participe déjà');
+
                                 particpe = true;
                                 this.set('partBut', true);
                                 break;
@@ -330,37 +561,55 @@
                         rawV.splice(0, 1);
                         for (var i = 0; i < rawV.length; i++) {
                             var temp = rawV[i].split(';');
+                            console.log(temp[0] + ':' + this.storedUser.id_Utilisateurs);
                             if (temp[0] == this.storedUser.id_Utilisateurs) {
-                                particpe = true;                                
+                                particpe = true;
                                 this.set('partBut', true);
                                 break;
                             }
                         }
                     }
-                    if(particpe == false){
+                    if (particpe == false) {
                         this.set('partBut', false);
                         console.log('Vous pouvez participé');
                     }
                     // particpe == false ? this.set('partBut', false) : console.log('Vous participé déjà');
-                    
+
                 }
+            }
+            _buildParticipants(string) {
+                var tab = [];
+                string = string.split('|');
+                string.splice(0, 1);
+                string.forEach(participant => {
+                    var temp = participant.split(';');
+                    tab.push({
+                        id: temp[0],
+                        pseudo: temp[1]
+                    })
+                });
+                this.set('partList', tab);
+                this.set('isTherePart', true);
             }
             _projectDataChanged(projectData) {
                 this.set('projectData', projectData);
                 this.set('commentThread', projectData.commentaires);
+                if (this.projectData.m_potentiel.length != 0)
+                    this._buildParticipants(this.projectData.m_potentiel);
+                else
+                    this.set('isTherePart', false);
                 this._setViewForIdStatus(projectData.id_Status);
                 this._checkParticipant(this.projectData.m_potentiel, this.projectData.m_valider);
                 this._setProgressBarValues(this.projectData.v_cur_step);
                 this._setActionButtonState(this.storedUser.id_Groupe, projectData.id_Status);
                 if (projectData.id_Status == 0) this.set('SelSteps', 'mainSteps');
             }
-            _checkValideur(valString){
+            _checkValideur(valString) {
                 var acteurs = [];
                 valString = valString.split('|');
-                
+
                 valString.forEach(groupe => {
-                    if(groupe.includes(';'))
-                    {
+                    if (groupe.includes(';')) {
                         var temp = groupe.split(';');
                         temp.splice(0, 1);
                         temp.forEach(user => {
@@ -369,22 +618,19 @@
                     }
                 });
                 // console.log(acteurs);
-                for(var i = 0; i < acteurs.length; i++)
-                {
-                    if(acteurs[i] == this.storedUser.id_Utilisateurs)
-                    {
+                for (var i = 0; i < acteurs.length; i++) {
+                    if (acteurs[i] == this.storedUser.id_Utilisateurs) {
                         console.log('Vous avez déjà voté');
                         return true;
-                    }   
+                    }
                 }
                 return false;
             }
             _setActionButtonState(user_group, mission_status) {
-                // console.log('user_group : '+user_group+' mission_status : '+mission_status);
-                if(this._checkValideur(this.projectData.v_cur_step))
-                {
+                console.log('user_group : ' + user_group + ' mission_status : ' + mission_status);
+                if (this._checkValideur(this.projectData.v_cur_step)) {
                     console.log('Deactivating buttons');
-                    
+
                     this.set('val_but', true);
                     this.set('inval_but', true);
                     this.set('info_but', true);
@@ -392,25 +638,25 @@
                 }
                 if (mission_status == 1 && user_group == 5) {
                     // console.log('Activating Buttons');
-                    
+
                     this.set('val_but', false);
                     this.set('inval_but', false);
                     this.set('info_but', false);
                 } else if (mission_status == 2 && user_group == 6) {
                     // console.log('Activating Buttons');
-                    
+
                     this.set('val_but', false);
                     this.set('inval_but', false);
                     this.set('info_but', false);
                 } else if (mission_status == 3 && user_group == 7) {
                     // console.log('Activating Buttons');
-                    
+
                     this.set('val_but', false);
                     this.set('inval_but', false);
                     this.set('info_but', false);
                 } else {
                     // console.log('Deactivating Buttons');
-                    
+
                     this.set('val_but', true);
                     this.set('inval_but', true);
                     this.set('info_but', true);
@@ -419,13 +665,13 @@
             _setProgressBarValues(iString) {
                 // console.log(iString);
                 console.log('Checeking progress bar values...', iString);
-                
+
                 var groups = iString.split('|');
                 for (var i = 0; i < groups.length; i++) {
                     groups[i] = groups[i].split(';');
                     groups[i].splice(0, 1);
-                    console.log('group '+i, groups[i]);
-                    
+                    console.log('group ' + i, groups[i]);
+
                 }
                 // console.log('grouped user', groups);
                 if (groups[0][0] == '') this.set('valval', 0);
@@ -439,7 +685,7 @@
                 // console.log('id status', id);
                 if (id == 0) {
                     console.log('Etape 0!! ');
-                    
+
                     this.set('selSteps', 'Steps0');
                 } else {
                     this.set('selSteps', 'mainSteps');
@@ -447,41 +693,26 @@
                 if (id >= 2) {
                     this.set('isChecked1', true); //En cours expert = valider ecoute
                     this.$.check1.classList.add('green');
-                }
-                else{
+                } else {
                     this.$.check1.classList.remove('green');
                     this.set('isChecked1', false);
                 }
                 if (id >= 3) {
                     this.set('isChecked2', true); //En courd comité = valider expert
                     this.$.check2.classList.add('green');
-                }
-                else{
+                } else {
                     this.$.check2.classList.remove('green');
                     this.set('isChecked2', false);
                 }
                 if (id == 4) {
                     this.set('isChecked3', true); // Est un projet validé
                     this.$.check3.classList.add('green');
-                }
-                else{
+                } else {
                     this.$.check3.classList.remove('green');
                     this.set('isChecked3', false);
                 }
             }
-            _submitParticip() {
-                var url = '/maria/submit-participation';
-                this.$.ajaxEl.url = url;
-                this.$.ajaxEl.body = {
-                    pseudo: this.storedUser.pseudo,
-                    id_Utilisateurs: this.storedUser.id_Utilisateurs,
-                    id_Status: this.projectData.id_Status,
-                    id_Mission: this.projectData.id_Mission,
-                    string: '|' + this.storedUser.id_Utilisateurs + ';' + this.storedUser.pseudo
-                };
-                this.$.ajaxEl.method = "POST";
-                this.$.ajaxEl.generateRequest();
-            }
+
         }
         window.customElements.define(ResumeTab.is, ResumeTab);
     </script>

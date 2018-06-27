@@ -9,44 +9,54 @@
             :host {
                 display: block;
             }
-            #spinner
-            {
+
+            #spinner {
                 margin-left: 50%;
                 margin-right: 50%;
                 display: none;
             }
-            table 
-            { 
+
+            table {
                 border: 1px solid transparent;
-                border-collapse: collapse; 
+                border-collapse: collapse;
                 border-spacing: 0;
                 color: #333;
                 margin: 25px;
             }
-            
-            tr{border-bottom: 1px solid #AAA;}
-            tr:last-of-type{border: none;}
-            td, th {height: 30px;} 
-            
-            th
-            {
+
+            tr {
+                border-bottom: 1px solid #AAA;
+            }
+
+            tr:last-of-type {
+                border: none;
+            }
+
+            td,
+            th {
+                height: 30px;
+            }
+
+            th {
                 padding: 5px 15px;
                 background: rgb(43, 43, 43);
-                color: #ddd; /* Light grey background */
-                font-weight: bold; 
-                text-align: center;  
+                color: #ddd;
+                /* Light grey background */
+                font-weight: bold;
+                text-align: center;
             }
-            td
-            {
+
+            td {
                 padding: 3px 30px 3px 30px;
-                
+
             }
-            .link:hover{
+
+            .link:hover {
                 background-color: rgba(0, 0, 0, 0.356);
                 cursor: pointer;
             }
         </style>
-        
+
         <template is="dom-if" if={{spin}}>
             <paper-spinner id="spinner" active></paper-spinner>
             Chargement de la liste des alertes...
@@ -65,7 +75,9 @@
                     <template is="dom-repeat" items="{{tableData}}" as="data">
                         <tr>
                             <!-- <td class="link" on-click="_test" data-projectid$="[[data.id_Mission]]">{{data.id_Mission}}</td> -->
-                            <td><a href="[[rootPath]]alert-page/{{data.id_Mission}}" data-page={{data.id_Mission}}>{{data.id_Mission}}</a></td>
+                            <td>
+                                <a href="[[rootPath]]alert-page/{{data.id_Mission}}" data-page={{data.id_Mission}}>{{data.id_Mission}}</a>
+                            </td>
                             <td>{{data.nom}}</td>
                             <td>{{data.resume}}</td>
                         </tr>
@@ -73,8 +85,8 @@
                 </tbody>
             </table>
         </template>
-        <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="ajaxEl"content-type="application/json" on-response="handleResponse"></iron-ajax>
-        
+        <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
+
     </template>
     <script>
         class alertTable extends Polymer.Element {
@@ -83,10 +95,10 @@
             }
             static get properties() {
                 return {
-                    wanted:{
-                        type:String
+                    wanted: {
+                        type: String
                     },
-                    trigger:{
+                    trigger: {
                         observer: '_getData'
                     }
                 };
@@ -99,37 +111,38 @@
             // _test(evt)
             // {
             //     //console.log("Etape 1 ", evt);
-                
+
             //     this.dispatchEvent(new CustomEvent('alert', {detail : {project_id: evt.target.dataset.projectid}}));
             //     //console.log(evt);
             //     //console.log(evt.target.dataset.mid);
             // }
-            _getData(){
+            _getData() {
                 console.log('Getting Project List...');
-                
+
                 this.set('spin', true);
                 this.$.ajaxEl.url = "/missions/get";
                 this.$.ajaxEl.method = "POST"
-                this.$.ajaxEl.body = {wanted : this.wanted};
+                this.$.ajaxEl.body = {
+                    wanted: this.wanted
+                };
                 this.$.ajaxEl.generateRequest();
             }
-            handleResponse(evt){
+            handleResponse(evt) {
                 //console.log(evt.detail.response);
                 this._buildTable(evt.detail.response);
             }
-            _buildTable(data)
-            {
-                if(data[0]){
+            _buildTable(data) {
+                if (data[0]) {
                     this.tableHead = Object.keys(data[0]);
                     this.tableData = data;
                     this.set('spin', false);
+                    console.log('data0', data);
                     setTimeout(() => {
                         //this._test();
                     });
-                }
-                else{
+                } else {
                     this.set('spin', false);
-                    
+
                 }
             }
         }

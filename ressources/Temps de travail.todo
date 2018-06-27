@@ -1,0 +1,36 @@
+Tache : 
+    Mes tâches et mon rôle ont déjà été explicitées dans le Lot 2, 
+Outils de travail  :
+    GitHub (Gestionnaire de version de codes) : https://github.com/NeitoFR/Ark
+    Visual Sutido Code (IDE open source axé développement web)
+    phpMyAdmin (Gestionnaire de base de données)
+
+Technologies utilisées : 
+    Codage de l'interface  : Polymer 2.X 
+    Codage du serveur : NodeJS  (v8.9.4) 
+        Dépendance majeur : 
+            Express pour le routage (v4.X)
+            maria-sql pour les requête SQL(0.2.6)
+Temps de travail : 
+    Les sessions précédant le développement :
+        Nous avons, avec Jeremy, réalisé beaucoup de réunion en amont du développement de la plateforme, pour se répartir les tâches, 
+        discuter et analyser l'infrastructure logiciel de notre solution, ainsi que baliser les travaux à rendre pour le Lot 1 et Lot 2.
+        Sur la periode précédent le mois de Mars, nous avions effectué 7 réunions formel (dont les compte rendu sont trouvable en annexe,
+        ainsi qu'une multitude de discussions informelle sur nos médias de discussions et dans l'enceinte de l'établissement.
+    Les sessions de développement du site web(basées sur les dates de commit) :
+        Du 12 Mars au 23 Mars
+            Temps de travail estimé 60 heure
+        Du 7 avril au 29 avril 
+            Temps de travail estimé : 80 – 100 heures
+        Du 9 Mai au 27 Mai 
+            Temps de travail estimé : 150 heures
+        Hors Session : Temps de travail estimé : 40 heures
+
+Les points que tout le monde doit fournir à Pascal :
+    -Temps de travail
+    Plus de 80 commit, environ 5000 lignes de code (4200 pour l’interface et 800 pour le serveur).
+    Date du premier commit : 12 Mars
+
+    -Tache
+    -Présentation perso
+    -Avis personnel sur le projet

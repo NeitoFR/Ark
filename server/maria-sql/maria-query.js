@@ -1,10 +1,11 @@
 "use strict"
-var Client = require('mariasql');
+var Client = require('mariasql'),
+    moment = require('moment');
 require('dotenv').config();
 
 var init = function (base) {
     //console.log(process.env);
-    
+
     var c = new Client({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
@@ -14,11 +15,23 @@ var init = function (base) {
     });
     return c;
 }
-
 exports.getUsers = function (callback) {
     var c = init(process.env.B_USER);
-    
+
     c.query('SELECT * FROM utilisateurs', function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getUserDataFromPseudo = function (pseudo, callback) {
+    var c = init(process.env.B_USER);
+    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, mes_alertes, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE pseudo=\'" + pseudo + "\';";
+    c.query(query, function (err, res) {
         if (err) {
             c.end();
             callback(err, null);
@@ -30,9 +43,301 @@ exports.getUsers = function (callback) {
 }
 exports.getUserInfo = function (id, callback) {
     var c = init(process.env.B_USER);
-    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE id_Utilisateurs=\'" + id + "\';";
+    var query = "SELECT id_Utilisateurs, pseudo, nom, prenom, mes_alertes, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE id_Utilisateurs=\'" + id + "\';";
     c.query(query, function (err, res) {
         if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+
+
+
+//Authentication related query
+exports.createUser = function (data, callback) {
+    var c = init(process.env.B_USER);
+    var query = 'INSERT INTO `utilisateurs` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `mes_alertes`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
+    VALUES (NULL, \'' + data.pseudo + '\', \'' + data.nom + '\', \'' + data.prenom + '\', \'' + data.password + '\', \'\', \'0\', \'1\', \'' + data.email + '\', \'' + data.phone + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.address + '\', \'1\');';
+    //console.log(query);
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.verifyUser = function (data, callback) {
+    var c = init(process.env.B_USER),
+
+        query = 'SELECT id_Utilisateurs, pseudo, nom, prenom, mes_alertes, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE `pseudo` = \'' + data.pseudo + '\' AND `password` = \'' + data.password + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+
+    });
+}
+exports.addComment = function (data, id, callback) {
+    // console.log('data', data, 'id', id)
+    var c = init(process.env.B_MISSION),
+        toAppend = '|' + Object.keys(data)[0] + "|" + data[Object.keys(data)[0]],
+        query = 'UPDATE missions SET commentaires = CONCAT(commentaires, \'' + toAppend + '\') WHERE id_Mission=\'' + id + '\';';
+
+    //console.log('comment to append : ', toAppend);
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getCommentThread = function (id, callback) {
+    var c = init(process.env.B_MISSION),
+        query = "SELECT commentaires FROM missions WHERE id_Mission=\'" + id + "\';";
+
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.updateAlertStatus = function (data, callback) {
+    var c = init(process.env.B_MISSION);
+
+    var query = 'UPDATE missions SET `id_Status` = \'' + data.id_Status + '\' WHERE id_Mission=\'' + data.id_Mission + '\';';
+
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('Erreur updating status', err);
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getAlerts = function (wanted, callback) {
+    var query;
+
+    switch (wanted) {
+        case "all":
+            query = "SELECT id_Mission, nom, resume FROM missions WHERE `visible` <> 1";
+            break;
+
+        case "new":
+
+            break;
+
+        default:
+            break;
+    }
+    var c = init(process.env.B_MISSION);
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.addTask = function (data, callback) {
+    var c = init(process.env.B_GEST);
+
+    var query = 'INSERT INTO `taches` (`id_Tache`, `resume`, `date_debut`, `date_fin`, `liste_actions`, `participants`, `deroulement`, `id_Mission`, `id_Commandes`, `a_nettoyer`) VALUES (NULL, \''+data.resume+'\', \''+moment(data.debut).format('DD-MM-YYYY')+'\', \''+moment(data.date_fin).format('DD-MM-YYYY')+'\', \'\', \'\', \'\', \''+data.id_Mission+'\', \'\', \'0\')';
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('error adding task ',err);
+            
+            c.end();
+            callback(err, null);
+        } else {
+            console.log('add task ok');
+            
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.deleteOrHideMission = function (data, callback) {
+    var c = init(process.env.B_MISSION);
+    var query = '';
+    if(data.id_Status == 0 || data.id_Status == 1)
+    query = 'DELETE FROM `missions` WHERE `missions`.`id_Mission` = '+data.id_Mission+';'
+    else
+    query = 'UPDATE `missions` SET `visible` = \'1\' WHERE `missions`.`id_Mission` = '+data.id_Mission+';'
+
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.deleteRelatedTask = function (data, callback) {
+    var c = init(process.env.B_GEST);
+
+    var query = 'UPDATE `taches` SET `a_nettoyer` = \'1\' WHERE `taches`.`id_Mission` = '+data.id_Mission+';';
+
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+
+exports.getTaskOfMission = function (id, callback) {
+    var c = init(process.env.B_GEST);
+
+    var query = 'SELECT `id_Tache` ,`resume` ,`date_debut` ,`date_fin` ,`liste_actions` ,`participants` ,`deroulement` ,`id_Mission` ,`id_Commandes` ,`a_nettoyer` FROM taches WHERE id_Mission=\'' + id + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.createAlert = function (data, callback) {
+    var c = init(process.env.B_MISSION);
+    // console.log(data.log);
+    data.log = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.data.id_Utilisateurs + ';' + data.data.id_Groupe + ';' + data.data.pseudo + ';' + '0' + ';' + "1" + ';' + '';
+
+    var query = 'INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `liste_taches`, `visible`)  \
+    VALUES (NULL, \'' + data.alertName + '\', \'' + data.summary + '\', \'' + (moment().format("DD-MM-YYYY HH:mm")) + '\', \'' + data.continent + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.id_Espece + '\', \'1\', \'' + data.desc + '\', \'\', \'' + data.initiateur + '\', \'||\', \'\', \'\', \'0\', \'0\',\'' + data.log + '\',\'\', \'0\');';
+    // VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', \'\', \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
+    //console.log(query);
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getAlertById = function (id, callback) {
+    var c = init(process.env.B_MISSION);
+
+    var query = 'SELECT * FROM missions WHERE id_Mission=\'' + id + '\';';
+    //console.log(query);
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getEspece = function (id, callback) {
+    var c = init(process.env.B_TAXO);
+
+    var query = 'SELECT espece FROM espece WHERE id_Espece =\'' + id + '\';';
+    //console.log(query);
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            // console.log("animal", res);
+
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getCommentFromMissionId = function (id, callback) {
+    var c = init(process.env.B_MISSION);
+
+    var query = 'SELECT commentaires FROM missions WHERE id_Mission =\'' + id + '\';';
+    //console.log(query);
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            // console.log("animal", res);
+
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+
+exports.getAnimals = function (callback) {
+    var c = init(process.env.B_TAXO);
+
+    var query = 'SELECT espece, id_Espece FROM espece;';
+    //console.log(query);
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+//Admin query
+exports.updateIdGroupe = function (data, callback) {
+    var c = init(process.env.B_USER);
+
+    var query = 'UPDATE utilisateurs SET `id_Groupe` = \'' + data.id_Groupe + '\' WHERE pseudo=\'' + data.pseudo + '\';';
+
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('Erreur ', err);
+
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.updateIdUser = function (data, callback) {
+    var c = init(process.env.B_USER);
+
+    var query = 'UPDATE utilisateurs SET `id_Utilisateurs` = \'' + data.new + '\' WHERE id_Utilisateurs=\'' + data.old + '\';';
+
+    c.query(query, function (err, res) {
+        if (err) {
+            console.log('Erreur ', err);
+
             c.end();
             callback(err, null);
         } else {
@@ -44,45 +349,11 @@ exports.getUserInfo = function (id, callback) {
 exports.sumbitParticipation = function (data, callback) {
     var c = init(process.env.B_MISSION);
     // console.log(data);
-    
+
     // var query = 'INSERT INTO `missions` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
     // VALUES (NULL, \''+data.pseudo+'\', \''+data.nom+'\', \''+data.prenom+'\', \''+data.password+'\', \'0\', \'0\', \'1\', \''+data.email+'\', \''+data.phone+'\', \''+data.country+'\', \''+data.city+'\', \''+data.address+'\', \'1\');';
     var query = 'UPDATE missions SET m_potentiel = CONCAT(m_potentiel, \'' + data.string + '\') WHERE id_Mission=\'' + data.id_Mission + '\';';
-    
-    c.query(query, function (err, res) {
-        if (err) {
-            c.end();
-            callback(err, null);
-        } else {
-            c.end();
-            callback(null, res);
-        }
-    });
-}
-exports.submitAvis = function (data, callback) {
-    var c = init(process.env.B_MISSION);
-    // callback(null, 'Merci d\'avoir '+data.avis);
-    
-    // var query = 'INSERT INTO `missions` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
-    // VALUES (NULL, \''+data.pseudo+'\', \''+data.nom+'\', \''+data.prenom+'\', \''+data.password+'\', \'0\', \'0\', \'1\', \''+data.email+'\', \''+data.phone+'\', \''+data.country+'\', \''+data.city+'\', \''+data.address+'\', \'1\');';
-    // var query = 'UPDATE missions SET m_potentiel = CONCAT(m_potentiel, \''+data.string+'\') WHERE id_Mission=\''+data.id_Mission+'\';';
-    
-    // c.query(query, function(err, res)
-    // {
-    //     if (err){
-    //         c.end();
-    //         callback(err, null);
-    //     }
-    //     else{
-    //         c.end();
-    //         callback(null, res);
-    //     }
-    // });
-}
-exports.updateVCurStep = function (id_Mission, v_cur_step, callback) {
-    console.log('id mission ' + id_Mission);
-    var c = init(process.env.B_MISSION);
-    var query = 'UPDATE missions SET `v_cur_step` = \''+v_cur_step+'\' WHERE id_Mission=\'' + id_Mission + '\';';
+
     c.query(query, function (err, res) {
         if (err) {
             c.end();
@@ -107,120 +378,92 @@ exports.getVCurStep = function (id_Mission, callback) {
         }
     });
 }
-//Authentication related query
-exports.createUser = function (data, callback) {
+exports.updateVCurStep = function (id_Mission, v_cur_step, callback) {
+    console.log('id mission ' + id_Mission);
+    var c = init(process.env.B_MISSION);
+    var query = 'UPDATE missions SET `v_cur_step` = \'' + v_cur_step + '\' WHERE id_Mission=\'' + id_Mission + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.updateMissionStatus = function (data, voteurs, _new, callback) {
+
+    var c = init(process.env.B_MISSION);
+    var old = data.id_Status;
+
+    var query = 'UPDATE missions SET `id_Status` = \'' + _new + '\', `v_cur_step` = \'||\' WHERE id_Mission=\'' + data.id_Mission + '\';';
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.logNewAlert = function (data) {
+    var string = '|' + data.id_Mission + ';' + data.nom + ';' + data.resume;
     var c = init(process.env.B_USER);
-    var query = 'INSERT INTO `utilisateurs` (`id_Utilisateurs`, `pseudo`, `nom`, `prenom`, `password`, `nb_Alerte`, `nb_Projet`, `id_Groupe`, `email`, `phone`, `pays`, `ville`, `adresse`, `visible`) \
-    VALUES (NULL, \'' + data.pseudo + '\', \'' + data.nom + '\', \'' + data.prenom + '\', \'' + data.password + '\', \'0\', \'0\', \'1\', \'' + data.email + '\', \'' + data.phone + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.address + '\', \'1\');';
-    //console.log(query);
+    var query = 'UPDATE utilisateurs SET `mes_alertes` = CONCAT(mes_alertes, \'' + string + '\') WHERE id_Utilisateurs =\'' + data.id_Utilisateurs + '\';';
     c.query(query, function (err, res) {
         if (err) {
+            console.log('Error logging', err);
             c.end();
-            callback(err, null);
         } else {
+            console.log('Logging ok');
             c.end();
-            callback(null, res);
         }
     });
 }
-exports.verifyUser = function (data, callback) {
-    var c = init(process.env.B_USER),
-    
-    query = 'SELECT id_Utilisateurs, pseudo, nom, prenom, nb_Alerte, nb_Projet, id_Groupe, email, phone, pays, ville, adresse FROM utilisateurs WHERE `pseudo` = \'' + data.pseudo + '\' AND `password` = \'' + data.password + '\';';
-    c.query(query, function (err, res) {
-        if (err) {
-            c.end();
-            callback(err, null);
-        } else {
-            c.end();
-            callback(null, res);
-        }
-        
-    });
-}
-exports.addComment = function (data, callback) {
-    // console.log('data', data)
-    var c = init(process.env.B_MISSION),
-    toAppend = '|' + Object.keys(data)[0] + "|" + data[Object.keys(data)[0]],
-    query = 'UPDATE missions SET commentaires = CONCAT(commentaires, \'' + toAppend + '\') WHERE id_Mission=\'' + data.id + '\';';
-    
-    //console.log('comment to append : ', toAppend);
-    c.query(query, function (err, res) {
-        if (err) {
-            c.end();
-            callback(err, null);
-        } else {
-            c.end();
-            callback(null, res);
-        }
-    });
-}
-exports.getCommentThread = function (id, callback) {
-    var c = init(process.env.B_MISSION),
-    query = "SELECT commentaires FROM missions WHERE id_Mission=\'" + id + "\';";
-    
-    c.query(query, function (err, res) {
-        if (err) {
-            c.end();
-            callback(err, null);
-        } else {
-            c.end();
-            callback(null, res);
-        }
-    });
-}
-exports.getAlerts = function (wanted, callback) {
-    var query;
-    
-    switch (wanted) {
-        case "all":
-        query = "SELECT id_Mission, nom, resume FROM missions";
-        break;
-        
-        case "new":
-        
-        break;
-        
-        default:
-        break;
+exports.logAvis = function (data) {
+    if (data.complement) {
+        var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + data.avis + ';' + data.id_Status + ';' + data.complement;
+        console.log('complement!', data.complement);
+
+    } else {
+        var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + data.avis + ';' + data.id_Status + ';' + '';
+        console.log('no complement', data.complement);
     }
     var c = init(process.env.B_MISSION);
+    var query = 'UPDATE missions SET `activity_log` = CONCAT(activity_log, \'' + string + '\') WHERE id_Mission=\'' + data.id_Mission + '\';';
     c.query(query, function (err, res) {
         if (err) {
+            console.log('Error logging', err);
             c.end();
-            callback(err, null);
         } else {
+            console.log('Logging ok');
             c.end();
-            callback(null, res);
         }
     });
 }
-exports.createAlert = function (data, callback) {
+exports.logParticipation = function (data) {
+    var string = '|' + moment().format("DD-MM-YYYY HH:mm") + ';' + data.id_Utilisateurs + ';' + data.id_Groupe + ';' + data.pseudo + ';' + '4' + ';' + data.id_Status + ';' + '';
     var c = init(process.env.B_MISSION);
-    // console.log(data.log);
-    
-    var query = 'INSERT INTO `missions` (`id_Mission`, `nom`, `resume`, `date_creation`, `continent`, `pays`, `ville`, `id_Espece`, `id_Status`, `contenu`, `commentaires`, `initiateur`, `v_cur_step`, `m_potentiel`,`m_valider`, `donation`, `retour`,`activity_log`, `visible`)  \
-    VALUES (NULL, \'' + data.alertName + '\', \'' + data.summary + '\', \'2018-04-12\', \'' + data.continent + '\', \'' + data.country + '\', \'' + data.city + '\', \'' + data.id_Espece + '\', \'1\', \'' + data.desc + '\', \'\', \'' + data.initiateur + '\', \'||\', \'\', \'\', \'0\', \'0\',\'' + data.log + '\', \'0\');';
-    // VALUES (NULL, \''+data.alertName+'\', \''+data.summary+'\', \'2018-04-12\', \''+data.continent+'\', \''+data.country+'\', \''+data.city+'\', \'212\', \'1\', \'\', \'\', \''+data.desc+'\', \'\', \'\', \'\', \'0\', \'0\', \'0\');';
-    //console.log(query);
+    var query = 'UPDATE missions SET `activity_log` = CONCAT(activity_log, \'' + string + '\') WHERE id_Mission=\'' + data.id_Mission + '\';';
     c.query(query, function (err, res) {
         if (err) {
+            console.log('Error logging', err);
             c.end();
-            callback(err, null);
         } else {
+            console.log('Logging ok');
             c.end();
-            callback(null, res);
         }
     });
 }
-exports.getAlertById = function (id, callback) {
+exports.getContenuById = function (id, callback) {
     var c = init(process.env.B_MISSION);
-    
-    var query = 'SELECT * FROM missions WHERE id_Mission=\'' + id + '\';';
-    //console.log(query);
+    var query = 'SELECT contenu FROM missions WHERE id_Mission = \'' + id + '\';';
     c.query(query, function (err, res) {
         if (err) {
-            c.end();
+            console.log('Error getting contenu', err);
+            c.end();            
             callback(err, null);
         } else {
             c.end();
@@ -228,51 +471,16 @@ exports.getAlertById = function (id, callback) {
         }
     });
 }
-exports.getEspece = function (id, callback) {
-    var c = init(process.env.B_TAXO);
-    
-    var query = 'SELECT espece FROM espece WHERE id_Espece =\'' + id + '\';';
-    //console.log(query);
-    c.query(query, function (err, res) {
-        if (err) {
-            c.end();
-            callback(err, null);
-        } else {
-            // console.log("animal", res);
-            
-            c.end();
-            callback(null, res);
-        }
-    });
-}
-exports.getCommentFromMissionId = function (id, callback) {
+exports.updateContenuById = function (data, id, callback) {
     var c = init(process.env.B_MISSION);
-    
-    var query = 'SELECT commentaires FROM missions WHERE id_Mission =\'' + id + '\';';
-    //console.log(query);
+    var query = 'UPDATE missions SET `contenu` = \''+data.contenu+'\' WHERE id_Mission=\'' + id + '\';';
     c.query(query, function (err, res) {
         if (err) {
+            console.log('Error logging', err);
             c.end();
             callback(err, null);
         } else {
-            // console.log("animal", res);
-            
-            c.end();
-            callback(null, res);
-        }
-    });
-}
-
-exports.getAnimals = function (callback) {
-    var c = init(process.env.B_TAXO);
-    
-    var query = 'SELECT espece, id_Espece FROM espece;';
-    //console.log(query);
-    c.query(query, function (err, res) {
-        if (err) {
-            c.end();
-            callback(err, null);
-        } else {
+            console.log('Logging ok');
             c.end();
             callback(null, res);
         }

@@ -1,0 +1,51 @@
+Réunion : 
+    Sujet : 
+        Méthode : Suivi de la note présente sur air table : https://docs.google.com/document/d/1TsOqvbKnBphmEk7amD0HIIuRhJ4r1aq2hajUzr_bMHA/edit
+        Point manquant : 
+            ✔ Justification de la structure de l'application @done (2018-6-19 00:34:50)
+            ☐ Compartif technos
+            ☐ deux branches master et dev
+            ☐ Quels sont les actions loggé + exemple
+        
+Lexique : 
+    ☐ Front-end
+    ☐ Back-end
+    ☐ API
+    ☐ HTML 
+    ☐ Polymer
+    ☐ NodeJS
+    ☐ Framework
+    ☐ HTTP
+    ☐ UI
+    ☐ Web Components
+    ☐ NPM
+    ☐ Modal
+
+Les Routes :
+    GET :
+        ✘ /maria/users @cancelled (2018-6-19 14:47:33)
+        ✔ /maria/users/:id @done (2018-6-19 21:50:27)
+        ✔ /maria/get-comments/:id @done (2018-6-19 18:06:53)
+        ✘ /missions/alert-status-1 @cancelled (2018-6-19 21:50:25)
+        ✔ /missions/:project_id @done (2018-6-19 17:56:38)
+        ✔ /comment/:id @done (2018-6-19 14:47:55)
+        ✔ /maria/get-animals @done (2018-6-19 21:50:18)
+        ✔ /mission/contenu/:id @done (2018-6-19 21:50:18)
+        ☐ /get-task/:id
+        
+    POST :
+        ✔ /signin @done (2018-6-19 14:18:58)
+        ✔ /signup @done (2018-6-19 14:18:59)
+        ✔ /maria/add-comment @done (2018-6-19 14:33:16)
+        ✘ /missions/get @cancelled (2018-6-19 14:47:38)
+        ✔ /maria/create-alert @done (2018-6-19 14:54:12)
+        ✔ /mission/update-contenu @done (2018-6-19 21:50:14)
+        ☐ /add/task
+        ☐ /maria/submit-participation
+        ☐ /maria/submit-avis
+    
+
+    ADMIN :
+    ✘ /admin/update-id-group @cancelled (2018-6-19 21:50:01)
+    ✘ /admin/update-id-user @cancelled (2018-6-19 21:50:03)
+    ✘ /admin/update-alert-status @cancelled (2018-6-19 21:50:09)

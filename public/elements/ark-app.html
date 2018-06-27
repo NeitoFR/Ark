@@ -11,6 +11,7 @@
 <link rel='import' href='../bower_components/paper-styles/color.html'>
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel='import' href='../bower_components/px-icon-set/px-icon-set.html'>
 <!-- Structure Layout Components -->
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <!-- Common Layout Components -->
@@ -25,6 +26,7 @@
 <link rel="lazy-import" href="profile-page.html">
 <link rel="lazy-import" href="alert-list.html">
 <link rel="lazy-import" href="alert-create.html">
+<link rel="lazy-import" href="about-page.html">
 <link rel='import' href='admin-panel.html'>
 <link rel="import" href="alert-page.html">
 <!-- No lazy import on those for the global variable to be accessible at loading -->
@@ -136,6 +138,10 @@
         <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
         <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
+        <admin-panel id='adminPanel' stored-user={{storedUser}} project-data={{projectData}}></admin-panel>
+        <!-- <template is="dom-if" if={{isAdminVisible}}>
+        </template> -->
+
         <!-- Navbar -->
         <ul>
             <iron-selector selected="[[page]]" role="navigation">
@@ -152,9 +158,11 @@
                     <!--  -->
                     <a href="[[rootPath]]home-page">L'Arche de Noé</a>
                 </li>
-                <li class="app-title" on-tap="_testButton">
-                    <a>Dev button</a>
-                </li>
+                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
+                    <li class="app-title" on-tap="_toggleAdminPanel">
+                        <a>Admin Panel</a>
+                    </li>
+                </template>
                 <template is="dom-if" if="{{!storedUser.loggedin}}">
                     <li class="app-link">
                         <a href="[[rootPath]]register-login">
@@ -185,11 +193,11 @@
             <home-page name="home-page"></home-page>
             <not-found name="not-found"></not-found>
             <register-login name="register-login"></register-login>
-            <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}}></profile-page>
+            <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}} table-data={{storedUser.mes_alertes}}></profile-page>
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
-            <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}}></alert-page>
-            <admin-panel name='admin-panel' trigger={{admtr}}></admin-panel>
+            <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage' stored-user={{storedUser}}></alert-page>
+            <about-page name="about-page"trigger={{abtr}} pseudo={{storedUser.pseudo}}></alert-page>
         </iron-pages>
         <app-drawer id='drawer'>
             <p id="drawer-head">Votre Arche</p>
@@ -197,9 +205,10 @@
                 <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Acceuil</a>
                 <a href="[[rootPath]]alert-list">Liste des alertes</a>
                 <a href="[[rootPath]]profile-page">Profil</a>
-                <!-- <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.id_Groupe)}}">
-                    <a href="[[rootPath]]admin-panel">Admin Panel</a>
-                </template> -->
+                <a href="[[rootPath]]about-page">Tout savoir sur l'Arche</a>
+                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
+                    <a on-tap='_toggleAdminPanel'>Admin Panel</a>
+                </template>
             </iron-selector>
         </app-drawer>
         <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
@@ -223,7 +232,11 @@
                     },
                     actr: Boolean,
                     pptr: Boolean,
-                    aptr: Boolean
+                    aptr: Boolean,
+                    isAdminVisible: {
+                        type: Boolean,
+                        value: true
+                    }
                 }
             }
             static get observers() {
@@ -235,26 +248,32 @@
                 super.ready();
                 if (!this.storedUser) this.storedUser = {};
                 const alertlist = this.$.alertlist;
-                /*alertlist.addEventListener('mission', function(evt){
-                    //console.log("Etape 3", evt.detail.project_id);
-                    this.projectId = evt.detail.project_id;
-                    //window.history.pushState({}, null, '/alert-page');
-                    this._routePageChanged('alert-page');
-                }.bind(this));*/
+                this.$.alertpage.addEventListener('projectData', function (evt) {
+                    this.set('projectData', evt.detail.projectData);
+                }.bind(this));
+                this.$.adminPanel.addEventListener('askprojectdata', function (evt) {
+                    this.aptr = !this.aptr;
+                }.bind(this));
+                this.$.adminPanel.addEventListener('askuserdata', function (evt) {
+                    this._updateUserDataFromAdmin();
+                }.bind(this));
+                this.$.adminPanel.addEventListener('closeModal', function (evt) {
+                    this._toggleAdminPanel();
+                }.bind(this));
+                this._toggleAdminPanel();
             }
-            _changePage(evt) {
-                //console.log(evt.path["0"].dataset.page);
-                this.page = evt.path["0"].dataset.page;
-                this.notifyPath('page');
+            _toggleAdminPanel() {
+                getComputedStyle(this.$.adminPanel).display == 'none' ? this.$.adminPanel.setAttribute('style',
+                    'display: block') : this.$.adminPanel.setAttribute('style', 'display: none')
             }
             _testButton(evt) {
-                // console.log('Stored User :', this.storedUser);
-                console.log('user storage', localStorage.getItem('user-storage'));
-
+                console.log('Stored User :', this.storedUser);
+                // console.log('user storage', localStorage.getItem('user-storage'));
+                console.log(this.projectData);
             }
-            _isAdminPanelVisible(id_group) {
-                return false;
-                // return id_group == 7 ? true : false;
+            _isAdminPanelVisible(pseudo) {
+                // return false;
+                return pseudo == 'neitofr' ? true : false;
             }
             _routePageChanged(page) {
                 console.log('page changed', page);
@@ -301,19 +320,35 @@
                     this.$.ajaxEl.generateRequest();
                 }
             }
+            _updateUserDataFromAdmin() {
+                if (this.storedUser.pseudo) {
+                    this.$.ajaxEl.url = '/admin/users/' + this.storedUser.pseudo;
+                    this.$.ajaxEl.method = 'GET'
+                    this.$.ajaxEl.generateRequest();
+                }
+            }
             handleResponse(evt) {
-                if (evt.detail.url.includes('/maria/users/')) {
-                    // console.log(evt.detail.response[0]);
-
+                if (evt.detail.url.includes('/users/')) {
+                    console.log('new user data', evt.detail.response[0]);
+                    var user = localStorage['user-storage'];
+                    user = JSON.parse(user);
                     var newUser = evt.detail.response[0];
                     var keys = Object.keys(evt.detail.response[0]);
                     var cpt = [];
                     keys.forEach(key => {
                         if (this.storedUser[key] != newUser[key]) {
-                            this.storedUser[key] = newUser[key];
+                            // this.storedUser[key] = newUser[key];
+                            const str = 'storedUser.' + key;
+                            this.set(str, newUser[key]);
                             cpt.push(key);
                         }
                     });
+                    user.id_Utilisateurs = evt.detail.response[0].id_Utilisateurs;
+                    user.id_Groupe = evt.detail.response[0].id_Groupe;
+                    user.mes_alertes = evt.detail.response[0].mes_alertes;
+                    user = JSON.stringify(user);
+                    localStorage['user-storage'] = user;
+
                     if (cpt.length != 0) console.log(' nouvelles valeurs', cpt);
                 }
             }

@@ -14,51 +14,87 @@
             :host {
                 display: block
             }
-            
-            .header div {
+
+            .tab {
                 width: 120px;
-                text-align: center;
+                /* text-align: center; */
                 padding: 5px 15px;
-                
-            }
-            .header div:hover{
-                cursor: pointer;
-            }
-            iron-selector   .iron-selected{
+                font-size: 2rem;
+                /* border-bottom: 1px solid black; */
                 border-top: 1px solid black;
                 border-left: 1px solid black;
                 border-right: 1px solid black;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
             }
+
+            .header div:hover {
+                cursor: pointer;
+            }
+
+            iron-selector .iron-selected {
+                border-top: 1px solid black;
+                border-left: 1px solid black;
+                border-right: 1px solid black;
+                border-bottom: none;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+                background-color: white;
+            }
+
             .container {
                 position: relative;
             }
-            
+
             .content {
                 width: 100%;
             }
+            .right-text{
+                text-align: right
+            }
+            .left-text{
+                text-align: left;
+                padding: 5px;
+            }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        
+
         <div class="flex flex--col container">
-            <iron-selector selected="{{selTab}}" attr-for-selected="name" fallback-selection="resume-tab" role="navigation" class="flex flex--row flex__item--top header">
-                <div class="flex__item--top flex__item" name="resume-tab">Détails</div>
-                <div class="flex__item--top flex__item" name="activitylog-tab">Fil d'activité</div>
+            <iron-selector selected="{{selTab}}" attr-for-selected="name" fallback-selection="resume-tab" role="navigation" class="flex flex--row flex__item header">
+
+                <div class="flex__item--top flex__item flex flex--row tab" name="resume-tab">
+                    <div class="flex__item--top right-text">
+                        <px-icon icon="px-fea:dashboard"></px-icon>
+                    </div>
+                    <div class="flex__item left-text">Détails</div>
+                </div>
+                <div class="flex__item--top flex__item flex flex--row tab" name="activitylog-tab">
+                    <div class="flex__item--top right-text">
+                        <px-icon icon="px-nav:list-view"></px-icon>
+                    </div>
+                    <div class="flex__item left-text">Fil d'activité</div>
+                </div>
                 <template is="dom-if" if={{_taskVisible(storedUser.id_Groupe)}}>
-                    <div class="flex__item--top flex__item" name="task-tab">Tâches</div>
+                    <div class="flex__item--top flex__item flex flex--row tab" name="task-tab">
+                        <div class="flex__item--top right-text">
+                            <px-icon icon="px-fea:log"></px-icon>
+                        </div>
+                        <div class="flex__item left-text">Tâches</div>
+                    </div>
                 </template>
             </iron-selector>
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
-                <resume-tab name='resume-tab' project-data={{projectData}} id='rstab'></resume-tab>
+                <resume-tab name='resume-tab' project-data={{projectData}} stored-user={{storedUser}} id='rstab'></resume-tab>
                 <activitylog-tab name='activitylog-tab' project-data={{projectData}} log-data={{logData}}></activitylog-tab>
-                <task-tab name='task-tab' project-data={{projectData}}></task-tab>
+                <task-tab name='task-tab' project-data={{projectData}} id='tstab' raw-task-list={{rawTaskList}} trigger={{tttr}}></task-tab>
             </iron-pages>
-            
+
             <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="ajaxEl" content-type="application/json" on-response="handleResponse"></iron-ajax>
         </div>
     </template>
     <script>
         class alertPage extends Polymer.Element {
-            
+
             static get is() {
                 return 'alert-page';
             }
@@ -79,30 +115,47 @@
                 this.$.rstab.addEventListener('askprojectdata', function () {
                     this._getProjectData(this.projectId);
                 }.bind(this));
+                this.$.tstab.addEventListener('askprojectdata', function () {
+                    this._getProjectData(this.projectId);
+                }.bind(this));
             }
-            _aptrChanged(){
+            _aptrChanged() {
                 this._getProjectData(this.projectId);
             }
-            _taskVisible(id_group){
+            _taskVisible(id_group) {
                 return (id_group == '6' || id_group == '7') ? true : false;
             }
-            _projectIdChanged(val){
-                // this._getProjectData(val);
+            _getRelatedTask() {
+                this.$.ajaxEl.url = '/get-task/' + this.projectData.id_Mission;
+                this.$.ajaxEl.method = "GET";
+                this.$.ajaxEl.generateRequest();
             }
             _getProjectData(projectId) {
                 // console.log('Getting Projet Data...');
-                
+
                 var url = '/missions/' + projectId;
                 this.$.ajaxEl.url = url;
                 this.$.ajaxEl.method = "GET";
                 this.$.ajaxEl.generateRequest();
             }
             handleResponse(evt) {
-                // console.log(evt.detail.response);
-                this.set('projectData', evt.detail.response[0][0]);
-                this.set('projectData.espece', evt.detail.response[1][0].espece);
-                this.set('logData', evt.detail.response[0][0].activity_log);
-                console.log('Project Data ', this.projectData);
+                if (evt.detail.url.includes('/missions/')) {
+                    // console.log(evt.detail.response);
+                    this.set('projectData', evt.detail.response[0][0]);
+                    this.set('projectData.espece', evt.detail.response[1][0].espece);
+                    this.set('logData', evt.detail.response[0][0].activity_log);
+                    this._getRelatedTask();
+                    this.dispatchEvent(new CustomEvent('projectData', {
+                        detail: {
+                            projectData: this.projectData
+                        }
+                    }));
+                    console.log('Project Data ', this.projectData);
+                }
+                if (evt.detail.url.includes('/get-task/')) {
+                    // console.log('task list', evt.detail.response);
+                    this.set('rawTaskList', evt.detail.response);
+                }
             }
         }
         window.customElements.define(alertPage.is, alertPage);

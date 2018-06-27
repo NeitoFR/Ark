@@ -143,8 +143,8 @@
             }
             handleResponse(evt){
                 switch (evt.detail.url) {
-                    case "/maria/get-animals":
-                    console.log('Animal list', evt.detail.response);
+                    case "/taxonomie/get-animals":
+                    // console.log('Animal list', evt.detail.response);
                     var tab = evt.detail.response;
                     var list = [];
                     tab.forEach(animal => {
@@ -158,9 +158,10 @@
                     //console.log("list", list);
                     this.animalList = list;
                     break;
-                    case "/maria/create-alert":
+                    case "/missions/new":
                     console.log('Mission bien ajouté');
                     this.set('formData', {});
+                    window.location.replace('/');
                     break;
                     default:
                     console.log('Weird, url not referenced, might being hacked', evt.detail.url);
@@ -176,7 +177,7 @@
                 this._postAlert();
             }
             _getAnimalList(){
-                this.$.createAjax.url = "/maria/get-animals";
+                this.$.createAjax.url = "/taxonomie/get-animals";
                 this.$.createAjax.method = "GET";
                 this.$.createAjax.generateRequest();
             }
@@ -184,12 +185,15 @@
                 this._getAnimalList();
             }
             _postAlert(){
-                var date = new Date();    
-                var timestamp = +date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()+' '+date.getUTCHours() + ':' + date.getUTCMinutes();
-                this.$.createAjax.url = "/maria/create-alert";
+                this.$.createAjax.url = "/missions/new";
                 this.$.createAjax.method = "POST";
                 this.formData.initiateur = this.storedUser.id_Utilisateurs;
-                this.formData.log = '|'+timestamp+';'+this.storedUser.id_Utilisateurs+';0;'+this.storedUser.pseudo+';1;';
+                // this.formData.log = '|'+timestamp+';'+this.storedUser.id_Utilisateurs+';0;'+this.storedUser.pseudo+';1;';
+                this.formData.data = {
+                    'pseudo'  : this.storedUser.pseudo,
+                    'id_Utilisateurs' : this.storedUser.id_Utilisateurs,
+                    'id_Groupe' : this.storedUser.id_Groupe
+                }
                 this.$.createAjax.body = this.formData;
                 this.$.createAjax.generateRequest();
             }

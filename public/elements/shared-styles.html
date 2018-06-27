@@ -18,6 +18,7 @@
         --apc: #099b34;
         --asc: #4CAF50; /*App Secondary Color*/
       }
+
       .alert-error {
         background: #ffcdd2;
         border: 1px solid #f44336;
@@ -26,7 +27,7 @@
         font-size: 14px;
         padding: 10px;
       }
-      
+
       .card {
         word-wrap: break-word;
         margin: 24px;
@@ -36,170 +37,207 @@
         background-color: #fff;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
+
       h1 {
         margin: 16px 0;
         color: #212121;
         font-size: 22px;
       }
+
       blockquote {
         border-left: 4px solid #eee;
         margin-left: 4px;
         padding-left: 20px;
       }
-      
+
+      table {
+        border: 1px solid transparent;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: #333;
+        margin: 25px;
+      }
+
+      tr {
+        border-bottom: 1px solid #AAA;
+      }
+
+      tr:last-of-type {
+        border: none;
+      }
+
+      td,
+      th {
+        height: 30px;
+      }
+
+      th {
+        padding: 5px 15px;
+        background: rgb(43, 43, 43);
+        color: #ddd;
+        /* Light grey background */
+        font-weight: bold;
+        text-align: center;
+      }
+
+      td {
+        padding: 3px 30px 3px 30px;
+
+      }
+
       /* Flex template */
-      
+
       .flex {
         display: -ms-flexbox;
         display: flex;
       }
-      
+
       .inline--flex {
         display: -ms-inline-flexbox;
         display: inline-flex;
       }
-      
+
       .flex--row {
         -ms-flex-direction: row;
         flex-direction: row;
       }
-      
+
       .flex--row--rev {
         -ms-flex-direction: row-reverse;
         flex-direction: row-reverse;
       }
-      
+
       .flex--col {
         -ms-flex-direction: column;
         flex-direction: column;
       }
-      
+
       .flex--col--rev {
         -ms-flex-direction: column-reverse;
         flex-direction: column-reverse;
       }
-      
+
       .flex--nowrap {
         -ms-flex-wrap: nowrap;
         flex-wrap: nowrap;
       }
-      
+
       .flex--wrap {
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
       }
-      
+
       .flex--wrap--rev {
         -ms-flex-wrap: wrap-reverse;
         flex-wrap: wrap-reverse;
       }
-      
+
       .flex--left {
         -ms-flex-pack: start;
         justify-content: flex-start;
       }
-      
+
       .flex--center {
         -ms-flex-pack: center;
         justify-content: center;
       }
-      
+
       .flex--right {
         -ms-flex-pack: end;
         justify-content: flex-end;
       }
-      
+
       .flex--justify {
         -ms-flex-pack: justify;
         justify-content: space-between;
       }
-      
+
       .flex--spaced {
         -ms-flex-pack: distribute;
         justify-content: space-around;
       }
-      
+
       .flex--top {
         -ms-flex-align: start;
         align-items: flex-start;
       }
-      
+
       .flex--middle {
         -ms-flex-align: center;
         align-items: center;
       }
-      
+
       .flex--bottom {
         -ms-flex-align: end;
         align-items: flex-end;
       }
-      
+
       .flex--stretch {
         -ms-flex-align: stretch;
         align-items: stretch;
       }
-      
+
       .flex--baseline {
         -ms-flex-align: baseline;
         align-items: baseline;
       }
-      
+
       .flex--top--multi {
         -ms-flex-line-pack: start;
         align-content: flex-start;
       }
-      
+
       .flex--middle--multi {
         -ms-flex-line-pack: center;
         align-content: center;
       }
-      
+
       .flex--bottom--multi {
         -ms-flex-line-pack: end;
         align-content: flex-end;
       }
-      
+
       .flex--stretch--multi {
         -ms-flex-line-pack: stretch;
         align-content: stretch;
       }
-      
+
       .flex--justify--multi {
         -ms-flex-line-pack: justify;
         align-content: space-between;
       }
-      
+
       .flex--spaced--multi {
         -ms-flex-line-pack: distribute;
         align-content: space-around;
       }
-      
+
       .flex__item {
         -ms-flex: 1;
         flex: 1;
       }
-      
+
       .flex__item--msfix {
         -ms-flex: 1 1 auto;
         flex: 1 1 auto;
       }
-      
+
       .flex__item--top {
         -ms-flex-item-align: start;
         align-self: flex-start;
       }
-      
+
       .flex__item--middle {
         -ms-flex-item-align: center;
         -ms-grid-row-align: center;
         align-self: center;
       }
-      
+
       .flex__item--bottom {
         -ms-flex-item-align: end;
         align-self: flex-end;
       }
-      
+
       .flex__item--baseline {
         -ms-flex-item-align: baseline;
         align-self: baseline;
