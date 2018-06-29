@@ -10,6 +10,9 @@ const _port = 3000;
 //Server
 var app = express();
 app.use(cors());
+
+console.log(process.env);
+
 //Middleware
 app.use(express.static(path.join(__dirname, '/..', 'public')));
 app.use(bodyParser.json());
