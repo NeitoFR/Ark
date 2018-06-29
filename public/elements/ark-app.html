@@ -132,6 +132,8 @@
                 border-bottom: 1px solid #CCC;
                 padding-bottom: 15px;
             }
+
+            .small {font-size: 75%}
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         <!-- Routing stuff -->
@@ -163,6 +165,9 @@
                         <a>Admin Panel</a>
                     </li>
                 </template>
+                <li class="app-title small">
+                    <a>{{hostName}}</a>
+                </li>
                 <template is="dom-if" if="{{!storedUser.loggedin}}">
                     <li class="app-link">
                         <a href="[[rootPath]]register-login">
@@ -197,7 +202,7 @@
             <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
             <alert-create name="alert-create" trigger={{actr}}></alert-create>
             <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage' stored-user={{storedUser}}></alert-page>
-            <about-page name="about-page"trigger={{abtr}} pseudo={{storedUser.pseudo}}></alert-page>
+            <about-page name="about-page" trigger={{abtr}} pseudo={{storedUser.pseudo}}></about-page>
         </iron-pages>
         <app-drawer id='drawer'>
             <p id="drawer-head">Votre Arche</p>
@@ -236,7 +241,8 @@
                     isAdminVisible: {
                         type: Boolean,
                         value: true
-                    }
+                    },
+                    hostName: String
                 }
             }
             static get observers() {
@@ -261,6 +267,12 @@
                     this._toggleAdminPanel();
                 }.bind(this));
                 this._toggleAdminPanel();
+                this._getEnv();
+            }
+            _getEnv() {
+                this.$.ajaxEl.url = '/getEnv';
+                this.$.ajaxEl.method = 'GET';
+                this.$.ajaxEl.generateRequest();
             }
             _toggleAdminPanel() {
                 getComputedStyle(this.$.adminPanel).display == 'none' ? this.$.adminPanel.setAttribute('style',
@@ -328,6 +340,11 @@
                 }
             }
             handleResponse(evt) {
+
+                if (evt.detail.url == '/getEnv') {
+                    console.log(evt.detail.response);
+                    this.hostName = evt.detail.response.hostname
+                }
                 if (evt.detail.url.includes('/users/')) {
                     console.log('new user data', evt.detail.response[0]);
                     var user = localStorage['user-storage'];
