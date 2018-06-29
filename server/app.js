@@ -3,7 +3,6 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     path = require('path'),
-    os = require('os'),
     cors = require('cors');
 //Populate process.env variable
 require('dotenv').config();

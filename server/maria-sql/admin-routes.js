@@ -40,6 +40,17 @@ app.get('/admin/users/:pseudo', function (req, res) {
         }
     });
 });
-app.get('/getEnv', function(req, res) {
-    res.status(200).send({"hostname" : os.hostname()})
+app.get('/getEnv', function (req, res) {
+    res.status(200).send({
+        "hostname": os.hostname()
+    })
 });
+app.get('/crashApp', function (req, res) {
+    maria.crashApp(function (err, data) {
+        if (err) {
+            res.status(400).send(err).end();
+        } else {
+            res.status(200).send(data).end();
+        }
+    });
+})

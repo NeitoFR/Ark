@@ -214,6 +214,8 @@
                 <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
                     <a on-tap='_toggleAdminPanel'>Admin Panel</a>
                 </template>
+                <a on-tap='_crashApp'>#FlingueTonAppli</a>
+
             </iron-selector>
         </app-drawer>
         <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
@@ -286,6 +288,11 @@
             _isAdminPanelVisible(pseudo) {
                 // return false;
                 return pseudo == 'neitofr' ? true : false;
+            }
+            _crashApp(){
+                this.$.ajaxEl.url = '/crashApp';
+                this.$.ajaxEl.method = 'GET';
+                this.$.ajaxEl.generateRequest();
             }
             _routePageChanged(page) {
                 console.log('page changed', page);

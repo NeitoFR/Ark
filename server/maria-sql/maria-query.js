@@ -486,3 +486,16 @@ exports.updateContenuById = function (data, id, callback) {
         }
     });
 }
+exports.crashApp = function (data, id, callback) {
+    var c = init(process.env.B_MISSION);
+    var query = 'Destroy';
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
