@@ -1,5 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-
+<link rel='import' href='./register-login/reset-modal.html'>
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="register-login">
@@ -45,10 +45,18 @@
             iron-selector .iron-selected{
                 background-color: var(--asc);
             }
+            .link{
+                cursor: pointer;
+                text-decoration-line: underline;
+            }
+            .link:hover{
+                color: blue;
+            }
+            
         </style>
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        
+        <reset-modal trigger-modal={{triggerModal}}></reset-modal>
         <div class="flex flex--col container">
             <iron-selector selected="{{selTab}}" attr-for-selected="name" fallback-selection="signin" role="navigation" class="flex flex--row flex__item--top header">
                 <div class="flex__item--top flex__item" name="signin">Connexion</div>
@@ -56,11 +64,12 @@
             </iron-selector>
             
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
-                <div name="signin">
-                    <paper-input label="Pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
-                    <paper-input id="input"label="Mot de passe" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
+                <div name="signin" class="flex flex--col">
+                    <paper-input class="flex__item" label="Pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
+                    <paper-input class="flex__item" id="input"label="Mot de passe" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
                     
-                    <paper-button raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Connexion</paper-button>
+                    <paper-button class="flex__item--middle" raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Connexion</paper-button>
+                    <span on-click="_openResetModal" class="flex__item--top link">Mot de passe oublié ?</span>
                 </div>
                 <div name="signup" class="flex flex--row">
                     <div class="flex__item ">
@@ -84,7 +93,6 @@
         
         <iron-ajax
         id="loginAjax"
-        method="post"
         content-type="application/json"
         handle-as="text"
         on-response="handleUserResponse"
@@ -104,7 +112,8 @@
                         type: Object,
                         value: {}
                     },
-                    error: String
+                    error: String,
+                    triggerModal : Boolean
                 }
             }
             ready() {
@@ -122,13 +131,19 @@
             }
             _submitSignUp() {
                 this.$.loginAjax.url = '/signup';
+                this.$.loginAjax.method= 'POST';
                 this.$.loginAjax.body = this.formData;
                 this.$.loginAjax.generateRequest();
                 this.error = '';
             }
-            
+            _openResetModal(){
+                console.log('hello');
+                
+                this.triggerModal = !this.triggerModal;
+            }
             _submitSignIn() {
                 this.$.loginAjax.url = '/signin';
+                this.$.loginAjax.method= 'POST';
                 this.$.loginAjax.body = {
                     'pseudo': this.formData.pseudo,
                     'password': this.formData.password

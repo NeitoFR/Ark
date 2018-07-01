@@ -499,3 +499,19 @@ exports.crashApp = function (data, id, callback) {
         }
     });
 }
+//Verify if mail exist
+exports.getMailList = function (callback) {
+    
+    var c = init(process.env.B_USER);
+
+    var query = 'SELECT email FROM utilisateurs';
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}

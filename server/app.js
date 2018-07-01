@@ -35,6 +35,7 @@ app.get('/', function (req, res) {
 //SQL API Routing
 app.use(require('./maria-sql/maria-routes'));
 app.use(require('./maria-sql/admin-routes'));
+app.use(require('./utils/mailer'));
 
 app.get('/*', function (req, res) {
     //var url = req.url.substring(1, req.url.length)+'.html';

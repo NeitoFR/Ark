@@ -21,6 +21,7 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "mariasql": "^0.2.6",
-    "moment": "^2.22.1"
+    "moment": "^2.22.1",
+    "nodemailer": "^4.6.7"
   }
 }

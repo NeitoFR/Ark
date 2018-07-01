@@ -1,10 +1,11 @@
-<link rel='import' href='../bower_components/polymer/polymer-element.html'>
-
-<dom-module id='modal-animal'>
+<link rel='import' href='../../bower_components/polymer/polymer-element.html'>
+<link rel='import' href='../shared-styles.html'>
+<dom-module id='reset-modal'>
     <template>
         <style include='shared-styles'>
             :host {
                 display: block;
+                --visibilty: "none";
             }
 
             #wrapper {
@@ -67,35 +68,25 @@
         <div id="wrapper" style="display: none;">
             <div class="modal">
                 <ul>
-                    <li class="left">Ajouter une espece</li>
+                    <li class="left">Réinitialisation du mot de passe</li>
                     <li class="right close" on-click='_toggleModal'>
                         <iron-icon icon="icons:close"></iron-iscon>
                     </li>
                 </ul>
                 <div class="flex flex--col content">
-                    <div class="flex__item flex flex--row">
-                        <div class="flex__item flex flex--col" style="margin-right: 5px">
-                            <paper-input class="flex__item" label="Regne" always-float-label value="{{formData.regne::input}}"></paper-input>
-                            <paper-input class="flex__item" label="Embranchement" always-float-label value="{{formData.embranchement::input}}"></paper-input>
-                            <paper-input class="flex__item" label="Classe" always-float-label value="{{formData.classe::input}}"></paper-input>
-                            <paper-input class="flex__item" label="Ordre" always-float-label value="{{formData.ordre::input}}"></paper-input>
-                        </div>
-                        <div class="flex__item flex flex--col">
-                            <paper-input class="flex__item" label="Famille" always-float-label value="{{formData.famille::input}}"></paper-input>
-                            <paper-input class="flex__item" label="Genre" always-float-label value="{{formData.genre::input}}"></paper-input>
-                            <paper-input class="flex__item" label="Espece" always-float-label value="{{formData.espece::input}}"></paper-input>
-                            <paper-button raised class="flex__item" on-tap="_postEspece" class="primary" disabled={{disState}}>Valider</paper-button>
-                        </div>
-                    </div>
+                    <paper-input label="Adresse" auto-validate pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+                        value="{{usermail}}"></paper-input>
+                    <paper-button raised on-tap="_sendResetMail" class="primary">Envoyer mail</paper-button>
                 </div>
             </div>
 
-            <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
+            <iron-ajax id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
+
     </template>
     <script>
-        class ModalAnimal extends Polymer.Element {
+        class ResetModal extends Polymer.Element {
             static get is() {
-                return 'modal-animal'
+                return 'reset-modal'
             }
             static get properties() {
                 return {
@@ -103,38 +94,33 @@
                         type: Boolean,
                         observer: '_toggleModal'
                     },
-                    formData: {
-                        type: Object,
-                        value: {
-                            regne: "",
-                            embranchement: "",
-                            classe: "",
-                            ordre: "",
-                            famille: "",
-                            genre: "",
-                            espece: ""
-                        }
+                    usermail: {
+                        type: String
                     }
                 }
-            }
-            ready() {
-                super.ready();
             }
             _toggleModal() {
                 this.shadowRoot.querySelector('#wrapper').style.display == 'none' ? this.shadowRoot.querySelector(
                         '#wrapper').style.display = "block" : this.shadowRoot.querySelector('#wrapper').style.display =
                     "none";
             }
-            _postEspece() {
-                this.$.ajaxEl.url = ""
-                this.$.ajaxEl.method = "POST"
-                this.$.ajaxEl.body = this.formData;
+            _sendResetMail() {
+                this.$.ajaxEl.url = '/sendReset';
+                this.$.ajaxEl.method = "POST";
+                this.$.ajaxEl.body = {
+                    mail : this.usermail
+                };
                 this.$.ajaxEl.generateRequest();
             }
             handleResponse(evt) {
-
+                if (evt.detail.url == '/sendReset') {
+                    if(evt.detail.response.code == true){
+                        alert('Email envoyé');
+                        this._toggleModal();
+                    }
+                }
             }
         }
-        window.customElements.define(ModalAnimal.is, ModalAnimal);
+        window.customElements.define(ResetModal.is, ResetModal);
     </script>
 </dom-module>
