@@ -1,0 +1,13 @@
+
+Plan de test applicatif : 
+    Test Unitaire : 
+        Test Automatiques : 
+            ☐ Test des envois de mails 
+            ☐ Test des routes interagissant avec la MariaDB :
+            Exemple : 
+                ☐ Route de demmande d'inscription
+                ☐ Route de demande des informations concernant un projet
+                ☐ Route de demande des informations concernant un utilisateurs
+    Test Manuel : 
+        ☐ Adéqation entre une pages de l'application et le cahier des charges (charte graphique et fonctionnalités attendues) 
+        
