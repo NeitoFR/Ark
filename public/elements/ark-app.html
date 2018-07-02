@@ -133,92 +133,96 @@
                 padding-bottom: 15px;
             }
 
-            .small {font-size: 75%}
+            .small {
+                font-size: 75%
+            }
         </style>
-        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        <!-- Routing stuff -->
-        <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
-        <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+        <div class="theme-default" id='themer'>
+            <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+            <!-- Routing stuff -->
+            <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
+            <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
-        <admin-panel id='adminPanel' stored-user={{storedUser}} project-data={{projectData}}></admin-panel>
-        <!-- <template is="dom-if" if={{isAdminVisible}}>
+            <admin-panel id='adminPanel' stored-user={{storedUser}} project-data={{projectData}}></admin-panel>
+            <!-- <template is="dom-if" if={{isAdminVisible}}>
         </template> -->
 
-        <!-- Navbar -->
-        <ul>
-            <iron-selector selected="[[page]]" role="navigation">
-                <template is="dom-if" if="{{storedUser.loggedin}}">
-                    <li class="app-title" style="border-right: 1px solid #bbb" on-click="_toggleDrawer">
-                        <a>
-                            <iron-icon icon="icons:menu"></iron-icon>
-                        </a>
-                    </li>
-                </template>
-                <li class="app-title">
-                </li>
-                <li class="app-title">
-                    <!--  -->
-                    <a href="[[rootPath]]home-page">L'Arche de Noé</a>
-                </li>
-                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
-                    <li class="app-title" on-tap="_toggleAdminPanel">
-                        <a>Admin Panel</a>
-                    </li>
-                </template>
-                <li class="app-title small">
-                    <a>{{hostName}}</a>
-                </li>
-                <template is="dom-if" if="{{!storedUser.loggedin}}">
-                    <li class="app-link">
-                        <a href="[[rootPath]]register-login">
-                            <iron-icon icon="icons:power-settings-new"></iron-icon>
-                        </a>
-                    </li>
-                </template>
-                <template is="dom-if" if="{{storedUser.loggedin}}">
-                    <div class="dropdown app-link">
-                        <li class="">
+            <!-- Navbar -->
+            <ul>
+                <iron-selector selected="[[page]]" role="navigation">
+                    <template is="dom-if" if="{{storedUser.loggedin}}">
+                        <li class="app-title" style="border-right: 1px solid #bbb" on-click="_toggleDrawer">
                             <a>
+                                <iron-icon icon="icons:menu"></iron-icon>
+                            </a>
+                        </li>
+                    </template>
+                    <li class="app-title">
+                    </li>
+                    <li class="app-title">
+                        <!--  -->
+                        <a href="[[rootPath]]home-page">L'Arche de Noé</a>
+                    </li>
+                    <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
+                        <li class="app-title" on-tap="_toggleAdminPanel">
+                            <a>Admin Panel</a>
+                        </li>
+                    </template>
+                    <li class="app-title small">
+                        <a>{{hostName}}</a>
+                    </li>
+                    <template is="dom-if" if="{{!storedUser.loggedin}}">
+                        <li class="app-link">
+                            <a href="[[rootPath]]register-login">
                                 <iron-icon icon="icons:power-settings-new"></iron-icon>
                             </a>
                         </li>
-                        <div class="dropdown-content">
-                            <a href="[[rootPath]]profile-page">Profil</a>
-                            <a on-click="_logout">Se déconnecter</a>
+                    </template>
+                    <template is="dom-if" if="{{storedUser.loggedin}}">
+                        <div class="dropdown app-link">
+                            <li class="">
+                                <a>
+                                    <iron-icon icon="icons:power-settings-new"></iron-icon>
+                                </a>
+                            </li>
+                            <div class="dropdown-content">
+                                <a href="[[rootPath]]profile-page">Profil</a>
+                                <a on-click="_logout">Se déconnecter</a>
+                            </div>
                         </div>
-                    </div>
-                    <li class="app-link">
-                        <a href="[[rootPath]]alert-create" data-page="alert-create">Nouvelle alerte</a>
-                    </li>
-                </template>
-            </iron-selector>
-        </ul>
-        <!-- End of NavBar -->
-        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-            <home-page name="home-page"></home-page>
-            <not-found name="not-found"></not-found>
-            <register-login name="register-login"></register-login>
-            <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}} table-data={{storedUser.mes_alertes}}></profile-page>
-            <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
-            <alert-create name="alert-create" trigger={{actr}}></alert-create>
-            <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage' stored-user={{storedUser}}></alert-page>
-            <about-page name="about-page" trigger={{abtr}} pseudo={{storedUser.pseudo}}></about-page>
-        </iron-pages>
-        <app-drawer id='drawer'>
-            <p id="drawer-head">Votre Arche</p>
-            <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Acceuil</a>
-                <a href="[[rootPath]]alert-list">Liste des alertes</a>
-                <a href="[[rootPath]]profile-page">Profil</a>
-                <a href="[[rootPath]]about-page">Tout savoir sur l'Arche</a>
-                <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
-                    <a on-tap='_toggleAdminPanel'>Admin Panel</a>
-                </template>
-                <a on-tap='_crashApp'>#FlingueTonAppli</a>
+                        <li class="app-link">
+                            <a href="[[rootPath]]alert-create" data-page="alert-create">Nouvelle alerte</a>
+                        </li>
+                    </template>
+                </iron-selector>
+            </ul>
+            <!-- End of NavBar -->
+            <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+                <home-page name="home-page"></home-page>
+                <not-found name="not-found"></not-found>
+                <register-login name="register-login" id="registerpage"></register-login>
+                <profile-page name="profile-page" trigger={{pptr}} stored-user={{storedUser}} table-data={{storedUser.mes_alertes}}></profile-page>
+                <alert-list name="alert-list" id="alertlist" trigger={{trigger}}f></alert-list>
+                <alert-create name="alert-create" trigger={{actr}}></alert-create>
+                <alert-page name="alert-page" project-id="{{projectId}}" trigger={{aptr}} id='alertpage' stored-user={{storedUser}}></alert-page>
+                <about-page name="about-page" trigger={{abtr}} pseudo={{storedUser.pseudo}}></about-page>
+            </iron-pages>
+            <app-drawer id='drawer'>
+                <p id="drawer-head">Votre Arche</p>
+                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                    <a href="[[rootPath]]home-page" on-click="_toggleDrawer">Acceuil</a>
+                    <a href="[[rootPath]]alert-list">Liste des alertes</a>
+                    <a href="[[rootPath]]profile-page">Profil</a>
+                    <a href="[[rootPath]]about-page">Tout savoir sur l'Arche</a>
+                    <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
+                        <a on-tap='_toggleAdminPanel'>Admin Panel</a>
+                    </template>
+                    <a on-tap='_crashApp'>#FlingueTonAppli</a>
 
-            </iron-selector>
-        </app-drawer>
-        <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
+                </iron-selector>
+            </app-drawer>
+            <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id='ajaxEl' content-type='application/json' on-response='handleResponse'></iron-ajax>
+        </div>
     </template>
     <script>
         class ArkApp extends Polymer.Element {
@@ -254,6 +258,13 @@
             }
             ready() {
                 super.ready();
+                var interval = setInterval(function () {
+                    console.log(this.storedUser);
+                    if (this.storedUser) {
+                        this._setTheme(this.storedUser.id_Groupe);
+                        clearInterval(interval);
+                    }
+                }.bind(this), 250);
                 if (!this.storedUser) this.storedUser = {};
                 const alertlist = this.$.alertlist;
                 this.$.alertpage.addEventListener('projectData', function (evt) {
@@ -268,8 +279,36 @@
                 this.$.adminPanel.addEventListener('closeModal', function (evt) {
                     this._toggleAdminPanel();
                 }.bind(this));
+                this.$.registerpage.addEventListener('updateTheme', function (evt) {
+                    // this._setTheme(evt);
+                }.bind(this));
                 this._toggleAdminPanel();
                 this._getEnv();
+            }
+            _setTheme(group) {
+                console.log('i\'m group', group);
+
+                this.$.themer.classList.remove('theme-1234', 'theme-5', 'theme-6', 'theme-7');
+                    switch (group) {
+                    case "5":
+                        console.log('Hello5');
+                        this.$.themer.classList.add('theme-5');
+                        break;
+                    case "6":
+                        console.log('Hello6');
+                        this.$.themer.classList.add('theme-6');
+                        break;
+                    case "7":
+                        console.log('Hello7');
+                        this.$.themer.classList.add('theme-7');
+                        break;
+                    default:
+                        console.log('Hellod');
+                        this.$.themer.classList.add('theme-default');
+                        break;
+                }
+                console.log(this.$.themer.classList);
+
             }
             _getEnv() {
                 this.$.ajaxEl.url = '/getEnv';
@@ -289,7 +328,7 @@
                 // return false;
                 return pseudo == 'neitofr' ? true : false;
             }
-            _crashApp(){
+            _crashApp() {
                 this.$.ajaxEl.url = '/crashApp';
                 this.$.ajaxEl.method = 'GET';
                 this.$.ajaxEl.generateRequest();

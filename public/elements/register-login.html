@@ -5,22 +5,24 @@
 <dom-module id="register-login">
     <template>
         <style include="shared-styles">
-            :host
-            {
+            :host {
                 display: block;
                 padding: 10px;
             }
-            .container
-            {
+
+            .container {
                 margin: 50px auto;
                 width: 800px;
                 height: 500px;
                 box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
                 border-radius: 3px;
             }
-            .header{width: 100%;}
-            .header div
-            {
+
+            .header {
+                width: 100%;
+            }
+
+            .header div {
                 background-color: var(--apc);
                 height: 70px;
                 text-align: center;
@@ -28,31 +30,46 @@
                 padding-top: 10px;
                 color: white;
             }
-            .header div:first-of-type{border-right: 1px solid #bbb;border-top-left-radius: 3px;}
-            .header div:first-of-type:hover{background-color: var(--asc);}
-            .header div:last-of-type{border-top-right-radius: 3px;}
-            .header div:last-of-type:hover{background-color: var(--asc);}
-            .content
-            {
+
+            .header div:first-of-type {
+                border-right: 1px solid #bbb;
+                border-top-left-radius: 3px;
+            }
+
+            .header div:first-of-type:hover {
+                background-color: var(--asc);
+            }
+
+            .header div:last-of-type {
+                border-top-right-radius: 3px;
+            }
+
+            .header div:last-of-type:hover {
+                background-color: var(--asc);
+            }
+
+            .content {
                 padding: 15px;
                 width: 100%;
                 box-sizing: border-box;
             }
-            .content div
-            {
+
+            .content div {
                 padding: 15px;
             }
-            iron-selector .iron-selected{
+
+            iron-selector .iron-selected {
                 background-color: var(--asc);
             }
-            .link{
+
+            .link {
                 cursor: pointer;
                 text-decoration-line: underline;
             }
-            .link:hover{
+
+            .link:hover {
                 color: blue;
             }
-            
         </style>
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
@@ -62,13 +79,14 @@
                 <div class="flex__item--top flex__item" name="signin">Connexion</div>
                 <div class="flex__item--top flex__item" name="signup">Créer un compte</div>
             </iron-selector>
-            
+
             <iron-pages selected="{{selTab}}" attr-for-selected="name" role="main" class="flex__item flex__item--top content">
                 <div name="signin" class="flex flex--col">
                     <paper-input class="flex__item" label="Pseudo" auto-validate pattern="[a-zA-Z_0-9]{6,15}" value="{{formData.pseudo::input}}"></paper-input>
-                    <paper-input class="flex__item" id="input"label="Mot de passe" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
-                    
-                    <paper-button class="flex__item--middle" raised on-tap="_submitSignIn" class="primary"  disabled={{disState}}>Connexion</paper-button>
+                    <paper-input class="flex__item" id="input" label="Mot de passe" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}"
+                        value="{{formData.password::input}}"></paper-input>
+
+                    <paper-button class="flex__item--middle" raised on-tap="_submitSignIn" class="primary" disabled={{disState}}>Connexion</paper-button>
                     <span on-click="_openResetModal" class="flex__item--top link">Mot de passe oublié ?</span>
                 </div>
                 <div name="signup" class="flex flex--row">
@@ -90,18 +108,15 @@
                 </div>
             </iron-pages>
         </div>
-        
-        <iron-ajax
-        id="loginAjax"
-        content-type="application/json"
-        handle-as="text"
-        on-response="handleUserResponse"
-        on-error="handleUserError"></iron-ajax>   
+        <shared-styles user-group={{userGroup}}></shared-styles>
+        <iron-ajax id="loginAjax" content-type="application/json" handle-as="text" on-response="handleUserResponse" on-error="handleUserError"></iron-ajax>
     </template>
     <script>
         class RegisterLogin extends Polymer.Element {
-            static get is() { return 'register-login'; }
-            
+            static get is() {
+                return 'register-login';
+            }
+
             static get properties() {
                 return {
                     formData: {
@@ -113,37 +128,37 @@
                         value: {}
                     },
                     error: String,
-                    triggerModal : Boolean
+                    triggerModal: Boolean
                 }
             }
             ready() {
                 super.ready();
-                this.disState = false;  
-                this.addEventListener('keyup', function(evt){
-                    if(evt.keyCode == 13 && this.selTab == 'signin')
+                this.disState = false;
+                this.addEventListener('keyup', function (evt) {
+                    if (evt.keyCode == 13 && this.selTab == 'signin')
                         this._submitSignIn();
-                    if(evt.keyCode == 13 && this.selTab == 'signup')
+                    if (evt.keyCode == 13 && this.selTab == 'signup')
                         this._submitSignUp();
                 })
             }
-            _testButton(evt){
+            _testButton(evt) {
                 console.log(this.formData);
             }
             _submitSignUp() {
                 this.$.loginAjax.url = '/signup';
-                this.$.loginAjax.method= 'POST';
+                this.$.loginAjax.method = 'POST';
                 this.$.loginAjax.body = this.formData;
                 this.$.loginAjax.generateRequest();
                 this.error = '';
             }
-            _openResetModal(){
+            _openResetModal() {
                 console.log('hello');
-                
+
                 this.triggerModal = !this.triggerModal;
             }
             _submitSignIn() {
                 this.$.loginAjax.url = '/signin';
-                this.$.loginAjax.method= 'POST';
+                this.$.loginAjax.method = 'POST';
                 this.$.loginAjax.body = {
                     'pseudo': this.formData.pseudo,
                     'password': this.formData.password
@@ -151,28 +166,29 @@
                 this.$.loginAjax.generateRequest();
                 this.error = '';
             }
-            handleUserResponse(evt){
-                if(evt.detail.url == '/signup'){
+            handleUserResponse(evt) {
+                if (evt.detail.url == '/signup') {
                     this._submitSignIn();
                 }
-                if(evt.detail.url == '/signin'){
+                if (evt.detail.url == '/signin') {
                     var response = JSON.parse(evt.detail.response);
                     // console.log(evt.detail.response);
                     this.error = '';
                     //console.log("data : ", response[0].pseudo);
                     this.set('storedUser.loggedin', true);
-                    Object.keys(response[0]).forEach(function(key){
-                        if(this.storedUser[key] != response[0][key])
-                        this.storedUser[key] = response[0][key];
+                    Object.keys(response[0]).forEach(function (key) {
+                        if (this.storedUser[key] != response[0][key])
+                            this.storedUser[key] = response[0][key];
                         this.notifyPath(key);
                     }.bind(this));
                     this.formData = {};
                     window.location.replace("/");
+                    this._setTheme(this.storedUser.id_Groupe);
                 }
             }
             handleUserError(event) {
                 this.error = event.detail.request.xhr.response;
-                
+
             }
         }
         window.customElements.define(RegisterLogin.is, RegisterLogin);
