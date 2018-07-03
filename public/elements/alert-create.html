@@ -6,24 +6,45 @@
 <dom-module id='alert-create'>
     <template>
         <style include='shared-styles'>
-            paper-input{width: 300px;}
-            paper-textarea{width: 600px;}
-            .card{width: 700px;}
-            .listcontainer
-            {
+            paper-input {
+                width: 300px;
+            }
+
+            paper-textarea {
+                width: 600px;
+            }
+
+            .card {
+                width: 700px;
+            }
+
+            .listcontainer {
                 height: 100px;
                 overflow: auto;
                 border-radius: 3px;
                 margin: 0 0 10px 0;
-                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);                
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
             }
-            .animallist{list-style-type: none;}
-            .content{padding: 25px;}
-            .animal:hover{background-color: rgb(240, 240, 240);cursor: pointer;}
-            .animal.aselected{background-color: rgb(215, 215, 215);}
+
+            .animallist {
+                list-style-type: none;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .animal:hover {
+                background-color: rgb(240, 240, 240);
+                cursor: pointer;
+            }
+
+            .animal.aselected {
+                background-color: rgb(215, 215, 215);
+            }
         </style>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        
+
         <modal-animal trigger-modal={{triggerModal}}></modal-animal>
         <div class="card content">
             <h1>Nouvelle Alerte</h1>
@@ -36,8 +57,11 @@
                     <paper-input class="flex__item" label="Ville" always-float-label value="{{formData.city::input}}"></paper-input>
                 </div>
                 <div class="flex__item flex flex--col">
-                    <paper-input class="flex__item--top" label="Animal selectionné" placeholder="Choisissez dans la liste ou ajouter le "always-float-label value="{{formData.animal}}" disabled></paper-input>
-                    <paper-input class="flex__item--top" label="Chercher anmial existant" always-float-label value="{{searchimal}}"><iron-icon icon="icons:search" slot="prefix"></iron-icon></paper-input>
+                    <paper-input class="flex__item--top" label="Animal selectionné" placeholder="Choisissez dans la liste ou ajouter le " always-float-label
+                        value="{{formData.animal}}" disabled></paper-input>
+                    <paper-input class="flex__item--top" label="Chercher anmial existant" always-float-label value="{{searchimal}}">
+                        <iron-icon icon="icons:search" slot="prefix"></iron-icon>
+                    </paper-input>
                     <div class="flex__item listcontainer">
                         <ul class="animallist">
                             <template is="dom-repeat" items="{{animalList}}" as="animal">
@@ -45,8 +69,10 @@
                             </template>
                         </ul>
                     </div>
-                    
-                    <div class="flex__item--middle">Ou alors<paper-button raised on-tap="_toggleModal" class="primary">Ajouter une espece</paper-button></div>
+
+                    <div class="flex__item--middle">Ou alors
+                        <paper-button raised on-tap="_toggleModal" class="primary">Ajouter une espece</paper-button>
+                    </div>
                 </div>
             </div>
             <div class="flex flex--row">
@@ -54,9 +80,11 @@
             </div>
             <div class="flex flex--row ">
                 <paper-button class="flex__item" raised on-tap="_buildBody" class="primary" disabled={{disState}}>Proposer</paper-button>
+                <paper-button class="flex__item" raised on-tap="_fillDemoAlert" class="primary" disabled={{disState}}>Remplir Alerte demo</paper-button>
             </div>
         </div>
-        <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="createAjax" on-response='handleResponse' on-error='handleError' content-type="application/json"></iron-ajax>
+        <iron-ajax headers='{"access-control-allow-origin": "*", Accept: "*/*"}' id="createAjax" on-response='handleResponse' on-error='handleError'
+            content-type="application/json"></iron-ajax>
     </template>
     <script>
         class AlertCreate extends Polymer.Element {
@@ -78,61 +106,72 @@
                         }
                     },
                     animalList: Array,
-                    trigger:{
+                    trigger: {
                         type: Boolean,
                         observer: '_triggerTriggered'
                     },
-                    searchimal:{
+                    searchimal: {
                         type: String,
                         observer: '_searchimalChanged'
                     },
-                    triggerModal:{
+                    triggerModal: {
                         type: Boolean
                     }
                 }
             }
-            ready(){
+            ready() {
                 super.ready();
             }
-            _toggleModal(){
-                
+            _toggleModal() {
+
                 this.triggerModal = !this.triggerModal;
-                
+
             }
-            _searchimalChanged(filter)
-            {
+            _fillDemoAlert() {
+                this.set('formData.alertName', "Sauver les renards de Montigny");
+                this.set('formData.summary', "De moins en moins de renards sont observé au nord de la ville");
+                this.set('formData.continent', "Europe");
+                this.set('formData.country', "France");
+                this.set('formData.city', "Montigny-en-Gohelle");
+                this.set('formData.desc', "Cela fait plusieurs années que nous apercevons de moins en moins de renard dans la forêt qui borde le nord de la ville, les gardes-chasse nous l'ont confirmé. Il faut agir !");
+                this.set('formData.animal', "Renard domestique");
+                this.set('formData.id_Espece', 26);
+                this.set('formData.pseudo', this.storedUser.pseudo)
+                this.set('formData.id_Utilisateurs', this.storedUser.id_Utilisateurs)
+                this.set('formData.id_Groupe', this.storedUser.id_Groupe)
+                setTimeout(function(){
+                    window.location.replace('/');
+                }, 1500);
+            }
+            _addslashes(ch) { ch = ch.replace(/\\/g, "\\\\"); ch = ch.replace(/\'/g, "\\'"); ch = ch.replace(/\"/g, "\\\""); return ch }
+            
+            _searchimalChanged(filter) {
                 filter = filter.toUpperCase();
                 // console.log("Searchimal changed :", filter);
-                
+
                 var list = this.shadowRoot.querySelectorAll('.animal');
                 // console.log(list);
-                
+
                 list.forEach(li => {
                     // console.log(li.innerHTML);
-                    
-                    if(!(li.innerHTML.toUpperCase().includes(filter)))
-                    {
+
+                    if (!(li.innerHTML.toUpperCase().includes(filter))) {
                         // console.log("\""+li.innerHTML+"\" ne contient pas : ", filter);
                         li.style.display = "none";
-                    }
-                    else
-                    {
+                    } else {
                         li.style.display = "block";
                     }
                 });
             }
-            _selectItem(val)
-            {
+            _selectItem(val) {
                 var li = val.target;
-                
-                if(!this.actualSelected){
+
+                if (!this.actualSelected) {
                     this.set('formData.animal', li.innerHTML);
                     this.set('formData.id_Espece', val.path["0"].dataset.ida);
                     li.classList.add('aselected');
                     this.actualSelected = li;
-                }
-                else
-                {
+                } else {
                     this.set('formData.animal', li.innerHTML);
                     this.set('formData.id_Espece', val.path["0"].dataset.ida);
                     this.actualSelected.classList.remove('aselected');
@@ -141,60 +180,61 @@
                 }
                 //console.log(li.innerHTML);
             }
-            handleResponse(evt){
+            handleResponse(evt) {
                 switch (evt.detail.url) {
                     case "/taxonomie/get-animals":
-                    // console.log('Animal list', evt.detail.response);
-                    var tab = evt.detail.response;
-                    var list = [];
-                    tab.forEach(animal => {
-                        // console.log(animal.espece);
-                        
-                        list.push({
-                           nom: animal.espece,
-                           id: animal.id_Espece
+                        // console.log('Animal list', evt.detail.response);
+                        var tab = evt.detail.response;
+                        var list = [];
+                        tab.forEach(animal => {
+                            // console.log(animal.espece);
+
+                            list.push({
+                                nom: animal.espece,
+                                id: animal.id_Espece
+                            });
                         });
-                    });
-                    //console.log("list", list);
-                    this.animalList = list;
-                    break;
+                        //console.log("list", list);
+                        this.animalList = list;
+                        break;
                     case "/missions/new":
-                    console.log('Mission bien ajouté');
-                    this.set('formData', {});
-                    window.location.replace('/');
-                    break;
+                        console.log('Mission bien ajouté');
+                        this.set('formData', {});
+                        window.location.replace('/');
+                        break;
                     default:
-                    console.log('Weird, url not referenced, might being hacked', evt.detail.url);
-                    break;
+                        console.log('Weird, url not referenced, might being hacked', evt.detail.url);
+                        break;
                 }
             }
-            handleError(evt)
-            {
+            handleError(evt) {
                 console.log('error : ', evt.detail.error.message);
             }
-            _buildBody(){
+            _buildBody() {
                 console.log("form data : ", this.formData);
                 this._postAlert();
             }
-            _getAnimalList(){
+            _getAnimalList() {
                 this.$.createAjax.url = "/taxonomie/get-animals";
                 this.$.createAjax.method = "GET";
                 this.$.createAjax.generateRequest();
             }
-            _triggerTriggered(){
+            _triggerTriggered() {
                 this._getAnimalList();
             }
-            _postAlert(){
+            _postAlert() {
                 this.$.createAjax.url = "/missions/new";
                 this.$.createAjax.method = "POST";
                 this.formData.initiateur = this.storedUser.id_Utilisateurs;
                 // this.formData.log = '|'+timestamp+';'+this.storedUser.id_Utilisateurs+';0;'+this.storedUser.pseudo+';1;';
                 this.formData.data = {
-                    'pseudo'  : this.storedUser.pseudo,
-                    'id_Utilisateurs' : this.storedUser.id_Utilisateurs,
-                    'id_Groupe' : this.storedUser.id_Groupe
+                    'pseudo': this.storedUser.pseudo,
+                    'id_Utilisateurs': this.storedUser.id_Utilisateurs,
+                    'id_Groupe': this.storedUser.id_Groupe
                 }
                 this.$.createAjax.body = this.formData;
+                console.log(this.formData);
+                
                 this.$.createAjax.generateRequest();
             }
         }
