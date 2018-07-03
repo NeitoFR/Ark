@@ -62,7 +62,7 @@ app.post('/missions/:id/set-comments', function (req, res) {
   //console.log('comment : ', req.body[Object.keys(req.body)[0]]);
   //console.log('user : ', Object.keys(req.body)[0]);
   maria.addComment(req.body, req.params.id, function (err, data) {
-    
+
     if (err) {
       //console.log('Request : INSERT INTO mission (id_mission, commentaire) :: ERROR', err);
       res.status(400).send(err).end();
@@ -100,7 +100,7 @@ app.post('/missions/new', function (req, res) {
       //console.log('Request : Update commentaire :: OK');
       //res.status(200).send('Commentaire ajouté').end();
       // console.log('res',data);
-      
+
       res.status(204).send(data).end();
     }
   });
@@ -127,7 +127,7 @@ app.get('/missions/:project_id', function (req, res) {
           //console.log('Request : SELECT * FROM USER_TABLE :: OK');
           // console.log('animal ', data);
           // console.log('project data', result);
-          
+
           result.push(data);
           res.status(200).send(result).end();
         }
@@ -144,6 +144,16 @@ app.get('/missions/:id/get-comments', function (req, res) {
       res.status(200).send(data).end();
     }
   });
+});
+app.get('/getPDF/:id', function (req, res) {
+    maria.getPDF(req.params.id, function (err, data) {
+        if (err) {
+            res.status(400).send(err).end();
+        } else {
+            // console.log(data[0].file);
+            res.status(200).send(data).end();
+        }
+    });
 });
 //ok
 app.get('/taxonomie/get-animals', function (req, res) {

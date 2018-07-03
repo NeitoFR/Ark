@@ -29,8 +29,6 @@ app.get('/', function (req, res) {
     res.sendFile('../public/index.html', {
         root: __dirname
     });
-
-    //console.log(req.url);
 });
 //SQL API Routing
 app.use(require('./maria-sql/maria-routes'));

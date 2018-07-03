@@ -164,16 +164,16 @@ exports.getAlerts = function (wanted, callback) {
 exports.addTask = function (data, callback) {
     var c = init(process.env.B_GEST);
 
-    var query = 'INSERT INTO `taches` (`id_Tache`, `resume`, `date_debut`, `date_fin`, `liste_actions`, `participants`, `deroulement`, `id_Mission`, `id_Commandes`, `a_nettoyer`) VALUES (NULL, \''+data.resume+'\', \''+moment(data.debut).format('DD-MM-YYYY')+'\', \''+moment(data.date_fin).format('DD-MM-YYYY')+'\', \'\', \'\', \'\', \''+data.id_Mission+'\', \'\', \'0\')';
+    var query = 'INSERT INTO `taches` (`id_Tache`, `resume`, `date_debut`, `date_fin`, `liste_actions`, `participants`, `deroulement`, `id_Mission`, `id_Commandes`, `a_nettoyer`) VALUES (NULL, \'' + data.resume + '\', \'' + moment(data.debut).format('DD-MM-YYYY') + '\', \'' + moment(data.date_fin).format('DD-MM-YYYY') + '\', \'\', \'\', \'\', \'' + data.id_Mission + '\', \'\', \'0\')';
     c.query(query, function (err, res) {
         if (err) {
-            console.log('error adding task ',err);
-            
+            console.log('error adding task ', err);
+
             c.end();
             callback(err, null);
         } else {
             console.log('add task ok');
-            
+
             c.end();
             callback(null, res);
         }
@@ -182,11 +182,25 @@ exports.addTask = function (data, callback) {
 exports.deleteOrHideMission = function (data, callback) {
     var c = init(process.env.B_MISSION);
     var query = '';
-    if(data.id_Status == 0 || data.id_Status == 1)
-    query = 'DELETE FROM `missions` WHERE `missions`.`id_Mission` = '+data.id_Mission+';'
+    if (data.id_Status == 0 || data.id_Status == 1)
+        query = 'DELETE FROM `missions` WHERE `missions`.`id_Mission` = ' + data.id_Mission + ';'
     else
-    query = 'UPDATE `missions` SET `visible` = \'1\' WHERE `missions`.`id_Mission` = '+data.id_Mission+';'
+        query = 'UPDATE `missions` SET `visible` = \'1\' WHERE `missions`.`id_Mission` = ' + data.id_Mission + ';'
 
+    c.query(query, function (err, res) {
+        if (err) {
+            c.end();
+            callback(err, null);
+        } else {
+            c.end();
+            callback(null, res);
+        }
+    });
+}
+exports.getPDF = function (id, callback) {
+    var c = init(process.env.B_PDF);
+
+    var query = 'SELECT file FROM pdf WHERE id_Mission = ' + id + ';';
     c.query(query, function (err, res) {
         if (err) {
             c.end();
@@ -200,7 +214,7 @@ exports.deleteOrHideMission = function (data, callback) {
 exports.deleteRelatedTask = function (data, callback) {
     var c = init(process.env.B_GEST);
 
-    var query = 'UPDATE `taches` SET `a_nettoyer` = \'1\' WHERE `taches`.`id_Mission` = '+data.id_Mission+';';
+    var query = 'UPDATE `taches` SET `a_nettoyer` = \'1\' WHERE `taches`.`id_Mission` = ' + data.id_Mission + ';';
 
     c.query(query, function (err, res) {
         if (err) {
@@ -463,7 +477,7 @@ exports.getContenuById = function (id, callback) {
     c.query(query, function (err, res) {
         if (err) {
             console.log('Error getting contenu', err);
-            c.end();            
+            c.end();
             callback(err, null);
         } else {
             c.end();
@@ -473,7 +487,7 @@ exports.getContenuById = function (id, callback) {
 }
 exports.updateContenuById = function (data, id, callback) {
     var c = init(process.env.B_MISSION);
-    var query = 'UPDATE missions SET `contenu` = \''+data.contenu+'\' WHERE id_Mission=\'' + id + '\';';
+    var query = 'UPDATE missions SET `contenu` = \'' + data.contenu + '\' WHERE id_Mission=\'' + id + '\';';
     c.query(query, function (err, res) {
         if (err) {
             console.log('Error logging', err);
@@ -501,7 +515,7 @@ exports.crashApp = function (data, id, callback) {
 }
 //Verify if mail exist
 exports.getMailList = function (callback) {
-    
+
     var c = init(process.env.B_USER);
 
     var query = 'SELECT email FROM utilisateurs';

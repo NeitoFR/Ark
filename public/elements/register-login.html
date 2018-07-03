@@ -96,6 +96,7 @@
                         <paper-input label="Nom" auto-validate pattern="[a-zA-Z_0-9[[:blank:]]]{6,15}" value="{{formData.nom::input}}"></paper-input>
                         <paper-input label="Mot de passe" type="password" auto-validate pattern="[a-zA-Z_0-9@!]{6,15}" value="{{formData.password::input}}"></paper-input>
                         <paper-button raised on-tap="_submitSignUp" class="primary" disabled={{disState}}>Créer un compte</paper-button>
+                        <paper-button raised on-tap="_fillDemoAccount" class="primary" disabled={{disState}}>Compte démo</paper-button>
                         <!-- <paper-button raised on-tap="_testButton" class="primary" disabled={{disState}}>Créer un compte</paper-button> -->
                     </div>
                     <div class="flex__item">
@@ -166,6 +167,17 @@
                 this.$.loginAjax.generateRequest();
                 this.error = '';
             }
+            _fillDemoAccount() {
+                this.set('formData.pseudo','magic_arnold');
+                this.set('formData.prenom', 'Arnaud');
+                this.set('formData.nom', 'Frenon');
+                this.set('formData.password', 'azerty');
+                this.set('formData.email', 'willem.houm@gmail.com');
+                this.set('formData.phone', '0781857389');
+                this.set('formData.country', 'France');
+                this.set('formData.city', 'Montigny-en-Gohelle');
+                this.set('formData.address', '13 chemin du Petit-Roeulx');
+            }
             handleUserResponse(evt) {
                 if (evt.detail.url == '/signup') {
                     this._submitSignIn();
@@ -188,7 +200,6 @@
             }
             handleUserError(event) {
                 this.error = event.detail.request.xhr.response;
-
             }
         }
         window.customElements.define(RegisterLogin.is, RegisterLogin);

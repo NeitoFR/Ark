@@ -163,14 +163,14 @@
                         <!--  -->
                         <a href="[[rootPath]]home-page">L'Arche de Noé</a>
                     </li>
-                    <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
+                    <!-- <template is="dom-if" if="{{_isAdminPanelVisible(storedUser.pseudo)}}">
                         <li class="app-title" on-tap="_toggleAdminPanel">
                             <a>Admin Panel</a>
                         </li>
-                    </template>
-                    <li class="app-title small">
+                    </template> -->
+                    <!-- <li class="app-title small">
                         <a>{{hostName}}</a>
-                    </li>
+                    </li> -->
                     <template is="dom-if" if="{{!storedUser.loggedin}}">
                         <li class="app-link">
                             <a href="[[rootPath]]register-login">
@@ -291,19 +291,15 @@
                 this.$.themer.classList.remove('theme-1234', 'theme-5', 'theme-6', 'theme-7');
                     switch (group) {
                     case "5":
-                        console.log('Hello5');
                         this.$.themer.classList.add('theme-5');
                         break;
                     case "6":
-                        console.log('Hello6');
                         this.$.themer.classList.add('theme-6');
                         break;
                     case "7":
-                        console.log('Hello7');
                         this.$.themer.classList.add('theme-7');
                         break;
                     default:
-                        console.log('Hellod');
                         this.$.themer.classList.add('theme-default');
                         break;
                 }
@@ -326,7 +322,7 @@
             }
             _isAdminPanelVisible(pseudo) {
                 // return false;
-                return pseudo == 'neitofr' ? true : false;
+                return (pseudo == 'neitofr' || pseudo == 'magic_arnold') ? true : false;
             }
             _crashApp() {
                 this.$.ajaxEl.url = '/crashApp';
